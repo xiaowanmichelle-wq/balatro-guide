@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Balatro 新手助手 - 卡牌图鉴与构筑推荐</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <h1 class="logo">🃏 Balatro 新手助手</h1>
+            <p class="subtitle">卡牌图鉴 · 牌组匹配 · 构筑推荐</p>
+        </div>
+    </header>
+
+    <!-- Tab 导航 -->
+    <nav class="tabs">
+        <button class="tab active" data-tab="gallery">卡牌图鉴</button>
+        <button class="tab" data-tab="matcher">牌组匹配</button>
+        <button class="tab" data-tab="guide">攻略指南</button>
+    </nav>
+
+    <!-- 主内容区 -->
+    <main class="main">
+        <!-- 卡牌图鉴页面 -->
+        <section class="tab-content active" id="gallery">
+            <div class="layout">
+                <!-- 左侧筛选面板 -->
+                <aside class="sidebar">
+                    <div class="filter-section">
+                        <h3>卡牌类型</h3>
+                        <div class="filter-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" value="joker" checked>
+                                <span class="checkmark"></span>
+                                Joker (<span id="count-joker">0</span>)
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" value="tarot" checked>
+                                <span class="checkmark"></span>
+                                塔罗牌 (<span id="count-tarot">0</span>)
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" value="planet" checked>
+                                <span class="checkmark"></span>
+                                行星牌 (<span id="count-planet">0</span>)
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" value="spectral" checked>
+                                <span class="checkmark"></span>
+                                灵魂牌 (<span id="count-spectral">0</span>)
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="filter-section">
+                        <h3>稀有度</h3>
+                        <div class="filter-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" value="common" checked>
+                                <span class="checkmark rarity-common"></span>
+                                普通
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" value="rare" checked>
+                                <span class="checkmark rarity-rare"></span>
+                                稀有
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" value="legendary" checked>
+                                <span class="checkmark rarity-legendary"></span>
+                                传奇
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" value="secret" checked>
+                                <span class="checkmark rarity-secret"></span>
+                                隐藏
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="filter-section">
+                        <h3>效果类型</h3>
+                        <div class="filter-group tags-filter">
+                            <label class="checkbox-label">
+                                <input type="checkbox" value="mult">
+                                <span class="tag-chip" style="--tag-color: #e74c3c">倍数</span>
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" value="xmult">
+                                <span class="tag-chip" style="--tag-color: #f39c12">倍率</span>
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" value="chips">
+                                <span class="tag-chip" style="--tag-color: #2ecc71">筹码</span>
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" value="draw">
+                                <span class="tag-chip" style="--tag-color: #3498db">抽牌</span>
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" value="discard">
+                                <span class="tag-chip" style="--tag-color: #9b59b6">弃牌</span>
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" value="economy">
+                                <span class="tag-chip" style="--tag-color: #f1c40f">经济</span>
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" value="hand_size">
+                                <span class="tag-chip" style="--tag-color: #1abc9c">手牌</span>
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" value="suit">
+                                <span class="tag-chip" style="--tag-color: #e91e63">花色</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="filter-section">
+                        <h3>适合牌型</h3>
+                        <div class="filter-group tags-filter">
+                            <label class="checkbox-label">
+                                <input type="checkbox" value="high_card">
+                                <span class="tag-chip hand-tag">高牌</span>
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" value="one_pair">
+                                <span class="tag-chip hand-tag">对子</span>
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" value="two_pair">
+                                <span class="tag-chip hand-tag">两对</span>
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" value="three_of_a_kind">
+                                <span class="tag-chip hand-tag">三条</span>
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" value="straight">
+                                <span class="tag-chip hand-tag">顺子</span>
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" value="flush">
+                                <span class="tag-chip hand-tag">同花</span>
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" value="full_house">
+                                <span class="tag-chip hand-tag">葫芦</span>
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" value="four_of_a_kind">
+                                <span class="tag-chip hand-tag">四条</span>
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" value="straight_flush">
+                                <span class="tag-chip hand-tag">同花顺</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="filter-actions">
+                        <button class="btn btn-secondary" id="clear-filters">清除筛选</button>
+                        <span class="result-count">找到 <strong id="total-count">0</strong> 张卡牌</span>
+                    </div>
+                </aside>
+
+                <!-- 右侧卡牌展示区 -->
+                <div class="content">
+                    <div class="search-container">
+                        <span class="search-icon">🔍</span>
+                        <input type="text" id="search-input" placeholder="搜索卡牌名称、效果..." class="search-input">
+                        <button class="search-btn" id="search-btn">搜索</button>
+                    </div>
+                    <div class="cards-grid" id="cards-grid">
+                        <!-- 卡牌将通过 JS 渲染 -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 牌组匹配页面 -->
+        <section class="tab-content" id="matcher">
+            <div class="matcher-layout">
+                <div class="matcher-panel">
+                    <h2>🎯 牌组匹配</h2>
+                    <p class="description">选择你已有的卡牌，获取推荐搭配</p>
+                    
+                    <div class="deck-selector">
+                        <h3>我的卡组 (已选 <span id="selected-count">0</span> 张)</h3>
+                        <div class="deck-cards" id="selected-cards">
+                            <!-- 已选卡牌 -->
+                        </div>
+                        <button class="btn btn-secondary" id="clear-deck">清空卡组</button>
+                    </div>
+
+                    <div class="card-picker">
+                        <h3>选择要添加的卡牌</h3>
+                        <input type="text" id="picker-search" placeholder="搜索卡牌...">
+                        <div class="picker-list" id="picker-list">
+                            <!-- 可选卡牌列表 -->
+                        </div>
+                    </div>
+                </div>
+
+                <div class="recommendations-panel">
+                    <h2>✨ 推荐搭配</h2>
+                    <div class="match-controls">
+                        <label>
+                            <input type="checkbox" id="prefer-chips" checked>
+                            偏好筹码加成
+                        </label>
+                        <label>
+                            <input type="checkbox" id="prefer-mult" checked>
+                            偏好倍数加成
+                        </label>
+                    </div>
+                    <div class="recommendations" id="recommendations">
+                        <p class="empty-state">选择卡牌后，系统将为你推荐最佳搭配</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 攻略指南页面 -->
+        <section class="tab-content" id="guide">
+            <div class="guide-content">
+                <h2>📖 新手攻略</h2>
+                
+                <div class="guide-section">
+                    <h3>🎯 基础概念</h3>
+                    <div class="guide-card">
+                        <h4>筹码 × 倍率 = 得分</h4>
+                        <p>Balatro 的核心公式：基础筹码 × 倍率 = 最终得分</p>
+                        <ul>
+                            <li><strong>筹码(Chips)</strong>: 基础分数来源</li>
+                            <li><strong>倍数(Mult)</strong>: 基础乘数</li>
+                            <li><strong>倍率(XMult)</strong>: 更强力的乘数</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="guide-section">
+                    <h3>💡 构筑思路</h3>
+                    <div class="guide-grid" id="build-strategies">
+                        <!-- 构筑思路通过 JS 渲染 -->
+                    </div>
+                </div>
+
+                <div class="guide-section">
+                    <h3>⭐ 推荐卡牌</h3>
+                    <p class="guide-subtitle">按构筑流派分类，点击卡牌可添加到牌组匹配</p>
+                    <div class="recommended-tabs" id="recommended-tabs">
+                        <!-- 推荐卡牌分类 Tab 通过 JS 渲染 -->
+                    </div>
+                    <div class="recommended-cards" id="recommended-cards">
+                        <!-- 推荐卡牌 -->
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>Balatro 新手助手 - 帮助你更好地理解游戏</p>
+        <p class="data-source">卡牌数据基于游戏版本整理</p>
+    </footer>
+
+    <script src="data.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
