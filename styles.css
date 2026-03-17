@@ -728,7 +728,7 @@ body {
 
 /* Guide Page */
 .guide-content {
-    max-width: 900px;
+    max-width: 1400px;
     margin: 0 auto;
 }
 
@@ -1077,11 +1077,47 @@ body {
 /* ============ 构筑思路网格优化 ============ */
 #build-strategies {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+    grid-template-columns: repeat(4, 1fr);
     gap: 15px;
 }
 
-@media (max-width: 800px) {
+#build-strategies .guide-card {
+    padding: 16px;
+    margin-bottom: 0;
+}
+
+#build-strategies .strategy-header h4 {
+    font-size: 0.95rem;
+}
+
+#build-strategies .strategy-detail {
+    font-size: 0.8rem;
+    margin: 8px 0;
+    padding: 8px;
+}
+
+#build-strategies .strategy-core {
+    font-size: 0.8rem;
+}
+
+#build-strategies .strategy-tip {
+    font-size: 0.75rem;
+    padding: 6px 10px;
+}
+
+@media (max-width: 1200px) {
+    #build-strategies {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media (max-width: 900px) {
+    #build-strategies {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 600px) {
     #build-strategies {
         grid-template-columns: 1fr;
     }

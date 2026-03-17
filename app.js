@@ -258,6 +258,8 @@ class BalatroApp {
                 this.renderSelectedCards();
                 this.updateRecommendations();
                 this.switchTab('matcher');
+                // 滚动到牌组匹配页面顶端
+                window.scrollTo({ top: 0, behavior: 'smooth' });
             }
         }
     }
@@ -1048,6 +1050,8 @@ class BalatroApp {
         this.renderPicker();
         this.updateRecommendations();
         this.switchTab('matcher');
+        // 滚动到牌组匹配页面顶端
+        window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 }
 
