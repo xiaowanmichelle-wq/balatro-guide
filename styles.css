@@ -1035,6 +1035,49 @@ body {
     line-height: 1.4;
 }
 
+.strategy-compat {
+    margin: 10px 0;
+    padding: 8px 12px;
+    background: rgba(52, 152, 219, 0.08);
+    border-radius: 6px;
+    border-left: 3px solid var(--accent-blue, #3498db);
+}
+
+.compat-label {
+    font-size: 0.8rem;
+    font-weight: bold;
+    color: var(--accent-blue, #3498db);
+    display: block;
+    margin-bottom: 6px;
+}
+
+.compat-list {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.compat-item {
+    font-size: 0.78rem;
+    line-height: 1.4;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 4px;
+}
+
+.compat-target {
+    font-weight: 600;
+    color: var(--accent-gold, #f1c40f);
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+.compat-note {
+    color: var(--text-secondary, #aaa);
+    font-size: 0.75rem;
+}
+
 .btn-small {
     padding: 6px 14px;
     font-size: 0.85rem;
@@ -1231,6 +1274,14 @@ body {
     font-weight: bold;
 }
 
+.compat-brief {
+    font-size: 0.75rem;
+    color: var(--accent-blue, #3498db);
+    display: block;
+    margin-top: 6px;
+    opacity: 0.85;
+}
+
 .build-tag {
     background: rgba(155, 89, 182, 0.2) !important;
     color: var(--accent-purple) !important;
@@ -1266,6 +1317,555 @@ body {
 #build-strategies .strategy-tip {
     font-size: 0.75rem;
     padding: 6px 10px;
+}
+
+#build-strategies .strategy-compat {
+    font-size: 0.75rem;
+    padding: 6px 10px;
+    margin: 8px 0;
+}
+
+#build-strategies .compat-label {
+    font-size: 0.75rem;
+    margin-bottom: 4px;
+}
+
+#build-strategies .compat-item {
+    font-size: 0.72rem;
+}
+
+#build-strategies .compat-note {
+    font-size: 0.7rem;
+}
+
+/* ============ 种子分享板块 ============ */
+.seeds-layout {
+    max-width: 960px;
+    margin: 0 auto;
+}
+
+.seeds-header {
+    text-align: center;
+    margin-bottom: 25px;
+}
+
+.seeds-header h2 {
+    font-size: 1.6rem;
+    color: var(--accent-gold);
+    margin-bottom: 6px;
+}
+
+.seeds-header .description {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+}
+
+/* 投稿表单面板 */
+.seed-submit-panel {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 20px 24px;
+    margin-bottom: 25px;
+}
+
+.seed-submit-panel h3 {
+    color: var(--accent-gold);
+    font-size: 1.1rem;
+    margin-bottom: 15px;
+}
+
+.seed-form {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.form-group label {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    font-weight: 500;
+}
+
+.form-group label .required {
+    color: var(--accent-red);
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 10px 12px;
+    color: var(--text-primary);
+    font-size: 0.9rem;
+    font-family: inherit;
+    transition: border-color 0.2s;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+    outline: none;
+    border-color: var(--accent-gold);
+}
+
+.form-group input::placeholder,
+.form-group textarea::placeholder {
+    color: var(--text-muted);
+}
+
+.form-group textarea {
+    resize: vertical;
+    min-height: 60px;
+}
+
+.form-group select {
+    cursor: pointer;
+    appearance: none;
+    -webkit-appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%238888a0' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    padding-right: 32px;
+}
+
+.form-group select option {
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+}
+
+.form-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-top: 4px;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, var(--accent-gold), #e6a800);
+    color: #1a1a28;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 24px;
+    font-size: 0.95rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.btn-primary:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(255, 215, 0, 0.3);
+}
+
+.btn-primary:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.submit-hint {
+    font-size: 0.78rem;
+    color: var(--text-muted);
+}
+
+.seed-submit-msg {
+    display: none;
+    margin-top: 10px;
+    padding: 10px 14px;
+    border-radius: 8px;
+    font-size: 0.85rem;
+}
+
+.seed-submit-msg.success {
+    background: rgba(46, 204, 113, 0.12);
+    color: var(--accent-green);
+    border: 1px solid rgba(46, 204, 113, 0.25);
+}
+
+.seed-submit-msg.error {
+    background: rgba(231, 76, 60, 0.12);
+    color: var(--accent-red);
+    border: 1px solid rgba(231, 76, 60, 0.25);
+}
+
+/* 种子列表面板 */
+.seeds-list-panel {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 20px 24px;
+}
+
+.seeds-toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 18px;
+}
+
+.seeds-search {
+    flex: 1;
+    max-width: 350px;
+    display: flex;
+    align-items: center;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 0 12px;
+    transition: border-color 0.2s;
+}
+
+.seeds-search:focus-within {
+    border-color: var(--accent-gold);
+}
+
+.seeds-search .search-icon {
+    font-size: 0.9rem;
+    margin-right: 8px;
+}
+
+.seeds-search input {
+    background: transparent;
+    border: none;
+    color: var(--text-primary);
+    font-size: 0.88rem;
+    padding: 9px 0;
+    width: 100%;
+    outline: none;
+}
+
+.seeds-search input::placeholder {
+    color: var(--text-muted);
+}
+
+.seeds-sort {
+    display: flex;
+    gap: 6px;
+}
+
+.sort-btn {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    padding: 7px 14px;
+    color: var(--text-secondary);
+    font-size: 0.82rem;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.sort-btn:hover {
+    border-color: var(--accent-gold);
+    color: var(--text-primary);
+}
+
+.sort-btn.active {
+    background: rgba(255, 215, 0, 0.1);
+    border-color: var(--accent-gold);
+    color: var(--accent-gold);
+    font-weight: 600;
+}
+
+/* 种子卡片网格 */
+.seeds-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px;
+}
+
+.seed-card {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    padding: 16px;
+    transition: all 0.2s;
+}
+
+.seed-card:hover {
+    border-color: var(--accent-gold);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 16px rgba(255, 215, 0, 0.08);
+}
+
+.seed-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.seed-code-badge {
+    background: linear-gradient(135deg, rgba(255, 215, 0, 0.15), rgba(243, 156, 18, 0.15));
+    color: var(--accent-gold);
+    font-family: 'Courier New', monospace;
+    font-weight: bold;
+    font-size: 0.88rem;
+    padding: 4px 10px;
+    border-radius: 6px;
+    letter-spacing: 1px;
+}
+
+.seed-difficulty {
+    font-size: 0.75rem;
+}
+
+.seed-title {
+    color: var(--text-primary);
+    font-size: 0.95rem;
+    margin-bottom: 6px;
+    line-height: 1.35;
+}
+
+.seed-desc {
+    color: var(--text-secondary);
+    font-size: 0.8rem;
+    line-height: 1.4;
+    margin-bottom: 8px;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.seed-build-tag {
+    display: inline-block;
+    background: rgba(155, 89, 182, 0.15);
+    color: var(--accent-purple);
+    font-size: 0.75rem;
+    padding: 3px 8px;
+    border-radius: 4px;
+    margin-bottom: 10px;
+}
+
+.seed-card-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px solid var(--border-color);
+}
+
+.seed-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.seed-author {
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+}
+
+.seed-time {
+    font-size: 0.7rem;
+    color: var(--text-muted);
+}
+
+.seed-like-btn {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 20px;
+    padding: 6px 14px;
+    color: var(--text-secondary);
+    font-size: 0.82rem;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.seed-like-btn:hover:not(.liked) {
+    border-color: #e74c3c;
+    color: #e74c3c;
+    background: rgba(231, 76, 60, 0.08);
+}
+
+.seed-like-btn.liked {
+    border-color: transparent;
+    color: #e74c3c;
+    background: rgba(231, 76, 60, 0.12);
+    cursor: default;
+}
+
+.like-icon {
+    font-size: 0.9rem;
+}
+
+.like-count {
+    font-weight: 600;
+    min-width: 12px;
+    text-align: center;
+}
+
+/* 空状态和加载中 */
+.seeds-empty,
+.seeds-loading {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 50px 20px;
+    color: var(--text-muted);
+}
+
+.seeds-empty .empty-icon {
+    font-size: 3rem;
+    display: block;
+    margin-bottom: 12px;
+}
+
+.seeds-empty p {
+    font-size: 0.95rem;
+}
+
+.seeds-loading {
+    font-size: 1rem;
+    color: var(--accent-gold);
+}
+
+/* 分页 */
+.seeds-pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 6px;
+    margin-top: 18px;
+}
+
+.page-btn {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    padding: 6px 12px;
+    color: var(--text-secondary);
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: all 0.15s;
+    min-width: 36px;
+    text-align: center;
+}
+
+.page-btn:hover {
+    border-color: var(--accent-gold);
+    color: var(--accent-gold);
+}
+
+.page-btn.active {
+    background: var(--accent-gold);
+    color: #1a1a28;
+    border-color: var(--accent-gold);
+    font-weight: bold;
+    cursor: default;
+}
+
+.page-dots {
+    color: var(--text-muted);
+    padding: 0 4px;
+}
+
+/* ============ 种子板块响应式 ============ */
+@media (max-width: 900px) {
+    .seeds-layout {
+        padding: 0;
+    }
+
+    .seed-submit-panel,
+    .seeds-list-panel {
+        padding: 15px 16px;
+        border-radius: 10px;
+    }
+
+    .seed-submit-panel h3 {
+        font-size: 1rem;
+    }
+
+    .form-row {
+        grid-template-columns: 1fr;
+        gap: 10px;
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+        font-size: 0.85rem;
+        padding: 9px 10px;
+    }
+
+    .form-actions {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .btn-primary {
+        text-align: center;
+    }
+
+    .submit-hint {
+        text-align: center;
+    }
+
+    .seeds-toolbar {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .seeds-search {
+        max-width: 100%;
+    }
+
+    .seeds-sort {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .seeds-grid {
+        grid-template-columns: 1fr;
+        gap: 10px;
+    }
+
+    .seed-card {
+        padding: 14px;
+    }
+
+    .seed-title {
+        font-size: 0.9rem;
+    }
+
+    .seed-desc {
+        font-size: 0.78rem;
+    }
+}
+
+@media (max-width: 400px) {
+    .seed-submit-panel,
+    .seeds-list-panel {
+        padding: 12px;
+    }
+
+    .seed-code-badge {
+        font-size: 0.8rem;
+        padding: 3px 8px;
+    }
+
+    .seed-title {
+        font-size: 0.85rem;
+    }
 }
 
 @media (max-width: 1200px) {
@@ -1524,6 +2124,23 @@ body {
 
     .strategy-core {
         font-size: 0.78rem;
+    }
+
+    .strategy-compat {
+        font-size: 0.72rem;
+        padding: 6px 10px;
+    }
+    
+    .compat-label {
+        font-size: 0.72rem;
+    }
+    
+    .compat-item {
+        font-size: 0.7rem;
+    }
+    
+    .compat-note {
+        font-size: 0.68rem;
     }
 
     /* Footer */

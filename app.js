@@ -173,6 +173,12 @@ class BalatroApp {
         
         document.querySelector(`[data-tab="${tabId}"]`).classList.add('active');
         document.getElementById(tabId).classList.add('active');
+        
+        // 种子分享 Tab 延迟初始化
+        if (tabId === 'seeds' && !seedManager) {
+            seedManager = new SeedManager();
+            seedManager.init();
+        }
     }
     
     updateCounts() {
@@ -467,6 +473,18 @@ class BalatroApp {
                 const missingHtml = missingNames.length > 0 
                     ? `<span class="missing-cards">还缺: ${missingNames.join('、')}</span>` 
                     : '<span class="build-complete">✅ 核心已齐全！</span>';
+                // 获取兼容流派简要提示
+                const strategies = this.getBuildStrategies();
+                let compatBrief = '';
+                if (mb.strategy.compatibleWith && mb.strategy.compatibleWith.length > 0) {
+                    const compatNames = mb.strategy.compatibleWith.map(comp => {
+                        const target = strategies.find(st => st.id === comp.id);
+                        return target ? target.name : '';
+                    }).filter(Boolean);
+                    if (compatNames.length > 0) {
+                        compatBrief = `<span class="compat-brief">🔗 可兼容: ${compatNames.join('、')}</span>`;
+                    }
+                }
                 return `
                     <div class="matched-build ${mb.matchRate >= 0.7 ? 'high-match' : mb.matchRate >= 0.4 ? 'mid-match' : 'low-match'}">
                         <div class="build-match-header">
@@ -475,6 +493,7 @@ class BalatroApp {
                         </div>
                         <p class="build-desc">${mb.strategy.desc}</p>
                         ${missingHtml}
+                        ${compatBrief}
                     </div>
                 `;
             }).join('');
@@ -1628,7 +1647,11 @@ class BalatroApp {
                 detail: '对子是最容易凑成的牌型，核心是通过对子相关Joker叠加倍率和筹码。配合牌库压缩提高拿到对子的概率。',
                 coreCards: ['j_jolly', 'j_sly', 'j_duo'],
                 supportCards: ['j_spare_trousers', 'j_hanging_chad', 'j_splash', 'p_mercury'],
-                tips: '优先升级对子的行星牌（水星），后期寻找二重奏(X2)作为终极倍率'
+                tips: '优先升级对子的行星牌（水星），后期寻找二重奏(X2)作为终极倍率',
+                compatibleWith: [
+                    { id: 'double_pair_build', note: '对子流自然升级为双对流，所有对子加成在两对中触发两次' },
+                    { id: 'economy_build', note: '经济流可以作为前期过渡，攒钱后转对子体系' }
+                ]
             },
             {
                 id: 'double_pair_build',
@@ -1638,7 +1661,11 @@ class BalatroApp {
                 detail: '两对包含两个对子，因此开心小丑(+8倍率)、奸诈小丑(+50筹码)会双倍触发。再叠加疯狂小丑(+10倍率)、聪敏小丑(+80筹码)、备用裤子(+2倍率永久叠加)，五卡齐聚时对子效果全部触发两次，伤害倍增。',
                 coreCards: ['j_mad', 'j_clever', 'j_spare_trousers', 'j_jolly', 'j_sly'],
                 supportCards: ['j_duo', 'p_uranus'],
-                tips: '两对是双倍快乐——对子系加成会触发两次！备用裤子的倍率叠加尤其强大，两对一次叠加+4倍率'
+                tips: '两对是双倍快乐——对子系加成会触发两次！备用裤子的倍率叠加尤其强大，两对一次叠加+4倍率',
+                compatibleWith: [
+                    { id: 'pair_build', note: '双对流是对子流的升级版，核心卡牌完全兼容' },
+                    { id: 'economy_build', note: '经济流提供前期过渡资金，后期切换到双对输出' }
+                ]
             },
             {
                 id: 'straight_build',
@@ -1648,7 +1675,11 @@ class BalatroApp {
                 detail: '顺子需要5张连续牌，难度较高但回报丰厚。捷径允许1点间隔大幅降低组成难度，四指可以只用4张。',
                 coreCards: ['j_crazy', 'j_devious', 'j_order', 'j_shortcut', 'j_four_fingers'],
                 supportCards: ['j_runner', 'j_superposition', 'p_saturn'],
-                tips: '捷径是顺子流的核心辅助，让2-4-5-6-7也算顺子。四指进一步降低到4张即可'
+                tips: '捷径是顺子流的核心辅助，让2-4-5-6-7也算顺子。四指进一步降低到4张即可',
+                compatibleWith: [
+                    { id: 'flush_build', note: '顺子+同花=同花顺！四指让两者只需4张，是终极组合' },
+                    { id: 'fibonacci_build', note: 'A-2-3-5-8本身就是捷径顺子，斐波那契点数天然适配' }
+                ]
             },
             {
                 id: 'flush_build',
@@ -1658,7 +1689,12 @@ class BalatroApp {
                 detail: '同花需要5张同花色牌，模糊小丑合并红方/黑梅大幅提高概率。四指可以降低到4张。',
                 coreCards: ['j_droll', 'j_crafty', 'j_tribe', 'j_smeared'],
                 supportCards: ['j_four_fingers', 'j_blackboard', 'p_jupiter'],
-                tips: '模糊小丑是同花流最重要的辅助——红桃方块合并、黑桃梅花合并，等于只有2种花色'
+                tips: '模糊小丑是同花流最重要的辅助——红桃方块合并、黑桃梅花合并，等于只有2种花色',
+                compatibleWith: [
+                    { id: 'straight_build', note: '同花+顺子=同花顺！用四指降低门槛，是最强牌型组合' },
+                    { id: 'chance_build', note: '血石(红桃X1.5)与同花配合，打红桃同花每张牌都可能触发' },
+                    { id: 'steel_build', note: '钢铁牌留手牌不影响同花凑牌，两者互不冲突' }
+                ]
             },
             {
                 id: 'face_build',
@@ -1668,7 +1704,12 @@ class BalatroApp {
                 detail: '人头牌(J/Q/K)有大量专属加成Joker，幻视可以让所有牌都变成人头牌，是人头牌流的终极辅助。',
                 coreCards: ['j_photograph', 'j_scary_face', 'j_smiley', 'j_pareidolia'],
                 supportCards: ['j_sock', 'j_baron', 'j_triboulet', 'j_business_card', 'j_midas'],
-                tips: '幻视(所有牌变人头牌)是核心中的核心，拿到后所有人头牌加成都能触发'
+                tips: '幻视(所有牌变人头牌)是核心中的核心，拿到后所有人头牌加成都能触发',
+                compatibleWith: [
+                    { id: 'kq_build', note: '人头牌流自然兼容K/Q皇室流，K/Q本身就是人头牌' },
+                    { id: 'steel_build', note: '钢铁牌+男爵/射月，手牌中的K/Q既触发钢铁×1.5又触发皇室加成' },
+                    { id: 'augment_build', note: '迈达斯面具将人头牌变金卡(增强牌)，吸血鬼可以吸收叠倍率' }
+                ]
             },
             {
                 id: 'kq_build',
@@ -1678,7 +1719,12 @@ class BalatroApp {
                 detail: '特里布莱让K和Q各提供X2倍率，男爵让每张K提供X1.5，射月让每张Q+13倍率。配合幻视让所有牌变人头牌后效果更强。',
                 coreCards: ['j_triboulet', 'j_baron', 'j_shoot_moon'],
                 supportCards: ['j_pareidolia', 'j_sock', 'j_photograph', 'j_hanging_chad'],
-                tips: '传说Joker特里布莱是核心，每张K和Q都X2，手牌全是K/Q时倍率爆炸'
+                tips: '传说Joker特里布莱是核心，每张K和Q都X2，手牌全是K/Q时倍率爆炸',
+                compatibleWith: [
+                    { id: 'face_build', note: 'K/Q都是人头牌，所有人头牌加成(恐怖面孔/微笑表情/照片)全部叠加' },
+                    { id: 'steel_build', note: '手牌中的K/Q变钢铁牌后，钢铁×1.5+男爵×1.5+射月+13多重触发' },
+                    { id: 'copy_build', note: '蓝图/头脑风暴复制特里布莱的K/Q×2效果，倍率直接翻倍' }
+                ]
             },
             {
                 id: 'fibonacci_build',
@@ -1688,7 +1734,11 @@ class BalatroApp {
                 detail: '斐波那契小丑对A/2/3/5/8加倍率，偶数史蒂文对2/4/6/8/10加倍率，奇数托德对A/3/5/7/9加筹码。2和8可同时触发斐波那契+偶数，A/3/5可触发斐波那契+奇数。',
                 coreCards: ['j_fibonacci', 'j_even_steven', 'j_odd_todd'],
                 supportCards: ['j_scholar', 'j_hack', 'j_walkie', 'j_8ball'],
-                tips: '2和8是双重触发王者(斐波那契+偶数)，尽量多拿这两个点数'
+                tips: '2和8是双重触发王者(斐波那契+偶数)，尽量多拿这两个点数',
+                compatibleWith: [
+                    { id: 'straight_build', note: 'A-2-3-5-8用捷径可组成顺子，斐波那契点数天然兼容顺子流' },
+                    { id: 'tarot_build', note: '8号球打出8时1/4概率给塔罗牌，与塔罗流占卜师配合' }
+                ]
             },
             {
                 id: 'economy_build',
@@ -1698,7 +1748,14 @@ class BalatroApp {
                 detail: '先通过经济Joker快速积累资金，再用公牛(每$1+2筹码)和提靴带(每$5+2倍率)将金钱转化为战斗力。冲向月球让利息收益最大化。',
                 coreCards: ['j_golden', 'j_to_moon', 'j_bull', 'j_bootstraps'],
                 supportCards: ['j_rocket', 'j_egg', 'j_cloud9', 'j_credit_card'],
-                tips: '保持$25以上获得最大利息($5)，公牛和乌合之众让你的钱包就是你的武器'
+                tips: '保持$25以上获得最大利息($5)，公牛和乌合之众让你的钱包就是你的武器',
+                compatibleWith: [
+                    { id: 'pair_build', note: '经济流是最佳前期过渡，攒够钱后可以转任何后期流派' },
+                    { id: 'double_pair_build', note: '经济流提供前期资金，后期靠双对输出' },
+                    { id: 'straight_build', note: '经济流可以过渡到顺子流，攒钱期间搜集顺子组件' },
+                    { id: 'flush_build', note: '经济流前期攒钱，后期转同花体系输出' },
+                    { id: 'skip_build', note: '跳过盲注省下的回合用来攒钱，经济+跳过双重收益' }
+                ]
             },
             {
                 id: 'discard_build',
@@ -1708,7 +1765,11 @@ class BalatroApp {
                 detail: '醉汉和快乐安迪增加弃牌次数，旗帜将剩余弃牌转化为筹码，约里克弃23张后获得X倍率，上路吧杰克弃J获得倍率。弃牌经济卡则把弃牌变成收入。',
                 coreCards: ['j_yorick', 'j_burnt', 'j_drunkard', 'j_merry_andy', 'j_banner'],
                 supportCards: ['j_hit_road', 'j_trading', 'j_mail_in', 'j_castle', 'j_faceless'],
-                tips: '快乐安迪+3弃牌是核心引擎，配合旗帜每剩余弃牌+30筹码非常可观'
+                tips: '快乐安迪+3弃牌是核心引擎，配合旗帜每剩余弃牌+30筹码非常可观',
+                compatibleWith: [
+                    { id: 'economy_build', note: '弃牌经济卡(交易卡/邮寄回扣)赚的钱可以喂给公牛/提靴带' },
+                    { id: 'face_build', note: '无脸小丑弃3张人头牌+$5，配合幻视(所有牌变人头牌)收益爆炸' }
+                ]
             },
             {
                 id: 'burglar_build',
@@ -1718,7 +1779,10 @@ class BalatroApp {
                 detail: '窃贼移除所有弃牌次数但+3手牌。这让拉面始终保持X2倍率、神秘峰顶始终+15倍率、延迟满足获得最高$收益、绿色小丑不会扣倍率。',
                 coreCards: ['j_burglar', 'j_ramen', 'j_mystic_summit'],
                 supportCards: ['j_delayed', 'j_green', 'j_acrobat'],
-                tips: '窃贼是整个流派的基石——没有弃牌=拉面不衰减+神秘峰顶满触发+延迟满足满收益'
+                tips: '窃贼是整个流派的基石——没有弃牌=拉面不衰减+神秘峰顶满触发+延迟满足满收益',
+                compatibleWith: [
+                    { id: 'economy_build', note: '延迟满足每剩余弃牌+$2，窃贼让收益最大化，赚的钱转给公牛/提靴带' }
+                ]
             },
             {
                 id: 'tarot_build',
@@ -1728,7 +1792,12 @@ class BalatroApp {
                 detail: '卡牌术士每盲注创造塔罗牌，幻觉开包1/2概率获得塔罗牌，流浪者低价时产生塔罗牌。算命先生每张使用过的塔罗牌+1倍率，后期倍率非常可观。',
                 coreCards: ['j_cartomancer', 'j_fortune_teller', 'j_vagabond'],
                 supportCards: ['j_hallucination', 'j_8ball', 'j_superposition', 'j_perkeo'],
-                tips: '算命先生的倍率随游戏进行不断累积，是塔罗流的核心产出卡'
+                tips: '算命先生的倍率随游戏进行不断累积，是塔罗流的核心产出卡',
+                compatibleWith: [
+                    { id: 'planet_build', note: '塔罗牌和行星牌都是消耗品体系，帕奇欧可以同时为两者产出' },
+                    { id: 'augment_build', note: '塔罗牌(皇后/皇帝)给牌加增强，供吸血鬼吸收，双重收益' },
+                    { id: 'fibonacci_build', note: '8号球打出8时给塔罗牌，与占卜师+8倍率双触发' }
+                ]
             },
             {
                 id: 'planet_build',
@@ -1738,7 +1807,11 @@ class BalatroApp {
                 detail: '天文学家让商店行星牌免费，星座每使用行星牌+0.1X倍率。配合卫星获取独特行星收入。太空小丑有1/4概率自动升级牌型。',
                 coreCards: ['j_astronomer', 'j_constellation', 'j_satellite'],
                 supportCards: ['j_space', 'j_supernova', 'j_showman'],
-                tips: '天文学家是行星流的引擎——免费行星意味着每次商店都能升级牌型+增加星座倍率'
+                tips: '天文学家是行星流的引擎——免费行星意味着每次商店都能升级牌型+增加星座倍率',
+                compatibleWith: [
+                    { id: 'tarot_build', note: '塔罗和行星都是消耗品体系，帕奇欧可以同时复制两者' },
+                    { id: 'economy_build', note: '卫星赚的钱可以喂给公牛/提靴带，天文学家省下的钱用于其他购买' }
+                ]
             },
             {
                 id: 'destroy_build',
@@ -1748,7 +1821,11 @@ class BalatroApp {
                 detail: '玻璃小丑每摧毁玻璃卡+X0.75，正义塔罗创造玻璃牌供摧毁，愚者可复制正义形成循环。仪式匕首击败Boss时摧毁右侧Joker获得永久倍率。疯狂+抽象也是经典摧毁组合。注意：吸血鬼的"移除增强"不等于摧毁，不会触发玻璃小丑。',
                 coreCards: ['j_glass', 'j_ceremonial', 'j_madness', 'j_canio'],
                 supportCards: ['j_abstract', 'j_pareidolia', 't_justice', 't_fool'],
-                tips: '玻璃卡+正义塔罗牌是核心循环——正义创造玻璃卡，玻璃卡摧毁时玻璃小丑增加倍率，愚者可复制上次使用的正义'
+                tips: '玻璃卡+正义塔罗牌是核心循环——正义创造玻璃卡，玻璃卡摧毁时玻璃小丑增加倍率，愚者可复制上次使用的正义',
+                compatibleWith: [
+                    { id: 'face_build', note: '卡尼奥摧毁人头牌+X1，配合幻视(所有牌变人头牌)持续叠倍率' },
+                    { id: 'tarot_build', note: '正义/愚者都是塔罗牌，占卜师可以从中获得额外倍率' }
+                ]
             },
             {
                 id: 'copy_build',
@@ -1758,7 +1835,12 @@ class BalatroApp {
                 detail: '蓝图复制右侧Joker效果，头脑风暴复制最左侧Joker效果。将它们放在关键位置可以让核心Joker效果翻倍甚至三倍。',
                 coreCards: ['j_blueprint', 'j_brainstorm'],
                 supportCards: ['j_showman', 'j_invisible', 'j_dna'],
-                tips: '蓝图复制右侧、头脑风暴复制最左——合理安排Joker顺序让最强效果被复制'
+                tips: '蓝图复制右侧、头脑风暴复制最左——合理安排Joker顺序让最强效果被复制',
+                compatibleWith: [
+                    { id: 'kq_build', note: '复制特里布莱的K/Q×2，让倍率直接翻倍甚至三倍' },
+                    { id: 'steel_build', note: '复制钢铁小丑的X倍率效果，钢铁牌越多收益越恐怖' },
+                    { id: 'chance_build', note: '复制六六大顺的概率翻倍？不，概率不叠加，但可以复制血石/招财猫的效果' }
+                ]
             },
             {
                 id: 'sell_build',
@@ -1768,7 +1850,11 @@ class BalatroApp {
                 detail: '篝火每出售一张卡+X0.25倍率(Boss重置)，礼品卡增加出售值，零糖可乐出售创造免费双倍标签。每回合买卖循环快速累积倍率。',
                 coreCards: ['j_campfire', 'j_gift_card', 'j_diet_cola'],
                 supportCards: ['j_swashbuckler', 'j_riff_raff', 'j_ceremonial'],
-                tips: '篝火在Boss重置前要尽量多出售卡牌累积倍率，乌合之众每盲注创造2个普通Joker可以出售'
+                tips: '篝火在Boss重置前要尽量多出售卡牌累积倍率，乌合之众每盲注创造2个普通Joker可以出售',
+                compatibleWith: [
+                    { id: 'economy_build', note: '出售赚的钱可以喂给公牛/提靴带，买卖循环=倍率+经济双收' },
+                    { id: 'destroy_build', note: '仪式匕首摧毁Joker获得倍率，与出售流的"牺牲换收益"理念一致' }
+                ]
             },
             {
                 id: 'chance_build',
@@ -1778,7 +1864,12 @@ class BalatroApp {
                 detail: '六六大顺让所有概率翻倍：血石1/2→1/1(必触发)、太空1/4→1/2、招财猫触发率翻倍。配合幸运牌和概率型Joker效果极佳。',
                 coreCards: ['j_oops_6', 'j_bloodstone', 'j_lucky_cat'],
                 supportCards: ['j_space', 'j_gros_michel', 'j_ancient', 't_magician'],
-                tips: '六六大顺是概率流的基石——血石从50%变100%触发，太空从25%变50%，简直是作弊。注意大麦克香蕉灭绝后会变成卡文迪什(X3)更强'
+                tips: '六六大顺是概率流的基石——血石从50%变100%触发，太空从25%变50%，简直是作弊。注意大麦克香蕉灭绝后会变成卡文迪什(X3)更强',
+                compatibleWith: [
+                    { id: 'flush_build', note: '血石对红桃牌触发X1.5，打同花多红桃牌每张都可能触发' },
+                    { id: 'planet_build', note: '太空小丑概率翻倍后1/2升级牌型，与星座的X倍率叠加更快' },
+                    { id: 'tarot_build', note: '8号球概率翻倍后1/2给塔罗牌，名片翻倍后必给$2' }
+                ]
             },
             {
                 id: 'augment_build',
@@ -1788,7 +1879,11 @@ class BalatroApp {
                 detail: '吸血鬼打出增强牌时移除增强效果+X0.1倍率，通过塔罗牌（皇后/皇帝等）不断给牌附增强供吸收。驾驶执照需要16张增强牌才能X3，与吸血鬼存在天然矛盾——吸血鬼吃掉增强会导致驾驶执照失效，需要合理取舍。',
                 coreCards: ['j_vampire', 'j_driver_license'],
                 supportCards: ['t_empress', 't_emperor', 'j_hallucination', 'j_cartomancer'],
-                tips: '如果走吸血鬼路线就别指望驾驶执照了，专注给牌加增强然后让吸血鬼吃掉叠倍率。塔罗牌产出越多，增强供应越稳定'
+                tips: '如果走吸血鬼路线就别指望驾驶执照了，专注给牌加增强然后让吸血鬼吃掉叠倍率。塔罗牌产出越多，增强供应越稳定',
+                compatibleWith: [
+                    { id: 'face_build', note: '迈达斯面具将人头牌变金卡(增强牌)，源源不断供吸血鬼吸收' },
+                    { id: 'tarot_build', note: '塔罗牌(皇后/皇帝)给牌加增强，占卜师同时获得倍率，一举两得' }
+                ]
             },
             {
                 id: 'skip_build',
@@ -1798,7 +1893,26 @@ class BalatroApp {
                 detail: '回溯每跳过盲注+X0.25倍率，红牌每跳过增强包+3倍率。跳过小盲注和大盲注（只打Boss）可以快速积累倍率。',
                 coreCards: ['j_throwback', 'j_red'],
                 supportCards: ['j_mr_bones', 'j_acrobat', 'j_stencil'],
-                tips: '跳过小盲和大盲，只打Boss。骷髅先生防止意外死亡，杂技演员最后一手X3保底'
+                tips: '跳过小盲和大盲，只打Boss。骷髅先生防止意外死亡，杂技演员最后一手X3保底',
+                compatibleWith: [
+                    { id: 'economy_build', note: '跳过盲注少打回合但省时间，经济流帮你在少量回合中攒够钱' }
+                ]
+            },
+            {
+                id: 'steel_build',
+                name: '🛡️ 钢铁牌流',
+                difficulty: '⭐⭐⭐ 高级',
+                desc: '用战车塔罗创造钢铁牌，手牌中钢铁牌提供持续X1.5倍率',
+                detail: '钢铁牌留在手牌中时每张提供×1.5倍率，不需要打出即可生效。钢铁小丑每有1张钢铁牌+×0.2倍率。哑剧演员让手牌中钢铁牌的×1.5额外触发1次（变为×2.25）。配合男爵(K×1.5)和射月(Q+13)，手牌中的K/Q既触发钢铁又触发皇室加成，倍率叠乘极其恐怖。',
+                coreCards: ['j_steel', 'j_mime', 't_chariot'],
+                supportCards: ['j_baron', 'j_shoot_moon', 'j_hanging_chad', 'j_pareidolia'],
+                tips: '钢铁牌的核心优势是"不打出就能加倍率"——用战车把手牌中不需要打出的牌变钢铁牌，配合哑剧演员让每张钢铁牌的×1.5额外触发1次。手牌全钢铁时倍率指数级增长',
+                compatibleWith: [
+                    { id: 'kq_build', note: '手牌中的K/Q变钢铁牌后，钢铁×1.5+男爵×1.5+射月+13多重叠加' },
+                    { id: 'face_build', note: '钢铁牌留手牌触发倍率，人头牌加成在打出时触发，两者互补' },
+                    { id: 'flush_build', note: '钢铁牌留手牌不占出牌位，同花凑牌不受影响' },
+                    { id: 'copy_build', note: '蓝图/头脑风暴复制钢铁小丑的X倍率，钢铁牌越多收益越恐怖' }
+                ]
             }
         ];
     }
@@ -1820,6 +1934,22 @@ class BalatroApp {
                 return c ? c.name : '';
             }).filter(Boolean);
             
+            // 渲染兼容性提示
+            let compatHtml = '';
+            if (s.compatibleWith && s.compatibleWith.length > 0) {
+                const compatItems = s.compatibleWith.map(comp => {
+                    const target = strategies.find(st => st.id === comp.id);
+                    const targetName = target ? target.name : comp.id;
+                    return `<div class="compat-item"><span class="compat-target">${targetName}</span><span class="compat-note">${comp.note}</span></div>`;
+                }).join('');
+                compatHtml = `
+                    <div class="strategy-compat">
+                        <span class="compat-label">🔗 可兼容流派：</span>
+                        <div class="compat-list">${compatItems}</div>
+                    </div>
+                `;
+            }
+            
             return `
                 <div class="guide-card strategy-card" data-strategy="${s.id}">
                     <div class="strategy-header">
@@ -1832,6 +1962,7 @@ class BalatroApp {
                         <span class="core-label">核心卡牌：</span>
                         <span class="core-cards">${coreNames.join('、')}</span>
                     </div>
+                    ${compatHtml}
                     <p class="strategy-tip">💡 ${s.tips}</p>
                     <button class="btn btn-small btn-try" onclick="app.tryBuild('${s.id}')">试试这个构筑 →</button>
                 </div>

@@ -20,6 +20,7 @@
         <button class="tab active" data-tab="gallery">卡牌图鉴</button>
         <button class="tab" data-tab="matcher">牌组匹配</button>
         <button class="tab" data-tab="guide">攻略指南</button>
+        <button class="tab" data-tab="seeds">🌱 种子分享</button>
     </nav>
 
     <!-- 主内容区 -->
@@ -309,6 +310,101 @@
                 </div>
             </div>
         </section>
+        <!-- 种子分享页面 -->
+        <section class="tab-content" id="seeds">
+            <div class="seeds-layout">
+                <div class="seeds-header">
+                    <h2>🌱 种子分享</h2>
+                    <p class="description">分享你发现的好种子，帮助其他玩家获得精彩开局！</p>
+                </div>
+
+                <!-- 投稿表单 -->
+                <div class="seed-submit-panel">
+                    <h3>📝 投稿种子</h3>
+                    <form id="seed-form" class="seed-form">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="seed-code">种子代码 <span class="required">*</span></label>
+                                <input type="text" id="seed-code" placeholder="如：ABCD1234" required maxlength="50">
+                            </div>
+                            <div class="form-group">
+                                <label for="seed-author">你的昵称</label>
+                                <input type="text" id="seed-author" placeholder="匿名玩家" maxlength="30">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="seed-title">标题/亮点 <span class="required">*</span></label>
+                            <input type="text" id="seed-title" placeholder="如：第一关直接给传说Joker" required maxlength="80">
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="seed-build">推荐流派</label>
+                                <select id="seed-build">
+                                    <option value="">不限</option>
+                                    <option value="对子流">🃏 对子流</option>
+                                    <option value="双对流">👯 双对流</option>
+                                    <option value="顺子流">📏 顺子流</option>
+                                    <option value="同花流">🎨 同花流</option>
+                                    <option value="人头牌流">👑 人头牌流</option>
+                                    <option value="K/Q皇室流">♔ K/Q皇室流</option>
+                                    <option value="斐波那契流">🐚 斐波那契流</option>
+                                    <option value="经济流">💰 经济流</option>
+                                    <option value="弃牌流">🗑️ 弃牌流</option>
+                                    <option value="侠盗流">🦝 侠盗流</option>
+                                    <option value="塔罗流">🔮 塔罗流</option>
+                                    <option value="行星流">🪐 行星流</option>
+                                    <option value="摧毁流">💥 摧毁流</option>
+                                    <option value="复制流">📋 复制流</option>
+                                    <option value="出售流">🔥 出售流</option>
+                                    <option value="概率流">🎲 概率流</option>
+                                    <option value="增强吸收流">🧛 增强吸收流</option>
+                                    <option value="跳过流">⏭️ 跳过流</option>
+                                    <option value="钢铁牌流">🛡️ 钢铁牌流</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="seed-difficulty">难度评价</label>
+                                <select id="seed-difficulty">
+                                    <option value="简单">⭐ 简单</option>
+                                    <option value="中等" selected>⭐⭐ 中等</option>
+                                    <option value="困难">⭐⭐⭐ 困难</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="seed-desc">详细说明</label>
+                            <textarea id="seed-desc" placeholder="描述这个种子的特色、关键Joker、推荐打法等..." rows="3" maxlength="500"></textarea>
+                        </div>
+                        <div class="form-actions">
+                            <button type="submit" class="btn btn-primary" id="seed-submit-btn">🚀 提交种子</button>
+                            <span class="submit-hint">投稿需审核通过后才会展示</span>
+                        </div>
+                    </form>
+                    <div id="seed-submit-msg" class="seed-submit-msg"></div>
+                </div>
+
+                <!-- 种子列表 -->
+                <div class="seeds-list-panel">
+                    <div class="seeds-toolbar">
+                        <div class="seeds-search">
+                            <span class="search-icon">🔍</span>
+                            <input type="text" id="seed-search" placeholder="搜索种子代码或描述...">
+                        </div>
+                        <div class="seeds-sort">
+                            <button class="sort-btn active" data-sort="hot">🔥 最热</button>
+                            <button class="sort-btn" data-sort="new">🕐 最新</button>
+                        </div>
+                    </div>
+                    <div class="seeds-grid" id="seeds-grid">
+                        <!-- 种子卡片通过 JS 渲染 -->
+                        <div class="seeds-loading">加载中...</div>
+                    </div>
+                    <div class="seeds-pagination" id="seeds-pagination">
+                        <!-- 分页按钮 -->
+                    </div>
+                </div>
+            </div>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -318,6 +414,7 @@
     </footer>
 
     <script src="data.js"></script>
+    <script src="seeds.js"></script>
     <script src="app.js"></script>
 </body>
 </html>
