@@ -32,10 +32,60 @@ class BalatroApp {
     
     init() {
         this.bindEvents();
+        this.initMobileFilters();
         this.updateCounts();
         this.renderCards();
         this.renderPicker();
         this.renderRecommended();
+    }
+    
+    // 初始化手机端筛选面板
+    initMobileFilters() {
+        const toggle = document.getElementById('mobile-filter-toggle');
+        const sidebar = document.getElementById('sidebar-filters');
+        
+        if (toggle && sidebar) {
+            toggle.addEventListener('click', () => {
+                toggle.classList.toggle('active');
+                sidebar.classList.toggle('mobile-open');
+            });
+        }
+        
+        // 手机端默认折叠所有筛选组
+        if (window.innerWidth <= 900) {
+            document.querySelectorAll('.filter-section.collapsible').forEach(section => {
+                section.classList.add('collapsed');
+            });
+        }
+    }
+    
+    // 切换筛选组折叠状态
+    toggleFilter(header) {
+        const section = header.closest('.filter-section');
+        if (section) {
+            section.classList.toggle('collapsed');
+        }
+    }
+    
+    // 更新筛选徽标（显示激活的筛选数量）
+    updateFilterBadge() {
+        const badge = document.getElementById('filter-badge');
+        if (!badge) return;
+        
+        let activeFilters = 0;
+        if (this.filters.effects.length > 0) activeFilters += this.filters.effects.length;
+        if (this.filters.hands.length > 0) activeFilters += this.filters.hands.length;
+        if (this.filters.search) activeFilters++;
+        // 类型和稀有度如果不是全选也算
+        if (this.filters.types.length < 4) activeFilters += (4 - this.filters.types.length);
+        if (this.filters.rarities.length < 4) activeFilters += (4 - this.filters.rarities.length);
+        
+        if (activeFilters > 0) {
+            badge.textContent = activeFilters;
+            badge.classList.add('has-filters');
+        } else {
+            badge.classList.remove('has-filters');
+        }
     }
     
     bindEvents() {
@@ -180,6 +230,7 @@ class BalatroApp {
         const grid = document.getElementById('cards-grid');
         
         document.getElementById('total-count').textContent = filtered.length;
+        this.updateFilterBadge();
         
         if (filtered.length === 0) {
             grid.innerHTML = '<p class="empty-state">没有找到匹配的卡牌</p>';
@@ -215,12 +266,18 @@ class BalatroApp {
         
         const typeNames = { joker: 'Joker', tarot: '塔罗', planet: '行星', spectral: '灵魂' };
         
+        // 卡牌图片
+        const imageHTML = card.image 
+            ? `<div class="card-image"><img src="${card.image}" alt="${card.name}" loading="lazy" onerror="this.parentElement.style.display='none'"></div>` 
+            : '';
+        
         return `
-            <div class="card ${rarityClass}" onclick="app.selectCard('${card.id}')">
+            <div class="card ${rarityClass} ${card.image ? 'has-image' : ''}" onclick="app.selectCard('${card.id}')">
                 <div class="card-header">
                     <span class="card-name">${card.name}</span>
                     <span class="card-type ${card.cardType}">${typeNames[card.cardType]}</span>
                 </div>
+                ${imageHTML}
                 <p class="card-description">${card.description}</p>
                 <div class="card-tags">
                     ${tags}
@@ -275,16 +332,25 @@ class BalatroApp {
         
         const rarityLabels = { common: '普通', rare: '稀有', legendary: '传奇', secret: '隐藏' };
         
-        container.innerHTML = this.selectedCards.map(card => `
+        container.innerHTML = this.selectedCards.map(card => {
+            const thumbHTML = card.image 
+                ? `<img class="selected-card-thumb" src="${card.image}" alt="${card.name}" loading="lazy" onerror="this.style.display='none'">` 
+                : '';
+            return `
             <div class="selected-card">
-                <div class="selected-card-header">
-                    <span class="selected-card-name">${card.name}</span>
-                    <span class="selected-card-rarity">${rarityLabels[card.rarity] || ''}</span>
-                    <span class="remove" onclick="event.stopPropagation(); app.removeCard('${card.id}')">&times;</span>
+                <div class="selected-card-body">
+                    ${thumbHTML}
+                    <div class="selected-card-info">
+                        <div class="selected-card-header">
+                            <span class="selected-card-name">${card.name}</span>
+                            <span class="selected-card-rarity">${rarityLabels[card.rarity] || ''}</span>
+                            <span class="remove" onclick="event.stopPropagation(); app.removeCard('${card.id}')">&times;</span>
+                        </div>
+                        <div class="selected-card-desc">${card.description || ''}</div>
+                    </div>
                 </div>
-                <div class="selected-card-desc">${card.description || ''}</div>
             </div>
-        `).join('');
+        `}).join('');
     }
     
     removeCard(cardId) {
@@ -310,16 +376,21 @@ class BalatroApp {
         
         const typeNames = { joker: 'Joker', tarot: '塔罗', planet: '行星', spectral: '灵魂' };
         
-        container.innerHTML = availableCards.slice(0, 50).map(card => `
+        container.innerHTML = availableCards.slice(0, 50).map(card => {
+            const thumbHTML = card.image 
+                ? `<img class="picker-item-thumb" src="${card.image}" alt="${card.name}" loading="lazy" onerror="this.style.display='none'">` 
+                : '';
+            return `
             <label class="picker-item">
                 <div class="picker-item-header">
                     <input type="checkbox" value="${card.id}" onchange="app.togglePickerCard('${card.id}', this.checked)">
+                    ${thumbHTML}
                     <span class="name">${card.name}</span>
                     <span class="type">${typeNames[card.cardType] || 'Joker'}</span>
                 </div>
                 <div class="picker-item-desc">${card.description || ''}</div>
             </label>
-        `).join('');
+        `}).join('');
     }
     
     togglePickerCard(cardId, checked) {
@@ -379,22 +450,40 @@ class BalatroApp {
         }
         
         if (recommendations.length === 0) {
-            html += '<p class="empty-state">没有找到推荐卡牌</p>';
+            html += '<p class="empty-state">没有找到推荐卡牌，试试添加更多卡牌</p>';
             container.innerHTML = html;
             return;
         }
         
-        html += '<h3 class="rec-title">🎯 推荐卡牌</h3>';
-        html += recommendations.slice(0, 12).map(rec => {
+        // 分离 Joker 推荐和消耗品推荐
+        const jokerRecs = recommendations.filter(r => r.card.cardType === 'joker');
+        const tarotRecs = recommendations.filter(r => r.card.cardType === 'tarot');
+        const planetRecs = recommendations.filter(r => r.card.cardType === 'planet');
+        const spectralRecs = recommendations.filter(r => r.card.cardType === 'spectral');
+        
+        // 补充：基于选中 Joker 的牌型，智能推荐匹配的行星牌
+        const enhancedPlanetRecs = this.getMatchedPlanets(planetRecs);
+        // 补充：基于选中 Joker 的特性，智能推荐匹配的塔罗牌
+        const enhancedTarotRecs = this.getMatchedTarots(tarotRecs);
+        // 补充：基于选中 Joker 的特性，智能推荐匹配的灵魂牌
+        const enhancedSpectralRecs = this.getMatchedSpectrals(spectralRecs);
+        
+        const renderRecCard = (rec) => {
             const scoreClass = rec.score >= 70 ? 'high' : rec.score >= 40 ? 'medium' : 'low';
             const rarityLabel = rec.card.rarity === 'legendary' ? '传奇' : rec.card.rarity === 'rare' ? '稀有' : rec.card.rarity === 'secret' ? '隐藏' : '普通';
             const typeLabel = rec.card.cardType === 'joker' ? 'Joker' : rec.card.cardType === 'tarot' ? '塔罗' : rec.card.cardType === 'planet' ? '行星' : '灵魂';
             const buildTag = rec.buildTag ? `<span class="card-tag build-tag">${rec.buildTag}</span>` : '';
+            const recThumbHTML = rec.card.image 
+                ? `<img class="rec-thumb" src="${rec.card.image}" alt="${rec.card.name}" loading="lazy" onerror="this.style.display='none'">` 
+                : '';
             return `
-                <div class="recommendation-card">
+                <div class="recommendation-card ${rec.card.image ? 'has-thumb' : ''}">
                     <div class="rec-header">
-                        <span class="rec-name">${rec.card.name}</span>
-                        <span class="rec-score ${scoreClass}">${rec.score}分</span>
+                        ${recThumbHTML}
+                        <div class="rec-header-text">
+                            <span class="rec-name">${rec.card.name}</span>
+                            <span class="rec-score ${scoreClass}">${rec.score}分</span>
+                        </div>
                     </div>
                     <p class="rec-desc">${rec.card.description || ''}</p>
                     <p class="rec-reason">${rec.reason}</p>
@@ -406,7 +495,44 @@ class BalatroApp {
                     </div>
                 </div>
             `;
-        }).join('');
+        };
+        
+        // Joker 推荐
+        if (jokerRecs.length > 0) {
+            html += '<h3 class="rec-title">🎯 推荐 Joker</h3>';
+            html += '<div class="rec-section">';
+            html += jokerRecs.slice(0, 8).map(renderRecCard).join('');
+            html += '</div>';
+        }
+        
+        // 塔罗牌推荐
+        if (enhancedTarotRecs.length > 0) {
+            html += '<h3 class="rec-title rec-title-tarot">🔮 推荐塔罗牌</h3>';
+            html += '<div class="rec-section rec-section-tarot">';
+            html += enhancedTarotRecs.slice(0, 6).map(renderRecCard).join('');
+            html += '</div>';
+        }
+        
+        // 行星牌推荐
+        if (enhancedPlanetRecs.length > 0) {
+            html += '<h3 class="rec-title rec-title-planet">🪐 推荐行星牌</h3>';
+            html += '<div class="rec-section rec-section-planet">';
+            html += enhancedPlanetRecs.slice(0, 6).map(renderRecCard).join('');
+            html += '</div>';
+        }
+        
+        // 灵魂牌推荐
+        if (enhancedSpectralRecs.length > 0) {
+            html += '<h3 class="rec-title rec-title-spectral">👻 推荐灵魂牌</h3>';
+            html += '<div class="rec-section rec-section-spectral">';
+            html += enhancedSpectralRecs.slice(0, 6).map(renderRecCard).join('');
+            html += '</div>';
+        }
+        
+        // 如果没有任何推荐
+        if (jokerRecs.length === 0 && enhancedTarotRecs.length === 0 && enhancedPlanetRecs.length === 0 && enhancedSpectralRecs.length === 0) {
+            html += '<p class="empty-state">没有找到推荐卡牌</p>';
+        }
         
         container.innerHTML = html;
     }
@@ -530,7 +656,7 @@ class BalatroApp {
                 }
             }
             
-            // 互斥卡牌检测（如大麦克和卡文迪什不能同时存在）
+            // 互斥卡牌检测（如大麦克香蕉和卡文迪什不能同时存在）
             if (card.exclusive_with && selectedIds.includes(card.exclusive_with)) {
                 score = -100;
                 reasons = ['⚠️ 与已选卡牌互斥（不能同时出现）'];
@@ -550,21 +676,96 @@ class BalatroApp {
                 }
             }
             
-            // 2. 点数协同检测 (斐波那契/偶数/奇数)
+            // 2. 点数协同检测 (斐波那契/偶数/奇数/单卡牌效果)
             if (card.effects && card.effects.rank) {
                 const cardRanks = Array.isArray(card.effects.rank) ? card.effects.rank : [card.effects.rank];
                 
-                // 检测斐波那契+偶数
-                if (selectedIds.includes('j_fibonacci') && cardRanks.includes(8)) {
-                    score += 40;
-                    if (!synergy) synergy = '斐波那契+偶数史蒂文：8可触发双重效果';
-                }
-                // 检测斐波那契+奇数托德
-                if (selectedIds.includes('j_fibonacci') && selectedIds.includes('j_odd_todd')) {
-                    const overlapping = cardRanks.filter(r => [3, 5].includes(r));
-                    if (overlapping.length > 0) {
+                // 斐波那契协同
+                if (selectedIds.includes('j_fibonacci')) {
+                    // 斐波那契 + 偶数史蒂文 (2, 8)
+                    if (cardRanks.filter(r => [2, 8].includes(r)).length > 0) {
+                        score += 40;
+                        synergy = synergy || '斐波那契+偶数史蒂文双重效果';
+                    }
+                    // 斐波那契 + 奇数托德 (A, 3, 5)
+                    if (selectedIds.includes('j_odd_todd') && cardRanks.filter(r => [1, 3, 5].includes(r)).length > 0) {
+                        score += 40;
+                        synergy = synergy || '斐波那契+奇数托德双重效果';
+                    }
+                    // 斐波那契 + 小小丑 (2)
+                    if (cardRanks.includes(2)) {
                         score += 35;
-                        if (!synergy) synergy = '3,5可触发斐波那契+奇数托德双重效果';
+                        synergy = synergy || '斐波那契2+小小丑双重效果';
+                    }
+                    // 斐波那契 + 学者 (A)
+                    if (cardRanks.includes(1) && selectedIds.includes('j_scholar')) {
+                        score += 35;
+                        synergy = synergy || '斐波那契A+学者双重效果';
+                    }
+                }
+                
+                // 偶数史蒂文协同
+                if (selectedIds.includes('j_even_steven')) {
+                    // 偶数史蒂文 + 对讲机 (10, 4都是偶数)
+                    if (card.id === 'j_walkie') {
+                        score += 50;
+                        synergy = '对讲机10和4都是偶数，完美触发偶数史蒂文';
+                    }
+                    // 偶数史蒂文 + 小小丑 (2)
+                    if (cardRanks.includes(2) && selectedIds.includes('j_wee')) {
+                        score += 45;
+                        synergy = synergy || '偶数史蒂文2+小小丑双重效果';
+                    }
+                    // 已选对讲机，当前卡牌有偶数点数
+                    if (selectedIds.includes('j_walkie') && cardRanks.filter(r => [10, 8, 6, 4, 2].includes(r)).length > 0) {
+                        score += 40;
+                        synergy = synergy || '偶数点数触发偶数史蒂文和对讲机';
+                    }
+                }
+                
+                // 对讲机协同
+                if (selectedIds.includes('j_walkie')) {
+                    // 对讲机 + 烂脱口秀演员 (4在重置范围2,3,4,5)
+                    if (card.id === 'j_hack') {
+                        score += 45;
+                        synergy = '对讲机4在重置范围(2,3,4,5)，反复触发';
+                    }
+                    // 烂脱口秀演员 + 对讲机
+                    if (card.id === 'j_even_steven') {
+                        score += 50;
+                        synergy = '对讲机10和4都是偶数，完美触发偶数史蒂文';
+                    }
+                }
+                
+                // 烂脱口秀演员协同
+                if (selectedIds.includes('j_hack')) {
+                    // 烂脱口秀演员 + 小小丑 (2在重置范围)
+                    if (cardRanks.includes(2) && card.id === 'j_wee') {
+                        score += 45;
+                        synergy = '烂脱口秀演员2反复触发小小丑';
+                    }
+                    // 烂脱口秀演员 + 斐波那契 (2,3,5在重置范围)
+                    if (selectedIds.includes('j_fibonacci') && cardRanks.filter(r => [2, 3, 5].includes(r)).length > 0) {
+                        score += 40;
+                        synergy = synergy || '烂脱口秀演员2,3,5反复触发斐波那契';
+                    }
+                }
+                
+                // 奇数托德协同
+                if (selectedIds.includes('j_odd_todd') && selectedIds.includes('j_fibonacci')) {
+                    // 奇数托德 + 斐波那契 (A, 3, 5)
+                    if (cardRanks.filter(r => [1, 3, 5].includes(r)).length > 0) {
+                        score += 40;
+                        synergy = synergy || '斐波那契+奇数托德双重效果';
+                    }
+                }
+                
+                // 学者协同
+                if (selectedIds.includes('j_scholar')) {
+                    // 学者 + 斐波那契 (A)
+                    if (cardRanks.includes(1) && selectedIds.includes('j_fibonacci')) {
+                        score += 35;
+                        synergy = synergy || '斐波那契A+学者双重效果';
                     }
                 }
             }
@@ -611,10 +812,320 @@ class BalatroApp {
                 }
             }
             
-            // 5. 人头牌协同
-            if (tags.includes('face') && selectedIds.includes('j_pareidolia')) {
-                score += 30;
-                synergy = synergy || '空想性错觉使所有牌变人头牌';
+            // 5. 人头牌协同 (包括未断选票)
+            if (tags.includes('face')) {
+                // 幻视让人头牌协同更强大
+                if (selectedIds.includes('j_pareidolia')) {
+                    score += 30;
+                    synergy = synergy || '幻视使所有牌变人头牌';
+                }
+                // 未断选票 + 人头牌卡牌高协同
+                if (selectedIds.includes('j_hanging_chad')) {
+                    // 未断选票 + 照片(第一张人头牌)
+                    if (card.id === 'j_photograph') {
+                        score += 50;
+                        synergy = synergy || '未断选票重复触发照片X2';
+                    }
+                    // 未断选票 + 恐怖面孔
+                    if (card.id === 'j_scary_face') {
+                        score += 45;
+                        synergy = synergy || '未断选票重复触发恐怖面孔+30筹码';
+                    }
+                    // 未断选票 + 微笑表情
+                    if (card.id === 'j_smiley') {
+                        score += 45;
+                        synergy = synergy || '未断选票重复触发微笑脸+5倍率';
+                    }
+                    // 未断选票 + 男爵
+                    if (card.id === 'j_baron') {
+                        score += 50;
+                        synergy = synergy || '未断选票重复触发男爵K×1.5';
+                    }
+                    // 未断选票 + 特里布莱
+                    if (card.id === 'j_triboulet') {
+                        score += 50;
+                        synergy = synergy || '未断选票重复触发特里布莱K/Q×2';
+                    }
+                    // 未断选票 + 小小丑
+                    if (card.id === 'j_wee') {
+                        score += 55;
+                        synergy = synergy || '未断选票重复触发小小丑+8筹码';
+                    }
+                    // 未断选票 + 黄昏
+                    if (card.id === 'j_dusk') {
+                        score += 50;
+                        synergy = synergy || '未断选票+黄昏最大化重复触发';
+                    }
+                    // 未断选票 + 老千小丑(重复牌型)
+                    if (card.id === 'j_card_sharp') {
+                        score += 45;
+                        synergy = synergy || '未断选票+老千小丑重复触发X3';
+                    }
+                    // 未断选票 + 大麦克香蕉(更多自毁机会)
+                    if (card.id === 'j_gros_michel') {
+                        score += 35;
+                        synergy = synergy || '未断选票重复计分增加大麦克自毁机会';
+                    }
+                    // 未断选票 + 卡文迪什(更多自毁机会)
+                    if (card.id === 'j_cavendish') {
+                        score += 35;
+                        synergy = synergy || '未断选票重复计分增加卡文迪什自毁机会';
+                    }
+                    // 未断选票 + 点数效果卡（斐波那契/偶数/奇数/学者/对讲机）
+                    if (card.id === 'j_fibonacci') {
+                        score += 55;
+                        synergy = synergy || '未断选票让第1张A/2/3/5/8触发3次，+8倍率变+24倍率';
+                    }
+                    if (card.id === 'j_even_steven') {
+                        score += 50;
+                        synergy = synergy || '未断选票让第1张偶数牌触发3次，+4倍率变+12倍率';
+                    }
+                    if (card.id === 'j_odd_todd') {
+                        score += 50;
+                        synergy = synergy || '未断选票让第1张奇数牌触发3次，+31筹码变+93筹码';
+                    }
+                    if (card.id === 'j_scholar') {
+                        score += 55;
+                        synergy = synergy || '未断选票让A触发3次，学者+12倍率+60筹码';
+                    }
+                    if (card.id === 'j_walkie') {
+                        score += 50;
+                        synergy = synergy || '未断选票让第1张10/4触发3次，+30筹码+12倍率';
+                    }
+                    // 未断选票 + 烂脱口秀演员（双重重复触发）
+                    if (card.id === 'j_hack') {
+                        score += 55;
+                        synergy = synergy || '双重重复触发！第1张2/3/4/5计分多达4次';
+                    }
+                    // 未断选票 + 花色效果卡
+                    if (['j_greedy', 'j_lusty', 'j_wrathful', 'j_gluttonous'].includes(card.id)) {
+                        score += 45;
+                        synergy = synergy || '未断选票让第1张对应花色牌的+3倍率触发3次，变+9倍率';
+                    }
+                    if (card.id === 'j_arrowhead') {
+                        score += 50;
+                        synergy = synergy || '未断选票让第1张黑桃的+50筹码触发3次，变+150筹码';
+                    }
+                    if (card.id === 'j_onyx') {
+                        score += 50;
+                        synergy = synergy || '未断选票让第1张梅花的+7倍率触发3次，变+21倍率';
+                    }
+                    if (card.id === 'j_bloodstone') {
+                        score += 50;
+                        synergy = synergy || '未断选票让第1张红桃多2次X1.5概率触发';
+                    }
+                    // 未断选票 + 徒步者
+                    if (card.id === 'j_hiker') {
+                        score += 50;
+                        synergy = synergy || '未断选票让第1张牌永久+15筹码(触发3次)';
+                    }
+                    // 未断选票 + 喜与悲
+                    if (card.id === 'j_sock') {
+                        score += 50;
+                        synergy = synergy || '未断选票+喜与悲双重重复触发人头牌';
+                    }
+                }
+                // 已选未断选票，当前是人头牌卡牌
+                const hasHangingChad = selectedIds.includes('j_hanging_chad');
+                if (hasHangingChad) {
+                    // 第一张人头牌X倍率卡
+                    if (['j_photograph', 'j_scary_face', 'j_smiley'].includes(card.id)) {
+                        score += 40;
+                        synergy = synergy || '未断选票让人头牌卡牌重复触发';
+                    }
+                    // K/Q相关卡牌
+                    if (['j_baron', 'j_triboulet', 'j_shoot_moon'].includes(card.id)) {
+                        score += 45;
+                        synergy = synergy || '未断选票让K/Q卡牌重复触发';
+                    }
+                    // 点数效果卡
+                    if (['j_fibonacci', 'j_even_steven', 'j_odd_todd', 'j_scholar', 'j_walkie', 'j_hack'].includes(card.id)) {
+                        score += 45;
+                        synergy = synergy || '未断选票让单牌点数效果触发3次';
+                    }
+                    // 花色效果卡
+                    if (['j_greedy', 'j_lusty', 'j_wrathful', 'j_gluttonous', 'j_arrowhead', 'j_onyx', 'j_bloodstone'].includes(card.id)) {
+                        score += 40;
+                        synergy = synergy || '未断选票让花色单牌效果触发3次';
+                    }
+                    // 徒步者
+                    if (card.id === 'j_hiker') {
+                        score += 45;
+                        synergy = synergy || '未断选票让徒步者永久+5筹码触发3次';
+                    }
+                    // 喜与悲
+                    if (card.id === 'j_sock') {
+                        score += 45;
+                        synergy = synergy || '未断选票+喜与悲双重重复触发';
+                    }
+                }
+                // 喜与悲 + 人头牌卡牌高协同
+                if (selectedIds.includes('j_sock')) {
+                    if (card.id === 'j_scary_face' || card.id === 'j_photograph' || card.id === 'j_smiley' || card.id === 'j_baron' || card.id === 'j_pareidolia' || card.id === 'j_triboulet') {
+                        score += 45;
+                        synergy = synergy || '喜与悲让人头牌卡牌反复触发';
+                    }
+                }
+                // 特里布莱 + 人头牌相关卡牌协同（K和Q是人头牌）
+                if (selectedIds.includes('j_triboulet')) {
+                    if (card.id === 'j_scary_face') {
+                        score += 50;
+                        synergy = synergy || '特里布莱K/Q×2 + 恐怖面孔人头牌+30筹码';
+                    }
+                    if (card.id === 'j_photograph') {
+                        score += 55;
+                        synergy = synergy || '特里布莱K/Q×2 + 照片第1张人头牌×2，双重X倍率';
+                    }
+                    if (card.id === 'j_smiley') {
+                        score += 50;
+                        synergy = synergy || '特里布莱K/Q×2 + 微笑表情人头牌+5倍率';
+                    }
+                    if (card.id === 'j_sock') {
+                        score += 55;
+                        synergy = synergy || '特里布莱K/Q×2 + 喜与悲人头牌额外触发1次';
+                    }
+                    if (card.id === 'j_pareidolia') {
+                        score += 60;
+                        synergy = synergy || '特里布莱K/Q×2 + 幻视让所有牌变人头牌，全牌触发';
+                    }
+                }
+                // 反向：已选人头牌相关卡牌，推荐特里布莱
+                if (card.id === 'j_triboulet') {
+                    if (selectedIds.includes('j_scary_face') || selectedIds.includes('j_photograph') || selectedIds.includes('j_smiley')) {
+                        score += 50;
+                        synergy = synergy || '特里布莱K/Q×2叠加人头牌加成';
+                    }
+                    if (selectedIds.includes('j_sock')) {
+                        score += 55;
+                        synergy = synergy || '喜与悲让特里布莱K/Q×2额外触发1次';
+                    }
+                    if (selectedIds.includes('j_pareidolia')) {
+                        score += 60;
+                        synergy = synergy || '幻视让所有牌变人头牌，特里布莱全牌×2';
+                    }
+                }
+                // 哑剧演员 + 手牌效果协同（男爵/射月/钢铁牌）
+                if (selectedIds.includes('j_mime')) {
+                    // 哑剧演员 + 男爵（手牌中K的×1.5额外触发）
+                    if (card.id === 'j_baron') {
+                        score += 55;
+                        synergy = synergy || '哑剧演员让手牌K的男爵×1.5额外触发1次';
+                    }
+                    // 哑剧演员 + 射月（手牌中Q的+13倍率额外触发）
+                    if (card.id === 'j_shoot_moon') {
+                        score += 50;
+                        synergy = synergy || '哑剧演员让手牌Q的射月+13倍率额外触发1次';
+                    }
+                    // 哑剧演员 + 钢铁牌（战车创建钢铁牌）
+                    if (card.id === 'j_steel') {
+                        score += 50;
+                        synergy = synergy || '哑剧演员让手牌中钢铁牌×1.5额外触发1次';
+                    }
+                }
+                // 反向：已选男爵/射月/钢铁小丑，推荐哑剧演员
+                if (card.id === 'j_mime') {
+                    if (selectedIds.includes('j_baron')) {
+                        score += 50;
+                        synergy = synergy || '哑剧演员让手牌K的男爵×1.5额外触发';
+                    }
+                    if (selectedIds.includes('j_shoot_moon')) {
+                        score += 45;
+                        synergy = synergy || '哑剧演员让手牌Q的射月+13倍率额外触发';
+                    }
+                    if (selectedIds.includes('j_steel')) {
+                        score += 45;
+                        synergy = synergy || '哑剧演员让手牌中钢铁牌效果额外触发';
+                    }
+                }
+                // 照片 + 恐怖面孔
+                if (selectedIds.includes('j_photograph') && card.id === 'j_scary_face') {
+                    score += 40;
+                    synergy = synergy || '照片X2 + 恐怖面孔+30筹码';
+                }
+                // 照片 + 微笑脸
+                if (selectedIds.includes('j_photograph') && card.id === 'j_smiley') {
+                    score += 40;
+                    synergy = synergy || '照片X2 + 微笑脸+5倍率';
+                }
+                // 烂脱口秀 + 偶数史蒂文/奇数托德
+                if (selectedIds.includes('j_hack')) {
+                    if (card.id === 'j_even_steven') {
+                        score += 45;
+                        synergy = synergy || '烂脱口秀让2和4额外触发，偶数史蒂文+4倍率双重触发';
+                    }
+                    if (card.id === 'j_odd_todd') {
+                        score += 45;
+                        synergy = synergy || '烂脱口秀让3和5额外触发，奇数托德+31筹码双重触发';
+                    }
+                }
+                if (card.id === 'j_hack') {
+                    if (selectedIds.includes('j_even_steven')) {
+                        score += 40;
+                        synergy = synergy || '烂脱口秀让2和4双重触发偶数史蒂文';
+                    }
+                    if (selectedIds.includes('j_odd_todd')) {
+                        score += 40;
+                        synergy = synergy || '烂脱口秀让3和5双重触发奇数托德';
+                    }
+                }
+                // 飞溅扩展协同
+                if (selectedIds.includes('j_splash')) {
+                    if (card.id === 'j_smiley') {
+                        score += 40;
+                        synergy = synergy || '飞溅让所有牌计分，微笑表情人头牌+5倍率全触发';
+                    }
+                    if (card.id === 'j_triboulet') {
+                        score += 45;
+                        synergy = synergy || '飞溅让所有牌计分，特里布莱K/Q×2全触发';
+                    }
+                    if (card.id === 'j_sock') {
+                        score += 40;
+                        synergy = synergy || '飞溅让所有牌计分，喜与悲人头牌额外触发';
+                    }
+                }
+                // 六六大顺扩展协同
+                if (selectedIds.includes('j_oops_6')) {
+                    if (card.id === 'j_8ball') {
+                        score += 45;
+                        synergy = synergy || '六六大顺将8号球1/4概率翻倍为1/2';
+                    }
+                    if (card.id === 'j_business_card') {
+                        score += 40;
+                        synergy = synergy || '六六大顺将名片1/2概率翻倍为1/1，必定$2';
+                    }
+                }
+                if (card.id === 'j_oops_6') {
+                    if (selectedIds.includes('j_8ball')) {
+                        score += 40;
+                        synergy = synergy || '六六大顺翻倍8号球概率';
+                    }
+                    if (selectedIds.includes('j_business_card')) {
+                        score += 35;
+                        synergy = synergy || '六六大顺翻倍名片概率';
+                    }
+                }
+                // 幻视扩展协同（名片/迈达斯）
+                if (selectedIds.includes('j_pareidolia')) {
+                    if (card.id === 'j_business_card') {
+                        score += 45;
+                        synergy = synergy || '幻视所有牌变人头牌，名片每张牌1/2概率$2';
+                    }
+                    if (card.id === 'j_midas') {
+                        score += 50;
+                        synergy = synergy || '幻视所有牌变人头牌，迈达斯将所有牌变金卡';
+                    }
+                }
+                // 喜与悲 + 名片/迈达斯
+                if (selectedIds.includes('j_sock')) {
+                    if (card.id === 'j_business_card') {
+                        score += 35;
+                        synergy = synergy || '喜与悲人头牌额外触发，名片多一次$2机会';
+                    }
+                    if (card.id === 'j_midas') {
+                        score += 40;
+                        synergy = synergy || '喜与悲人头牌额外触发，迈达斯更多变金机会';
+                    }
+                }
             }
             
             // 6. 花色协同
@@ -624,6 +1135,33 @@ class BalatroApp {
                 if (suitMatches.length >= 2) {
                     score += 25;
                     synergy = synergy || '多花色加成卡牌组合';
+                }
+                
+                // 模糊小丑让花色卡牌协同翻倍
+                if (selectedIds.includes('j_smeared') && suitMatches.length >= 1) {
+                    score += 20;
+                    synergy = synergy || '模糊小丑扩大花色触发范围';
+                }
+                
+                // 箭头 + 黑板 (黑桃+梅花)
+                if ((selectedIds.includes('j_arrowhead') && card.id === 'j_blackboard') ||
+                    (selectedIds.includes('j_blackboard') && card.id === 'j_arrowhead')) {
+                    score += 45;
+                    synergy = synergy || '箭头+黑板黑桃/梅花协同';
+                }
+                
+                // 璞玉 + 部落 (方块牌收益)
+                if ((selectedIds.includes('j_rough_gem') && card.id === 'j_tribe') ||
+                    (selectedIds.includes('j_tribe') && card.id === 'j_rough_gem')) {
+                    score += 40;
+                    synergy = synergy || '璞玉方块牌+$1与部落同花X2协同';
+                }
+                
+                // 血石 + 滑稽/精明
+                if ((selectedIds.includes('j_bloodstone') && (card.id === 'j_droll' || card.id === 'j_crafty')) ||
+                    ((selectedIds.includes('j_droll') || selectedIds.includes('j_crafty')) && card.id === 'j_bloodstone')) {
+                    score += 40;
+                    synergy = synergy || '血石1/2概率X1.5与红桃同花协同';
                 }
             }
             
@@ -640,12 +1178,14 @@ class BalatroApp {
             // 8. 摧毁类协同
             if (tags.includes('destroy') || effects.destroy) {
                 const destroySynergies = [
-                    { cards: ['j_glass', 'j_vampire'], name: '玻璃吸血鬼组合' },
+                    { cards: ['j_glass', 't_justice'], name: '玻璃正义循环' },
+                    { cards: ['j_glass', 't_fool'], name: '玻璃愚者循环' },
                     { cards: ['j_canio', 'j_pareidolia'], name: '人头牌销毁流' },
-                    { cards: ['j_glass', 't_fool'], name: '玻璃销毁流' },
                     { cards: ['j_flower_pot', 't_high_priestess'], name: '卖花女组合' },
                     { cards: ['t_hanged', 'j_abstract'], name: '倒吊抽象流' },
-                    { cards: ['j_madness', 'j_abstract'], name: '疯狂销毁流' }
+                    { cards: ['j_madness', 'j_abstract'], name: '疯狂销毁流' },
+                    { cards: ['j_erosion', 't_hanged'], name: '侵蚀倒吊人' },
+                    { cards: ['j_erosion', 's_immolate'], name: '侵蚀火祭' }
                 ];
                 
                 for (const syn of destroySynergies) {
@@ -667,7 +1207,7 @@ class BalatroApp {
                     { cards: ['j_superposition', 'j_fortune_teller'], name: '叠加塔罗' },
                     { cards: ['j_vagabond', 'j_fortune_teller'], name: '流浪塔罗' },
                     { cards: ['t_strength', 'j_abstract'], name: '力量抽象' },
-                    { cards: ['t_wheel', 'j_showman'], name: '轮盘主持人' }
+                    { cards: ['t_wheel', 'j_showman'], name: '轮盘马戏团长' }
                 ];
                 
                 for (const syn of tarotSynergies) {
@@ -686,7 +1226,7 @@ class BalatroApp {
                     { cards: ['j_constellation', 'j_astronomer'], name: '星座天文学' },
                     { cards: ['j_satellite', 'j_constellation'], name: '卫星星座' },
                     { cards: ['t_priestess', 'j_constellation'], name: '女祭司星座' },
-                    { cards: ['j_showman', 'j_constellation'], name: '主持人行星' },
+                    { cards: ['j_showman', 'j_constellation'], name: '马戏团长行星' },
                     { cards: ['j_crazy', 'p_saturn'], name: '顺子行星' },
                     { cards: ['j_tribe', 'p_jupiter'], name: '同花行星' }
                 ];
@@ -709,7 +1249,7 @@ class BalatroApp {
                     { cards: ['s_familiar', 'j_pareidolia'], name: '使魔人头' },
                     { cards: ['s_grim', 'j_scholar'], name: '严峻学者' },
                     { cards: ['s_incantation', 'j_abstract'], name: '咒语抽象' },
-                    { cards: ['s_immolate', 'j_to_moon'], name: '火祭登月' },
+                    { cards: ['s_immolate', 'j_to_moon'], name: '火祭冲向月球' },
                     { cards: ['s_hex', 'j_showman'], name: '妖法主持' }
                 ];
                 
@@ -727,11 +1267,19 @@ class BalatroApp {
             if (tags.includes('rescore') || card.id === 'j_dusk') {
                 const rescoreSynergies = [
                     { cards: ['j_hanging_chad', 'j_dusk'], name: '查德黄昏' },
-                    { cards: ['j_hanging_chad', 'j_wee'], name: '查德小不点' },
+                    { cards: ['j_hanging_chad', 'j_wee'], name: '未断选票小小丑' },
                     { cards: ['j_hanging_chad', 'j_cavendish'], name: '查德卡文迪什' },
-                    { cards: ['j_hanging_chad', 'j_gros_michel'], name: '查德大麦克' },
+                    { cards: ['j_hanging_chad', 'j_gros_michel'], name: '未断选票大麦克香蕉' },
+                    { cards: ['j_hanging_chad', 'j_fibonacci'], name: '未断选票斐波那契' },
+                    { cards: ['j_hanging_chad', 'j_even_steven'], name: '未断选票偶数史蒂文' },
+                    { cards: ['j_hanging_chad', 'j_odd_todd'], name: '未断选票奇数托德' },
+                    { cards: ['j_hanging_chad', 'j_scholar'], name: '未断选票学者' },
+                    { cards: ['j_hanging_chad', 'j_walkie'], name: '未断选票对讲机' },
+                    { cards: ['j_hanging_chad', 'j_hack'], name: '未断选票烂脱口秀' },
+                    { cards: ['j_hanging_chad', 'j_hiker'], name: '未断选票徒步者' },
+                    { cards: ['j_hanging_chad', 'j_sock'], name: '未断选票喜与悲' },
                     { cards: ['j_dusk', 'j_abstract'], name: '黄昏抽象' },
-                    { cards: ['j_throwback', 'j_hanging_chad'], name: '怀旧查德' }
+                    { cards: ['j_throwback', 'j_hanging_chad'], name: '回溯未断选票' }
                 ];
                 
                 for (const syn of rescoreSynergies) {
@@ -747,7 +1295,7 @@ class BalatroApp {
             // 13. 风险/几率协同
             if (tags.includes('risky') || card.id === 'j_gros_michel' || card.id === 'j_cavendish' || card.id === 'j_bloodstone') {
                 const riskySynergies = [
-                    // 注意：大麦克和卡文迪什互斥，大麦克灭绝后才出现卡文迪什
+                    // 注意：大麦克香蕉和卡文迪什互斥，大麦克香蕉灭绝后才出现卡文迪什
                     { cards: ['j_gros_michel', 'j_bloodstone'], name: '风险血石' },
                     { cards: ['j_cavendish', 'j_oops_6'], name: '卡文迪什全6' },
                     { cards: ['j_madness', 'j_abstract'], name: '疯狂抽象' }
@@ -784,6 +1332,257 @@ class BalatroApp {
         .sort((a, b) => b.score - a.score);
     }
     
+    // ============ 匹配消耗品推荐 ============
+    
+    // 智能推荐匹配的塔罗牌
+    getMatchedTarots(existingRecs) {
+        const selectedIds = this.selectedCards.map(c => c.id);
+        const selectedJokers = this.selectedCards.filter(c => c.cardType === 'joker');
+        if (selectedJokers.length === 0) return existingRecs;
+        
+        const allTarots = this.allCards.filter(c => c.cardType === 'tarot' && !selectedIds.includes(c.id));
+        const recMap = new Map(existingRecs.map(r => [r.card.id, r]));
+        
+        // 定义 Joker → 塔罗牌 的匹配关系
+        const jokerTarotMap = {
+            'j_steel': { tarots: ['t_chariot'], reason: '战车创造钢铁牌，钢铁小丑每张钢卡+0.2倍率' },
+            'j_glass': { tarots: ['t_justice', 't_fool'], reason: '正义创造玻璃牌供摧毁叠加倍率，愚者可复制正义' },
+            'j_vampire': { tarots: ['t_empress', 't_emperor', 't_devil'], reason: '持续给牌附增强供吸血鬼吸收叠加X倍率' },
+            'j_driver_license': { tarots: ['t_empress', 't_emperor', 't_devil', 't_chariot'], reason: '强化牌凑齐16张增强牌激活X3倍率' },
+            'j_lucky_cat': { tarots: ['t_magician'], reason: '魔术师创造幸运牌，招财猫触发幸运卡+0.25倍率' },
+            'j_stone': { tarots: ['t_tower'], reason: '塔创造石头牌，石头小丑每张石头牌+25筹码' },
+            'j_marble': { tarots: ['t_tower'], reason: '塔创造石头牌，配合大理石小丑增加石头牌数量' },
+            'j_midas': { tarots: ['t_devil'], reason: '恶魔创造黄金牌，配合迈达斯面具增强金卡效果' },
+            'j_golden_ticket': { tarots: ['t_devil'], reason: '恶魔创造黄金牌，黄金门票每张金卡+$4' },
+            'j_fortune_teller': { tarots: ['t_fool'], reason: '愚者复制上张塔罗牌，增加算命先生使用次数' },
+            'j_greedy': { tarots: ['t_star'], reason: '星星将牌转为方块，贪婪小丑方块+3倍率' },
+            'j_lusty': { tarots: ['t_sun'], reason: '太阳将牌转为红桃，色欲小丑红桃+3倍率' },
+            'j_wrathful': { tarots: ['t_world'], reason: '世界将牌转为黑桃，愤怒小丑黑桃+3倍率' },
+            'j_gluttonous': { tarots: ['t_moon'], reason: '月亮将牌转为梅花，暴食小丑梅花+3倍率' },
+            'j_bloodstone': { tarots: ['t_sun'], reason: '太阳将牌转为红桃，血石红桃1/2几率X1.5' },
+            'j_arrowhead': { tarots: ['t_world'], reason: '世界将牌转为黑桃，箭头黑桃+50筹码' },
+            'j_onyx': { tarots: ['t_moon'], reason: '月亮将牌转为梅花，缟玛瑙梅花+7倍率' },
+            'j_rough_gem': { tarots: ['t_star'], reason: '星星将牌转为方块，璞玉方块牌+$1' },
+            'j_blackboard': { tarots: ['t_world', 't_moon'], reason: '世界/月亮将牌转为黑桃/梅花，黑板全黑X3更容易' },
+            'j_flower_pot': { tarots: ['t_lovers'], reason: '恋人创造万能牌，花盆四花色更容易凑齐' },
+            'j_constellation': { tarots: ['t_priestess'], reason: '女教皇生成2张行星牌，星座每张行星牌+0.1倍率' },
+            'j_abstract': { tarots: ['t_strength', 't_hanged'], reason: '力量/倒吊人调整牌组，抽象小丑获得额外倍率' },
+            'j_pareidolia': { tarots: ['t_empress', 't_emperor'], reason: '幻视让所有牌变人头牌，增强牌效果范围翻倍' },
+            'j_canio': { tarots: ['t_hanged'], reason: '倒吊人移除牌给卡尼奥提供人头牌摧毁机会' },
+            'j_hologram': { tarots: ['t_strength', 't_death'], reason: '全息影像每加入牌组+0.25倍率，塔罗牌可以改牌加入' },
+            'j_showman': { tarots: ['t_wheel'], reason: '命运之轮概率强化Joker，马戏团长让强化效果可重复' },
+            'j_cartomancer': { tarots: ['t_fool'], reason: '卡牌术士创造塔罗牌，愚者可复制上张塔罗效果' },
+        };
+        
+        const results = new Map();
+        
+        for (const joker of selectedJokers) {
+            const mapping = jokerTarotMap[joker.id];
+            if (!mapping) continue;
+            
+            for (const tarotId of mapping.tarots) {
+                if (selectedIds.includes(tarotId)) continue;
+                const tarot = allTarots.find(t => t.id === tarotId);
+                if (!tarot) continue;
+                
+                if (results.has(tarotId)) {
+                    const existing = results.get(tarotId);
+                    existing.score += 30;
+                    existing.reason += `；${mapping.reason}`;
+                } else {
+                    // 合并已有的推荐分数
+                    const existingRec = recMap.get(tarotId);
+                    const baseScore = existingRec ? existingRec.score : 0;
+                    results.set(tarotId, {
+                        card: tarot,
+                        score: baseScore + 40,
+                        reason: mapping.reason,
+                        synergy: `配合 ${joker.name}`,
+                        buildTag: null
+                    });
+                }
+            }
+        }
+        
+        // 合并已有推荐中未被新逻辑覆盖的塔罗牌
+        for (const rec of existingRecs) {
+            if (!results.has(rec.card.id)) {
+                results.set(rec.card.id, rec);
+            }
+        }
+        
+        return Array.from(results.values()).sort((a, b) => b.score - a.score);
+    }
+    
+    // 智能推荐匹配的行星牌
+    getMatchedPlanets(existingRecs) {
+        const selectedIds = this.selectedCards.map(c => c.id);
+        const selectedJokers = this.selectedCards.filter(c => c.cardType === 'joker');
+        if (selectedJokers.length === 0) return existingRecs;
+        
+        const allPlanets = this.allCards.filter(c => c.cardType === 'planet' && !selectedIds.includes(c.id));
+        const recMap = new Map(existingRecs.map(r => [r.card.id, r]));
+        
+        // 定义 牌型 → 行星牌 的映射
+        const handToPlanet = {
+            'high_card': 'p_pluto', 'one_pair': 'p_mercury', 'pair': 'p_mercury',
+            'two_pair': 'p_uranus', 'three_of_a_kind': 'p_venus',
+            'straight': 'p_saturn', 'flush': 'p_jupiter',
+            'full_house': 'p_earth', 'four_of_a_kind': 'p_mars',
+            'straight_flush': 'p_neptune', 'five_of_a_kind': 'p_planet_x',
+            'flush_five': 'p_eris', 'flush_house': 'p_ceres'
+        };
+        
+        // 定义 Joker → 行星牌 的直接匹配
+        const jokerPlanetMap = {
+            'j_jolly': { planets: ['p_mercury'], reason: '水星升级对子牌型，开心小丑对子+8倍率' },
+            'j_sly': { planets: ['p_mercury'], reason: '水星升级对子牌型，奸诈小丑对子+50筹码' },
+            'j_duo': { planets: ['p_mercury'], reason: '水星升级对子牌型，二重奏对子X2' },
+            'j_zany': { planets: ['p_venus'], reason: '金星升级三条牌型，疯狂小丑三条+12倍率' },
+            'j_wily': { planets: ['p_venus'], reason: '金星升级三条牌型，狡猾小丑三条+100筹码' },
+            'j_trio': { planets: ['p_venus'], reason: '金星升级三条牌型，三重奏三条X3' },
+            'j_mad': { planets: ['p_uranus'], reason: '天王星升级两对牌型，疯小丑两对+10倍率' },
+            'j_clever': { planets: ['p_uranus'], reason: '天王星升级两对牌型，聪明小丑两对+80筹码' },
+            'j_spare_trousers': { planets: ['p_uranus'], reason: '天王星升级两对牌型，备用裤子两对+2倍率' },
+            'j_crazy': { planets: ['p_saturn'], reason: '土星升级顺子牌型，疯狂小丑顺子+12倍率' },
+            'j_devious': { planets: ['p_saturn'], reason: '土星升级顺子牌型，阴险小丑顺子+100筹码' },
+            'j_order': { planets: ['p_saturn'], reason: '土星升级顺子牌型，秩序顺子X3' },
+            'j_runner': { planets: ['p_saturn'], reason: '土星升级顺子牌型，跑步选手顺子+15筹码' },
+            'j_droll': { planets: ['p_jupiter'], reason: '木星升级同花牌型，滑稽小丑同花+10倍率' },
+            'j_crafty': { planets: ['p_jupiter'], reason: '木星升级同花牌型，精明小丑同花+80筹码' },
+            'j_tribe': { planets: ['p_jupiter'], reason: '木星升级同花牌型，部落同花X2' },
+            'j_family': { planets: ['p_mars'], reason: '火星升级四条牌型，一家人四条X4' },
+            'j_constellation': { planets: ['p_pluto', 'p_mercury', 'p_venus', 'p_saturn', 'p_jupiter'], reason: '使用任何行星牌都能增加星座的X倍率' },
+            'j_astronomer': { planets: ['p_pluto', 'p_mercury', 'p_venus', 'p_saturn', 'p_jupiter'], reason: '天文学家让商店行星牌免费，多买多升级' },
+            'j_satellite': { planets: ['p_pluto', 'p_mercury', 'p_venus', 'p_saturn', 'p_jupiter', 'p_uranus', 'p_earth', 'p_mars', 'p_neptune'], reason: '卫星每使用独特行星+$1，尽量多用不同行星' },
+            'j_supernova': { planets: ['p_mercury', 'p_saturn', 'p_jupiter'], reason: '超新星按牌型使用次数+倍率，行星牌升级常用牌型' },
+            'j_shortcut': { planets: ['p_saturn'], reason: '土星升级顺子，捷径允许1点空隙降低门槛' },
+            'j_four_fingers': { planets: ['p_saturn', 'p_jupiter', 'p_neptune'], reason: '四指只需4张组顺子/同花，行星牌升级这些牌型收益更大' },
+            'j_seance': { planets: ['p_neptune'], reason: '海王星升级同花顺牌型，通灵同花顺时产生灵魂牌' },
+            'j_smeared': { planets: ['p_jupiter', 'p_neptune'], reason: '模糊小丑合并花色，同花/同花顺更容易凑成，值得升级' },
+        };
+        
+        const results = new Map();
+        
+        for (const joker of selectedJokers) {
+            const mapping = jokerPlanetMap[joker.id];
+            if (!mapping) continue;
+            
+            for (const planetId of mapping.planets) {
+                if (selectedIds.includes(planetId)) continue;
+                const planet = allPlanets.find(p => p.id === planetId);
+                if (!planet) continue;
+                
+                if (results.has(planetId)) {
+                    const existing = results.get(planetId);
+                    existing.score += 20;
+                    if (!existing.reason.includes(joker.name)) {
+                        existing.synergy += `、${joker.name}`;
+                    }
+                } else {
+                    const existingRec = recMap.get(planetId);
+                    const baseScore = existingRec ? existingRec.score : 0;
+                    results.set(planetId, {
+                        card: planet,
+                        score: baseScore + 35,
+                        reason: mapping.reason,
+                        synergy: `配合 ${joker.name}`,
+                        buildTag: null
+                    });
+                }
+            }
+        }
+        
+        // 合并已有推荐
+        for (const rec of existingRecs) {
+            if (!results.has(rec.card.id)) {
+                results.set(rec.card.id, rec);
+            }
+        }
+        
+        return Array.from(results.values()).sort((a, b) => b.score - a.score);
+    }
+    
+    // 智能推荐匹配的灵魂牌
+    getMatchedSpectrals(existingRecs) {
+        const selectedIds = this.selectedCards.map(c => c.id);
+        const selectedJokers = this.selectedCards.filter(c => c.cardType === 'joker');
+        if (selectedJokers.length === 0) return existingRecs;
+        
+        const allSpectrals = this.allCards.filter(c => c.cardType === 'spectral' && !selectedIds.includes(c.id));
+        const recMap = new Map(existingRecs.map(r => [r.card.id, r]));
+        
+        // 定义 Joker → 灵魂牌 的匹配关系
+        const jokerSpectralMap = {
+            'j_photograph': { spectrals: ['s_familiar'], reason: '使魔摧毁牌获得3张强化人头牌，照片第一张人头牌X2' },
+            'j_scary_face': { spectrals: ['s_familiar'], reason: '使魔获得强化人头牌，恐怖面容人头牌+30筹码' },
+            'j_smiley': { spectrals: ['s_familiar'], reason: '使魔获得强化人头牌，微笑表情人头牌+5倍率' },
+            'j_pareidolia': { spectrals: ['s_familiar', 's_cryptid'], reason: '使魔配合幻视，所有强化牌都触发人头牌加成；神秘生物复制牌组' },
+            'j_scholar': { spectrals: ['s_grim'], reason: '严峻摧毁牌获得2张强化A，学者A+20筹码+4倍率' },
+            'j_fibonacci': { spectrals: ['s_grim', 's_incantation'], reason: '严峻获得强化A配合斐波那契，咒语获得数字牌也可触发' },
+            'j_abstract': { spectrals: ['s_incantation', 's_hex'], reason: '咒语增加牌组配合抽象小丑，妖法强化Joker多彩效果' },
+            'j_to_moon': { spectrals: ['s_immolate'], reason: '火祭摧毁5张牌获$20，冲向月球增加利息收益最大化' },
+            'j_golden': { spectrals: ['s_immolate', 's_talisman'], reason: '火祭$20配合经济体系，护身符金封印增加金卡收益' },
+            'j_bull': { spectrals: ['s_immolate'], reason: '火祭$20增加现金，公牛每$1+2筹码' },
+            'j_bootstraps': { spectrals: ['s_immolate'], reason: '火祭$20增加现金，乌合之众每$5+2倍率' },
+            'j_showman': { spectrals: ['s_hex', 's_aura'], reason: '妖法/光环强化Joker，马戏团长让效果可重复' },
+            'j_blueprint': { spectrals: ['s_soul', 's_ankh'], reason: '灵魂获得传说Joker，安卡复制Joker配合蓝图' },
+            'j_brainstorm': { spectrals: ['s_soul', 's_ankh'], reason: '灵魂获得传说Joker，安卡复制Joker配合头脑风暴' },
+            'j_seance': { spectrals: ['s_soul'], reason: '通灵产灵魂牌，灵魂创造传说Joker' },
+            'j_sixth_sense': { spectrals: ['s_soul'], reason: '第六感产灵魂牌，灵魂创造传说Joker' },
+            'j_hologram': { spectrals: ['s_cryptid', 's_familiar', 's_grim', 's_incantation'], reason: '这些灵魂牌创造新牌加入牌组，全息影像每加入+0.25倍率' },
+            'j_midas': { spectrals: ['s_talisman'], reason: '护身符添加金封印，配合迈达斯面具的金卡体系' },
+            'j_golden_ticket': { spectrals: ['s_talisman'], reason: '护身符添加金封印，黄金门票每张金卡+$4' },
+            'j_glass': { spectrals: ['s_hex'], reason: '妖法赋予多彩效果，配合玻璃小丑的摧毁叠加体系' },
+            'j_driver_license': { spectrals: ['s_aura', 's_familiar', 's_grim', 's_incantation'], reason: '灵魂牌创造强化牌，帮助凑齐16张增强牌激活驾驶执照X3' },
+            'j_perkeo': { spectrals: ['s_soul', 's_black_hole', 's_wraith'], reason: '帕奇欧创造消耗卡负面复制，灵魂/黑洞/幽灵都是顶级灵魂牌' },
+            'j_campfire': { spectrals: ['s_ankh'], reason: '安卡复制Joker可以出售，篝火每出售+X0.25' },
+            'j_space': { spectrals: ['s_black_hole'], reason: '黑洞所有牌型升1级，配合太空小丑的牌型升级体系' },
+            'j_supernova': { spectrals: ['s_black_hole'], reason: '黑洞升级所有牌型，超新星按使用次数+倍率' },
+            'j_constellation': { spectrals: ['s_black_hole'], reason: '黑洞升级所有牌型如同使用多张行星牌，星座获得大量倍率' },
+        };
+        
+        const results = new Map();
+        
+        for (const joker of selectedJokers) {
+            const mapping = jokerSpectralMap[joker.id];
+            if (!mapping) continue;
+            
+            for (const spectralId of mapping.spectrals) {
+                if (selectedIds.includes(spectralId)) continue;
+                const spectral = allSpectrals.find(s => s.id === spectralId);
+                if (!spectral) continue;
+                
+                if (results.has(spectralId)) {
+                    const existing = results.get(spectralId);
+                    existing.score += 25;
+                    if (!existing.synergy.includes(joker.name)) {
+                        existing.synergy += `、${joker.name}`;
+                    }
+                } else {
+                    const existingRec = recMap.get(spectralId);
+                    const baseScore = existingRec ? existingRec.score : 0;
+                    results.set(spectralId, {
+                        card: spectral,
+                        score: baseScore + 35,
+                        reason: mapping.reason,
+                        synergy: `配合 ${joker.name}`,
+                        buildTag: null
+                    });
+                }
+            }
+        }
+        
+        // 合并已有推荐
+        for (const rec of existingRecs) {
+            if (!results.has(rec.card.id)) {
+                results.set(rec.card.id, rec);
+            }
+        }
+        
+        return Array.from(results.values()).sort((a, b) => b.score - a.score);
+    }
+    
     // ============ 攻略推荐 ============
     
     // 构筑流派定义
@@ -800,41 +1599,51 @@ class BalatroApp {
                 tips: '优先升级对子的行星牌（水星），后期寻找二重奏(X2)作为终极倍率'
             },
             {
+                id: 'double_pair_build',
+                name: '👯 双对流',
+                difficulty: '⭐⭐ 中等',
+                desc: '两对牌型组合卡牌，双倍触发对子加成，伤害爆炸',
+                detail: '两对包含两个对子，因此开心小丑(+8倍率)、奸诈小丑(+50筹码)会双倍触发。再叠加疯狂小丑(+10倍率)、聪敏小丑(+80筹码)、备用裤子(+2倍率永久叠加)，五卡齐聚时对子效果全部触发两次，伤害倍增。',
+                coreCards: ['j_mad', 'j_clever', 'j_spare_trousers', 'j_jolly', 'j_sly'],
+                supportCards: ['j_duo', 'p_uranus'],
+                tips: '两对是双倍快乐——对子系加成会触发两次！备用裤子的倍率叠加尤其强大，两对一次叠加+4倍率'
+            },
+            {
                 id: 'straight_build',
                 name: '📏 顺子流',
                 difficulty: '⭐⭐ 中等',
                 desc: '顺子体系，配合捷径降低门槛，秩序提供X3倍率',
                 detail: '顺子需要5张连续牌，难度较高但回报丰厚。捷径允许1点间隔大幅降低组成难度，四指可以只用4张。',
-                coreCards: ['j_crazy', 'j_devious', 'j_order', 'j_shortcut'],
-                supportCards: ['j_runner', 'j_superposition', 'j_four_fingers', 'p_saturn'],
+                coreCards: ['j_crazy', 'j_devious', 'j_order', 'j_shortcut', 'j_four_fingers'],
+                supportCards: ['j_runner', 'j_superposition', 'p_saturn'],
                 tips: '捷径是顺子流的核心辅助，让2-4-5-6-7也算顺子。四指进一步降低到4张即可'
             },
             {
                 id: 'flush_build',
                 name: '🎨 同花流',
                 difficulty: '⭐⭐ 中等',
-                desc: '同花体系，配合花色Joker和涂抹小丑提高触发率',
-                detail: '同花需要5张同花色牌，涂抹小丑合并红方/黑梅大幅提高概率。四指可以降低到4张。',
-                coreCards: ['j_droll', 'j_crafty', 'j_tribe'],
-                supportCards: ['j_smeared', 'j_four_fingers', 'j_blackboard', 'p_jupiter'],
-                tips: '涂抹小丑是同花流最重要的辅助——红桃方块合并、黑桃梅花合并，等于只有2种花色'
+                desc: '同花体系，配合花色Joker和模糊小丑提高触发率',
+                detail: '同花需要5张同花色牌，模糊小丑合并红方/黑梅大幅提高概率。四指可以降低到4张。',
+                coreCards: ['j_droll', 'j_crafty', 'j_tribe', 'j_smeared'],
+                supportCards: ['j_four_fingers', 'j_blackboard', 'p_jupiter'],
+                tips: '模糊小丑是同花流最重要的辅助——红桃方块合并、黑桃梅花合并，等于只有2种花色'
             },
             {
                 id: 'face_build',
                 name: '👑 人头牌流',
                 difficulty: '⭐⭐ 中等',
                 desc: '围绕J/Q/K人头牌构筑，多个Joker提供叠加加成',
-                detail: '人头牌(J/Q/K)有大量专属加成Joker，空想性错觉可以让所有牌都变成人头牌，是人头牌流的终极辅助。',
+                detail: '人头牌(J/Q/K)有大量专属加成Joker，幻视可以让所有牌都变成人头牌，是人头牌流的终极辅助。',
                 coreCards: ['j_photograph', 'j_scary_face', 'j_smiley', 'j_pareidolia'],
                 supportCards: ['j_sock', 'j_baron', 'j_triboulet', 'j_business_card', 'j_midas'],
-                tips: '空想性错觉(所有牌变人头牌)是核心中的核心，拿到后所有人头牌加成都能触发'
+                tips: '幻视(所有牌变人头牌)是核心中的核心，拿到后所有人头牌加成都能触发'
             },
             {
                 id: 'kq_build',
                 name: '♔ K/Q皇室流',
                 difficulty: '⭐⭐⭐ 高级',
                 desc: '围绕K和Q打造超高倍率，特里布莱K/Q各X2',
-                detail: '特里布莱让K和Q各提供X2倍率，男爵让每张K提供X1.5，射月让每张Q+13倍率。配合空想性错觉让所有牌变人头牌后效果更强。',
+                detail: '特里布莱让K和Q各提供X2倍率，男爵让每张K提供X1.5，射月让每张Q+13倍率。配合幻视让所有牌变人头牌后效果更强。',
                 coreCards: ['j_triboulet', 'j_baron', 'j_shoot_moon'],
                 supportCards: ['j_pareidolia', 'j_sock', 'j_photograph', 'j_hanging_chad'],
                 tips: '传说Joker特里布莱是核心，每张K和Q都X2，手牌全是K/Q时倍率爆炸'
@@ -854,40 +1663,40 @@ class BalatroApp {
                 name: '💰 经济流',
                 difficulty: '⭐ 简单',
                 desc: '快速积累金钱，利用金钱转化为筹码/倍率',
-                detail: '先通过经济Joker快速积累资金，再用公牛(每$1+2筹码)和靴带(每$5+2倍率)将金钱转化为战斗力。登月让利息收益最大化。',
+                detail: '先通过经济Joker快速积累资金，再用公牛(每$1+2筹码)和提靴带(每$5+2倍率)将金钱转化为战斗力。冲向月球让利息收益最大化。',
                 coreCards: ['j_golden', 'j_to_moon', 'j_bull', 'j_bootstraps'],
                 supportCards: ['j_rocket', 'j_egg', 'j_cloud9', 'j_credit_card'],
-                tips: '保持$25以上获得最大利息($5)，公牛和靴带让你的钱包就是你的武器'
+                tips: '保持$25以上获得最大利息($5)，公牛和乌合之众让你的钱包就是你的武器'
             },
             {
                 id: 'discard_build',
                 name: '🗑️ 弃牌流',
                 difficulty: '⭐⭐ 中等',
                 desc: '利用弃牌触发各种效果，弃牌也能赚钱和加倍率',
-                detail: '醉汉和快乐安迪增加弃牌次数，旗帜将剩余弃牌转化为筹码，尤里克弃23张后获得X倍率，赶路弃J获得倍率。弃牌经济卡则把弃牌变成收入。',
-                coreCards: ['j_drunkard', 'j_merry_andy', 'j_banner', 'j_yorick'],
-                supportCards: ['j_hit_road', 'j_trading', 'j_mail_in', 'j_castle', 'j_burnt', 'j_faceless'],
+                detail: '醉汉和快乐安迪增加弃牌次数，旗帜将剩余弃牌转化为筹码，约里克弃23张后获得X倍率，上路吧杰克弃J获得倍率。弃牌经济卡则把弃牌变成收入。',
+                coreCards: ['j_yorick', 'j_burnt', 'j_drunkard', 'j_merry_andy', 'j_banner'],
+                supportCards: ['j_hit_road', 'j_trading', 'j_mail_in', 'j_castle', 'j_faceless'],
                 tips: '快乐安迪+3弃牌是核心引擎，配合旗帜每剩余弃牌+30筹码非常可观'
             },
             {
                 id: 'burglar_build',
-                name: '🦝 窃贼流',
+                name: '🦝 侠盗流',
                 difficulty: '⭐⭐⭐ 高级',
                 desc: '窃贼移除所有弃牌，让多个Joker保持最佳状态',
-                detail: '窃贼移除所有弃牌次数但+3手牌。这让拉面始终保持X2倍率、神秘山峰始终+15倍率、延迟满足获得最高$收益、绿色小丑不会扣倍率。',
+                detail: '窃贼移除所有弃牌次数但+3手牌。这让拉面始终保持X2倍率、神秘峰顶始终+15倍率、延迟满足获得最高$收益、绿色小丑不会扣倍率。',
                 coreCards: ['j_burglar', 'j_ramen', 'j_mystic_summit'],
                 supportCards: ['j_delayed', 'j_green', 'j_acrobat'],
-                tips: '窃贼是整个流派的基石——没有弃牌=拉面不衰减+神秘山峰满触发+延迟满足满收益'
+                tips: '窃贼是整个流派的基石——没有弃牌=拉面不衰减+神秘峰顶满触发+延迟满足满收益'
             },
             {
                 id: 'tarot_build',
                 name: '🔮 塔罗流',
                 difficulty: '⭐⭐ 中等',
-                desc: '大量产出塔罗牌，算命师将每张塔罗牌转化为倍率',
-                detail: '占卜师每盲注创造塔罗牌，幻觉开包1/2概率获得塔罗牌，流浪者低价时产生塔罗牌。算命师每张使用过的塔罗牌+1倍率，后期倍率非常可观。',
+                desc: '大量产出塔罗牌，算命先生将每张塔罗牌转化为倍率',
+                detail: '卡牌术士每盲注创造塔罗牌，幻觉开包1/2概率获得塔罗牌，流浪者低价时产生塔罗牌。算命先生每张使用过的塔罗牌+1倍率，后期倍率非常可观。',
                 coreCards: ['j_cartomancer', 'j_fortune_teller', 'j_vagabond'],
                 supportCards: ['j_hallucination', 'j_8ball', 'j_superposition', 'j_perkeo'],
-                tips: '算命师的倍率随游戏进行不断累积，是塔罗流的核心产出卡'
+                tips: '算命先生的倍率随游戏进行不断累积，是塔罗流的核心产出卡'
             },
             {
                 id: 'planet_build',
@@ -904,10 +1713,10 @@ class BalatroApp {
                 name: '💥 摧毁流',
                 difficulty: '⭐⭐⭐ 高级',
                 desc: '通过摧毁卡牌/Joker获得永久加成',
-                detail: '玻璃小丑每摧毁玻璃卡+X0.75，吸血鬼吸收增强牌+X0.1，祭祀匕首击败Boss时摧毁右侧Joker获得永久倍率。疯狂+抽象也是经典摧毁组合。',
-                coreCards: ['j_glass', 'j_vampire', 'j_ceremonial', 'j_madness'],
-                supportCards: ['j_abstract', 'j_canio', 'j_pareidolia', 't_justice'],
-                tips: '玻璃卡+正义塔罗牌是核心循环——正义创造玻璃卡，玻璃卡摧毁时玻璃小丑增加倍率'
+                detail: '玻璃小丑每摧毁玻璃卡+X0.75，正义塔罗创造玻璃牌供摧毁，愚者可复制正义形成循环。仪式匕首击败Boss时摧毁右侧Joker获得永久倍率。疯狂+抽象也是经典摧毁组合。注意：吸血鬼的"移除增强"不等于摧毁，不会触发玻璃小丑。',
+                coreCards: ['j_glass', 'j_ceremonial', 'j_madness', 'j_canio'],
+                supportCards: ['j_abstract', 'j_pareidolia', 't_justice', 't_fool'],
+                tips: '玻璃卡+正义塔罗牌是核心循环——正义创造玻璃卡，玻璃卡摧毁时玻璃小丑增加倍率，愚者可复制上次使用的正义'
             },
             {
                 id: 'copy_build',
@@ -924,30 +1733,40 @@ class BalatroApp {
                 name: '🔥 出售流',
                 difficulty: '⭐⭐ 中等',
                 desc: '通过出售卡牌获得增益，篝火每出售+X0.25',
-                detail: '篝火每出售一张卡+X0.25倍率(Boss重置)，礼品卡增加出售值，健怡可乐出售创造免费双倍标签。每回合买卖循环快速累积倍率。',
+                detail: '篝火每出售一张卡+X0.25倍率(Boss重置)，礼品卡增加出售值，零糖可乐出售创造免费双倍标签。每回合买卖循环快速累积倍率。',
                 coreCards: ['j_campfire', 'j_gift_card', 'j_diet_cola'],
                 supportCards: ['j_swashbuckler', 'j_riff_raff', 'j_ceremonial'],
-                tips: '篝火在Boss重置前要尽量多出售卡牌累积倍率，流浪汉每盲注创造2个普通Joker可以出售'
+                tips: '篝火在Boss重置前要尽量多出售卡牌累积倍率，乌合之众每盲注创造2个普通Joker可以出售'
             },
             {
                 id: 'chance_build',
                 name: '🎲 概率流',
                 difficulty: '⭐⭐ 中等',
-                desc: '全是6翻倍所有概率，让概率型卡牌更稳定',
-                detail: '全是6让所有概率翻倍：血石1/2→1/1(必触发)、太空1/4→1/2、幸运猫触发率翻倍。配合幸运牌和概率型Joker效果极佳。',
+                desc: '六六大顺翻倍所有概率，让概率型卡牌更稳定',
+                detail: '六六大顺让所有概率翻倍：血石1/2→1/1(必触发)、太空1/4→1/2、招财猫触发率翻倍。配合幸运牌和概率型Joker效果极佳。',
                 coreCards: ['j_oops_6', 'j_bloodstone', 'j_lucky_cat'],
                 supportCards: ['j_space', 'j_gros_michel', 'j_ancient', 't_magician'],
-                tips: '全是6是概率流的基石——血石从50%变100%触发，太空从25%变50%，简直是作弊。注意大麦克灭绝后会变成卡文迪什(X3)更强'
+                tips: '六六大顺是概率流的基石——血石从50%变100%触发，太空从25%变50%，简直是作弊。注意大麦克香蕉灭绝后会变成卡文迪什(X3)更强'
+            },
+            {
+                id: 'augment_build',
+                name: '🧛 增强吸收流',
+                difficulty: '⭐⭐ 中等',
+                desc: '吸血鬼吸收增强牌效果叠加X倍率，注意与驾驶执照的取舍',
+                detail: '吸血鬼打出增强牌时移除增强效果+X0.1倍率，通过塔罗牌（皇后/皇帝等）不断给牌附增强供吸收。驾驶执照需要16张增强牌才能X3，与吸血鬼存在天然矛盾——吸血鬼吃掉增强会导致驾驶执照失效，需要合理取舍。',
+                coreCards: ['j_vampire', 'j_driver_license'],
+                supportCards: ['t_empress', 't_emperor', 'j_hallucination', 'j_cartomancer'],
+                tips: '如果走吸血鬼路线就别指望驾驶执照了，专注给牌加增强然后让吸血鬼吃掉叠倍率。塔罗牌产出越多，增强供应越稳定'
             },
             {
                 id: 'skip_build',
                 name: '⏭️ 跳过流',
                 difficulty: '⭐⭐ 中等',
-                desc: '跳过盲注获得倍率积累，怀旧+红小丑双重收益',
-                detail: '怀旧每跳过盲注+X0.25倍率，红小丑每跳过增强包+3倍率。跳过小盲注和大盲注（只打Boss）可以快速积累倍率。',
+                desc: '跳过盲注获得倍率积累，回溯+红牌双重收益',
+                detail: '回溯每跳过盲注+X0.25倍率，红牌每跳过增强包+3倍率。跳过小盲注和大盲注（只打Boss）可以快速积累倍率。',
                 coreCards: ['j_throwback', 'j_red'],
                 supportCards: ['j_mr_bones', 'j_acrobat', 'j_stencil'],
-                tips: '跳过小盲和大盲，只打Boss。骨头先生防止意外死亡，杂技演员最后一手X3保底'
+                tips: '跳过小盲和大盲，只打Boss。骷髅先生防止意外死亡，杂技演员最后一手X3保底'
             }
         ];
     }

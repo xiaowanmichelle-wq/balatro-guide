@@ -1,1 +1,4 @@
 .vercel
+.codebuddy/
+*.bak
+test_*.js
