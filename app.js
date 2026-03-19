@@ -154,6 +154,9 @@ class BalatroApp {
         // 清空卡组
         document.getElementById('clear-deck').addEventListener('click', () => this.clearDeck());
         
+        // 卡牌选择器 - 下拉切换
+        document.getElementById('picker-toggle').addEventListener('click', () => this.togglePicker());
+        
         // 卡牌选择器搜索
         document.getElementById('picker-search').addEventListener('input', (e) => {
             this.renderPicker(e.target.value.toLowerCase());
@@ -365,6 +368,32 @@ class BalatroApp {
         document.getElementById('recommendations').innerHTML = '<p class="empty-state">选择卡牌后，系统将为你推荐最佳搭配</p>';
     }
     
+    // 卡牌选择器下拉展开/收起
+    togglePicker() {
+        const toggle = document.getElementById('picker-toggle');
+        const dropdown = document.getElementById('picker-dropdown');
+        const isOpen = dropdown.classList.contains('open');
+        
+        if (isOpen) {
+            dropdown.classList.remove('open');
+            toggle.classList.remove('active');
+        } else {
+            dropdown.classList.add('open');
+            toggle.classList.add('active');
+            // 展开时聚焦搜索框
+            setTimeout(() => {
+                document.getElementById('picker-search').focus();
+            }, 100);
+        }
+    }
+    
+    closePicker() {
+        const toggle = document.getElementById('picker-toggle');
+        const dropdown = document.getElementById('picker-dropdown');
+        dropdown.classList.remove('open');
+        toggle.classList.remove('active');
+    }
+    
     renderPicker(search = '') {
         const container = document.getElementById('picker-list');
         
@@ -399,6 +428,9 @@ class BalatroApp {
         } else {
             this.removeCard(cardId);
         }
+        // 重新渲染 picker（保持当前搜索词）
+        const searchVal = document.getElementById('picker-search').value.toLowerCase();
+        this.renderPicker(searchVal);
     }
     
     updateRecommendations() {

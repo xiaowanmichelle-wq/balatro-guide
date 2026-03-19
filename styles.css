@@ -604,10 +604,51 @@ body {
     line-height: 1.4;
 }
 
-.card-picker h3 {
-    font-size: 1rem;
-    margin-bottom: 15px;
+/* 卡牌选择器 - 切换按钮（桌面端始终显示内容） */
+.picker-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 15px;
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
     color: var(--text-primary);
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.2s;
+    margin-bottom: 12px;
+}
+
+.picker-toggle:hover {
+    border-color: var(--accent-gold);
+    color: var(--accent-gold);
+}
+
+.picker-toggle.active {
+    border-color: var(--accent-gold);
+    color: var(--accent-gold);
+    border-radius: 8px 8px 0 0;
+    border-bottom-color: transparent;
+}
+
+.picker-toggle-icon {
+    transition: transform 0.3s ease;
+    font-size: 0.8rem;
+}
+
+.picker-toggle.active .picker-toggle-icon {
+    transform: rotate(180deg);
+}
+
+/* 桌面端：picker-toggle 隐藏，下拉区域始终可见 */
+.picker-toggle {
+    display: none;
+}
+
+.picker-dropdown {
+    /* 桌面端默认展开 */
 }
 
 .card-picker input {
@@ -1361,6 +1402,64 @@ body {
 
     .matcher-panel, .recommendations-panel {
         padding: 15px;
+    }
+
+    /* ★ 卡牌选择器 - 手机端下拉面板 */
+    .picker-toggle {
+        display: flex;
+        font-size: 0.9rem;
+        padding: 10px 12px;
+        margin-bottom: 0;
+    }
+
+    .picker-dropdown {
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.35s ease;
+        background: var(--bg-card);
+        border: 1px solid transparent;
+        border-top: none;
+        border-radius: 0 0 8px 8px;
+    }
+
+    .picker-dropdown.open {
+        max-height: 360px;
+        border-color: var(--accent-gold);
+        padding: 10px;
+        overflow-y: auto;
+    }
+
+    .picker-dropdown .picker-list {
+        max-height: 260px;
+        gap: 4px;
+    }
+
+    /* 手机端 picker-item 精简：单行，无描述 */
+    .picker-item {
+        padding: 8px 10px;
+        gap: 0;
+    }
+
+    .picker-item-header {
+        gap: 8px;
+    }
+
+    .picker-item-desc {
+        display: none;
+    }
+
+    .picker-item input {
+        width: 16px;
+        height: 16px;
+    }
+
+    .picker-item .name {
+        font-size: 0.82rem;
+    }
+
+    .picker-item .type {
+        font-size: 0.65rem;
+        padding: 1px 6px;
     }
 
     /* 匹配页面缩略图缩小 */
