@@ -932,6 +932,12 @@ body {
     color: var(--text-muted);
 }
 
+.site-stats {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    margin-top: 8px;
+}
+
 /* Scrollbar */
 ::-webkit-scrollbar {
     width: 8px;
