@@ -3,30 +3,162 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Balatro 新手助手 - 卡牌图鉴与构筑推荐</title>
+    <title>Balatro 新手助手 - 卡牌图鉴、构筑推荐与种子分享 | Balatro Guide</title>
+
+    <!-- SEO Meta -->
+    <meta name="description" content="Balatro 新手助手：最全的 Balatro 卡牌图鉴（150+张 Joker、塔罗牌、行星牌、灵魂牌），智能牌组匹配与构筑推荐，19种流派攻略指南（对子流、顺子流、同花流、经济流等），以及玩家种子分享社区。">
+    <meta name="keywords" content="Balatro, Balatro攻略, Balatro卡牌图鉴, Balatro新手指南, Balatro构筑, Balatro种子, Balatro Joker, Balatro guide, 小丑牌, 塔罗牌, 行星牌, 灵魂牌, 对子流, 顺子流, 同花流, 经济流, 牌组搭配, roguelike扑克">
+    <meta name="author" content="Balatro 新手助手">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://xiaowanmichelle-wq.github.io/balatro-guide/">
+
+    <!-- Open Graph (Facebook, Discord, etc.) -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Balatro 新手助手 - 卡牌图鉴、构筑推荐与种子分享">
+    <meta property="og:description" content="最全的 Balatro 卡牌图鉴（150+张），智能牌组匹配与构筑推荐，19种流派攻略指南，以及玩家种子分享社区。">
+    <meta property="og:url" content="https://xiaowanmichelle-wq.github.io/balatro-guide/">
+    <meta property="og:site_name" content="Balatro 新手助手">
+    <meta property="og:locale" content="zh_CN">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Balatro 新手助手 - 卡牌图鉴、构筑推荐与种子分享">
+    <meta name="twitter:description" content="最全的 Balatro 卡牌图鉴（150+张），智能牌组匹配与构筑推荐，19种流派攻略指南，以及玩家种子分享社区。">
+
+    <!-- 其他 -->
+    <meta name="theme-color" content="#1a1a2e">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
     <link rel="stylesheet" href="styles.css">
+
+    <!-- Schema.org 结构化数据 (SEO + GEO) -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "Balatro 新手助手",
+        "alternateName": ["Balatro Guide", "Balatro 攻略助手"],
+        "url": "https://xiaowanmichelle-wq.github.io/balatro-guide/",
+        "description": "最全的 Balatro 卡牌图鉴（150+张 Joker、塔罗牌、行星牌、灵魂牌），智能牌组匹配与构筑推荐，19种流派攻略指南，以及玩家种子分享社区。",
+        "applicationCategory": "GameApplication",
+        "operatingSystem": "Web",
+        "inLanguage": "zh-CN",
+        "isAccessibleForFree": true,
+        "offers": {
+            "@type": "Offer",
+            "price": "0",
+            "priceCurrency": "CNY"
+        },
+        "about": {
+            "@type": "VideoGame",
+            "name": "Balatro",
+            "genre": ["Roguelike", "Card Game", "Poker"],
+            "description": "Balatro 是一款以扑克牌为基础的 Roguelike 卡牌游戏，玩家通过搭配 Joker、塔罗牌、行星牌等特殊卡牌来构建强力牌组，挑战越来越高的盲注目标。"
+        }
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+            {
+                "@type": "Question",
+                "name": "Balatro 的得分公式是什么？",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Balatro 的核心得分公式是 Chips × Mult = Score。筹码(Chips)是基础值，由牌型基础筹码 + 打出牌点数 + 各种 +Chips 效果累加。倍数(Mult)由牌型基础倍数 + 各种 +Mult 效果累加。倍率(XMult)在倍数累加后依次相乘。计算顺序：先算总筹码，再算基础倍数，再乘以各倍率(XMult)，最后筹码 × 最终倍数 = 最终得分。"
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "Balatro 中 Joker 的顺序重要吗？",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "非常重要！Joker 的效果按从左到右的顺序依次触发。例如蓝图会复制右侧的 Joker，头脑风暴复制最左侧的 Joker。+Mult 的 Joker 应放在 XMult 的 Joker 左边（先加后乘收益最大）。打出的扑克牌也按从左到右依次计分。"
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "Balatro 有哪些常见的构筑流派？",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Balatro 常见的构筑流派包括：对子流（利用对子牌型叠加倍数）、顺子流（连续数字组成顺子得高分）、同花流（同一花色组成同花）、经济流（攒钱获取利息和强力卡牌）、弃牌流（通过弃牌触发卡牌效果）、人头牌流（J/Q/K 人头牌相关效果）、塔罗流（大量使用塔罗牌增强效果）、行星流（通过行星牌升级牌型等级）、摧毁流（通过摧毁卡牌获得收益）等19种流派。"
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "Balatro 什么是种子代码？怎么使用？",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "种子代码（Seed）决定了 Balatro 每一局中出现的卡牌、商店物品等随机内容。在开始新游戏时输入特定种子代码，就能获得与分享者相同的游戏体验。好的种子可以让你在早期就拿到强力 Joker 或稀有卡牌，获得精彩的开局。"
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "Balatro 新手应该优先选什么 Joker？",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "新手推荐优先选择：1) 提供 XMult（倍率）的 Joker，如钢铁小丑(X2)、黑暗骑士等，因为乘法增益远强于加法；2) 与你当前牌型匹配的 Joker，如打对子就选开心小丑(+8 Mult)；3) 经济型 Joker 如延迟满足（每回合+1美元上限20）帮助攒钱；4) 万能型如半张牌（首次弃牌每张+20筹码）适合任何流派。"
+                }
+            }
+        ]
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "ItemList",
+        "name": "Balatro 构筑流派指南",
+        "description": "19种 Balatro 构筑流派的详细攻略和推荐卡牌搭配",
+        "numberOfItems": 19,
+        "itemListElement": [
+            {"@type": "ListItem", "position": 1, "name": "对子流", "description": "利用对子牌型，搭配开心小丑、备用裤子等叠加倍数"},
+            {"@type": "ListItem", "position": 2, "name": "双对流", "description": "打出两对组合，搭配疯狂小丑、聪敏小丑获得高倍数和筹码"},
+            {"@type": "ListItem", "position": 3, "name": "顺子流", "description": "连续数字组成顺子，搭配狂野小丑、捷径获得高分"},
+            {"@type": "ListItem", "position": 4, "name": "同花流", "description": "同一花色组成同花，搭配滑稽小丑、部落获得强力加成"},
+            {"@type": "ListItem", "position": 5, "name": "人头牌流", "description": "围绕 J/Q/K 人头牌，搭配照片、男爵等获得大量加成"},
+            {"@type": "ListItem", "position": 6, "name": "经济流", "description": "攒钱获取利息，搭配延迟满足、信用卡等经济卡牌"},
+            {"@type": "ListItem", "position": 7, "name": "弃牌流", "description": "通过弃牌触发效果，搭配绿色小丑、城堡等弃牌增益卡"},
+            {"@type": "ListItem", "position": 8, "name": "塔罗流", "description": "大量使用塔罗牌增强手牌效果"},
+            {"@type": "ListItem", "position": 9, "name": "行星流", "description": "通过行星牌升级牌型等级获得基础加成"},
+            {"@type": "ListItem", "position": 10, "name": "摧毁流", "description": "通过摧毁卡牌获得强力收益"}
+        ]
+    }
+    </script>
 </head>
 <body>
     <!-- Header -->
-    <header class="header">
+    <header class="header" role="banner">
         <div class="header-content">
             <h1 class="logo">🃏 Balatro 新手助手</h1>
             <p class="subtitle">卡牌图鉴 · 牌组匹配 · 构筑推荐</p>
         </div>
     </header>
 
+    <!-- GEO: 对 AI 搜索引擎友好的隐藏摘要 -->
+    <div class="seo-summary" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden;">
+        <h2>关于 Balatro 新手助手</h2>
+        <p>Balatro 新手助手是一个免费的在线工具网站，专为 Balatro（巴拉特罗）玩家设计。Balatro 是一款融合了扑克和 Roguelike 元素的卡牌游戏。本站提供以下核心功能：</p>
+        <p>【卡牌图鉴】收录了 Balatro 全部 150+ 张特殊卡牌的完整图鉴，包括 Joker（小丑牌）、塔罗牌（Tarot）、行星牌（Planet）、灵魂牌（Spectral）四大类。支持按类型、稀有度（普通/稀有/传奇/隐藏）、效果类型（倍数/倍率/筹码/抽牌/弃牌/经济/手牌/花色）和适合牌型筛选。</p>
+        <p>【牌组匹配】选择你已拥有的卡牌，系统会基于卡牌之间的协同关系智能推荐最佳搭配，帮你构建更强力的牌组。</p>
+        <p>【攻略指南】详解 Balatro 的核心机制（得分公式 Chips × Mult = Score）、卡牌顺序策略（Joker 从左到右触发），以及 19 种构筑流派的详细指南：对子流、双对流、顺子流、同花流、人头牌流、K/Q皇室流、斐波那契流、经济流、弃牌流、侠盗流、塔罗流、行星流、摧毁流、复制流、出售流、概率流、增强吸收流、跳过流、钢铁牌流。</p>
+        <p>【种子分享】玩家社区分享优质种子代码（Seed），每个种子包含种子代码、推荐流派、难度评价和详细说明，帮助你找到精彩开局。</p>
+    </div>
+
     <!-- Tab 导航 -->
-    <nav class="tabs">
-        <button class="tab active" data-tab="gallery">卡牌图鉴</button>
-        <button class="tab" data-tab="matcher">牌组匹配</button>
-        <button class="tab" data-tab="guide">攻略指南</button>
-        <button class="tab" data-tab="seeds">🌱 种子分享</button>
+    <nav class="tabs" role="tablist" aria-label="主导航">
+        <button class="tab active" data-tab="gallery" role="tab" aria-selected="true" aria-controls="gallery">卡牌图鉴</button>
+        <button class="tab" data-tab="matcher" role="tab" aria-selected="false" aria-controls="matcher">牌组匹配</button>
+        <button class="tab" data-tab="guide" role="tab" aria-selected="false" aria-controls="guide">攻略指南</button>
+        <button class="tab" data-tab="seeds" role="tab" aria-selected="false" aria-controls="seeds">🌱 种子分享</button>
     </nav>
 
     <!-- 主内容区 -->
-    <main class="main">
+    <main class="main" role="main">
         <!-- 卡牌图鉴页面 -->
-        <section class="tab-content active" id="gallery">
+        <section class="tab-content active" id="gallery" role="tabpanel" aria-label="卡牌图鉴">
             <div class="layout">
                 <!-- 手机端筛选切换按钮 -->
                 <button class="mobile-filter-toggle" id="mobile-filter-toggle">
@@ -201,7 +333,7 @@
         </section>
 
         <!-- 牌组匹配页面 -->
-        <section class="tab-content" id="matcher">
+        <section class="tab-content" id="matcher" role="tabpanel" aria-label="牌组匹配">
             <div class="matcher-layout">
                 <div class="matcher-panel">
                     <h2>🎯 牌组匹配</h2>
@@ -249,7 +381,7 @@
         </section>
 
         <!-- 攻略指南页面 -->
-        <section class="tab-content" id="guide">
+        <section class="tab-content" id="guide" role="tabpanel" aria-label="攻略指南">
             <div class="guide-content">
                 <h2>📖 新手攻略</h2>
                 
@@ -310,8 +442,7 @@
                 </div>
             </div>
         </section>
-        <!-- 种子分享页面 -->
-        <section class="tab-content" id="seeds">
+        <section class="tab-content" id="seeds" role="tabpanel" aria-label="种子分享">
             <div class="seeds-layout">
                 <div class="seeds-header">
                     <h2>🌱 种子分享</h2>
@@ -408,7 +539,7 @@
     </main>
 
     <!-- Footer -->
-    <footer class="footer">
+    <footer class="footer" role="contentinfo">
         <p>Balatro 新手助手 - 帮助你更好地理解游戏</p>
         <p class="data-source">卡牌数据基于游戏版本整理</p>
         <p class="site-stats">🎴 本站总访问量 <span id="busuanzi_value_site_pv">-</span> 次 · 访客数 <span id="busuanzi_value_site_uv">-</span> 人</p>

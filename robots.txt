@@ -1,0 +1,27 @@
+# Balatro 新手助手 - robots.txt
+User-agent: *
+Allow: /
+
+# AI 搜索引擎爬虫（GEO 优化）
+User-agent: GPTBot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: anthropic-ai
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Bytespider
+Allow: /
+
+Sitemap: https://xiaowanmichelle-wq.github.io/balatro-guide/sitemap.xml

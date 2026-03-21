@@ -168,10 +168,15 @@ class BalatroApp {
     }
     
     switchTab(tabId) {
-        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+        document.querySelectorAll('.tab').forEach(t => {
+            t.classList.remove('active');
+            t.setAttribute('aria-selected', 'false');
+        });
         document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
         
-        document.querySelector(`[data-tab="${tabId}"]`).classList.add('active');
+        const activeTab = document.querySelector(`[data-tab="${tabId}"]`);
+        activeTab.classList.add('active');
+        activeTab.setAttribute('aria-selected', 'true');
         document.getElementById(tabId).classList.add('active');
         
         // 种子分享 Tab 延迟初始化
