@@ -2,3 +2,5 @@
 .codebuddy/
 *.bak
 test_*.js
+SEO-AUDIT-REPORT.md
+.DS_Store

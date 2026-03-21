@@ -1,0 +1,97 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#1a1a2e"/>
+      <stop offset="50%" style="stop-color:#16213e"/>
+      <stop offset="100%" style="stop-color:#1a1a3e"/>
+    </linearGradient>
+    <linearGradient id="gold" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#d4af37"/>
+      <stop offset="50%" style="stop-color:#ffd700"/>
+      <stop offset="100%" style="stop-color:#d4af37"/>
+    </linearGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="3" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    <filter id="softglow">
+      <feGaussianBlur stdDeviation="8" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  
+  <!-- 背景 -->
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  
+  <!-- 装饰性扑克花色 - 半透明 -->
+  <text x="80" y="80" font-size="50" fill="rgba(212,175,55,0.08)" font-family="serif">♠</text>
+  <text x="200" y="560" font-size="60" fill="rgba(212,175,55,0.08)" font-family="serif">♥</text>
+  <text x="950" y="100" font-size="55" fill="rgba(212,175,55,0.08)" font-family="serif">♦</text>
+  <text x="1070" y="520" font-size="50" fill="rgba(212,175,55,0.08)" font-family="serif">♣</text>
+  <text x="100" y="350" font-size="45" fill="rgba(212,175,55,0.06)" font-family="serif">♠</text>
+  <text x="1050" y="300" font-size="48" fill="rgba(212,175,55,0.06)" font-family="serif">♥</text>
+  <text x="350" y="120" font-size="38" fill="rgba(212,175,55,0.05)" font-family="serif">♣</text>
+  <text x="850" y="550" font-size="42" fill="rgba(212,175,55,0.05)" font-family="serif">♦</text>
+  
+  <!-- 金色边框 -->
+  <rect x="30" y="30" width="1140" height="570" rx="8" ry="8" fill="none" stroke="url(#gold)" stroke-width="2" opacity="0.6"/>
+  <rect x="42" y="42" width="1116" height="546" rx="5" ry="5" fill="none" stroke="url(#gold)" stroke-width="1" opacity="0.3"/>
+  
+  <!-- 中央 Joker 卡牌图标 -->
+  <g transform="translate(540, 60)">
+    <!-- 卡牌背景 -->
+    <rect x="0" y="0" width="120" height="160" rx="10" ry="10" fill="#0f3460" stroke="url(#gold)" stroke-width="2.5"/>
+    <rect x="6" y="6" width="108" height="148" rx="7" ry="7" fill="none" stroke="url(#gold)" stroke-width="1" opacity="0.5"/>
+    <!-- 光晕 -->
+    <circle cx="60" cy="80" r="50" fill="rgba(212,175,55,0.15)" filter="url(#softglow)"/>
+    <!-- Joker 文字 -->
+    <text x="60" y="70" text-anchor="middle" font-size="28" font-weight="bold" fill="url(#gold)" font-family="Georgia, serif" filter="url(#glow)">J</text>
+    <text x="60" y="100" text-anchor="middle" font-size="14" fill="#d4af37" font-family="Georgia, serif" letter-spacing="3">OKER</text>
+    <!-- 角标 -->
+    <text x="15" y="28" font-size="14" fill="#d4af37" font-family="Georgia, serif">♠</text>
+    <text x="98" y="150" font-size="14" fill="#d4af37" font-family="Georgia, serif">♠</text>
+  </g>
+  
+  <!-- 主标题 -->
+  <text x="600" y="290" text-anchor="middle" font-size="68" font-weight="bold" fill="white" font-family="'PingFang SC', 'Heiti SC', 'Microsoft YaHei', sans-serif" filter="url(#glow)">Balatro 新手助手</text>
+  
+  <!-- 英文副标题 -->
+  <text x="600" y="345" text-anchor="middle" font-size="30" fill="url(#gold)" font-family="Georgia, 'Times New Roman', serif" letter-spacing="6">BALATRO GUIDE</text>
+  
+  <!-- 分隔线 -->
+  <line x1="350" y1="380" x2="850" y2="380" stroke="url(#gold)" stroke-width="1.5" opacity="0.6"/>
+  <circle cx="350" cy="380" r="3" fill="#d4af37" opacity="0.6"/>
+  <circle cx="850" cy="380" r="3" fill="#d4af37" opacity="0.6"/>
+  <circle cx="600" cy="380" r="4" fill="#ffd700" opacity="0.8"/>
+  
+  <!-- 功能描述 -->
+  <text x="600" y="425" text-anchor="middle" font-size="24" fill="rgba(200,200,220,0.9)" font-family="'PingFang SC', 'Heiti SC', 'Microsoft YaHei', sans-serif" letter-spacing="2">卡牌图鉴  ·  构筑推荐  ·  流派攻略  ·  种子分享</text>
+  
+  <!-- 底部数据 -->
+  <g transform="translate(0, 480)">
+    <!-- 三个数据块 -->
+    <g transform="translate(300, 0)">
+      <text x="0" y="0" text-anchor="middle" font-size="32" font-weight="bold" fill="url(#gold)" font-family="Georgia, serif">150+</text>
+      <text x="0" y="28" text-anchor="middle" font-size="16" fill="rgba(180,180,200,0.8)" font-family="'PingFang SC', sans-serif">卡牌图鉴</text>
+    </g>
+    <text x="450" y="10" text-anchor="middle" font-size="24" fill="rgba(212,175,55,0.3)">|</text>
+    <g transform="translate(600, 0)">
+      <text x="0" y="0" text-anchor="middle" font-size="32" font-weight="bold" fill="url(#gold)" font-family="Georgia, serif">19</text>
+      <text x="0" y="28" text-anchor="middle" font-size="16" fill="rgba(180,180,200,0.8)" font-family="'PingFang SC', sans-serif">构筑流派</text>
+    </g>
+    <text x="750" y="10" text-anchor="middle" font-size="24" fill="rgba(212,175,55,0.3)">|</text>
+    <g transform="translate(900, 0)">
+      <text x="0" y="0" text-anchor="middle" font-size="32" font-weight="bold" fill="url(#gold)" font-family="Georgia, serif">AI</text>
+      <text x="0" y="28" text-anchor="middle" font-size="16" fill="rgba(180,180,200,0.8)" font-family="'PingFang SC', sans-serif">智能匹配</text>
+    </g>
+  </g>
+  
+  <!-- 底部网址 -->
+  <text x="600" y="580" text-anchor="middle" font-size="14" fill="rgba(150,150,170,0.6)" font-family="'Courier New', monospace" letter-spacing="1">xiaowanmichelle-wq.github.io/balatro-guide</text>
+</svg>
