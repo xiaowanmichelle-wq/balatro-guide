@@ -1713,7 +1713,8 @@ class BalatroApp {
                 compatibleWith: [
                     { id: 'kq_build', note: '人头牌流自然兼容K/Q皇室流，K/Q本身就是人头牌' },
                     { id: 'steel_build', note: '钢铁牌+男爵/射月，手牌中的K/Q既触发钢铁×1.5又触发皇室加成' },
-                    { id: 'augment_build', note: '迈达斯面具将人头牌变金卡(增强牌)，吸血鬼可以吸收叠倍率' }
+                    { id: 'augment_build', note: '迈达斯面具将人头牌变金卡(增强牌)，吸血鬼可以吸收叠倍率' },
+                    { id: 'remove_card_build', note: '卡尼奥+幻视让所有被摧毁的牌都算人头牌，每次摧毁都叠×倍率+侵蚀+4' }
                 ]
             },
             {
@@ -1759,7 +1760,8 @@ class BalatroApp {
                     { id: 'double_pair_build', note: '经济流提供前期资金，后期靠双对输出' },
                     { id: 'straight_build', note: '经济流可以过渡到顺子流，攒钱期间搜集顺子组件' },
                     { id: 'flush_build', note: '经济流前期攒钱，后期转同花体系输出' },
-                    { id: 'skip_build', note: '跳过盲注省下的回合用来攒钱，经济+跳过双重收益' }
+                    { id: 'skip_build', note: '跳过盲注省下的回合用来攒钱，经济+跳过双重收益' },
+                    { id: 'remove_card_build', note: '火祭摧毁5张牌获$20，减牌赚钱两不误，喂给公牛/提靴带' }
                 ]
             },
             {
@@ -1801,7 +1803,8 @@ class BalatroApp {
                 compatibleWith: [
                     { id: 'planet_build', note: '塔罗牌和行星牌都是消耗品体系，帕奇欧可以同时为两者产出' },
                     { id: 'augment_build', note: '塔罗牌(皇后/皇帝)给牌加增强，供吸血鬼吸收，双重收益' },
-                    { id: 'fibonacci_build', note: '8号球打出8时给塔罗牌，与占卜师+8倍率双触发' }
+                    { id: 'fibonacci_build', note: '8号球打出8时给塔罗牌，与占卜师+8倍率双触发' },
+                    { id: 'add_card_build', note: '占卜师配合全息影像，使用塔罗牌的同时全息间接获益' }
                 ]
             },
             {
@@ -1815,7 +1818,8 @@ class BalatroApp {
                 tips: '天文学家是行星流的引擎——免费行星意味着每次商店都能升级牌型+增加星座倍率',
                 compatibleWith: [
                     { id: 'tarot_build', note: '塔罗和行星都是消耗品体系，帕奇欧可以同时复制两者' },
-                    { id: 'economy_build', note: '卫星赚的钱可以喂给公牛/提靴带，天文学家省下的钱用于其他购买' }
+                    { id: 'economy_build', note: '卫星赚的钱可以喂给公牛/提靴带，天文学家省下的钱用于其他购买' },
+                    { id: 'add_card_build', note: '星座配合全息影像，使用行星牌+X0.1的同时全息也在叠加' }
                 ]
             },
             {
@@ -1829,7 +1833,8 @@ class BalatroApp {
                 tips: '玻璃卡+正义塔罗牌是核心循环——正义创造玻璃卡，玻璃卡摧毁时玻璃小丑增加倍率，愚者可复制上次使用的正义',
                 compatibleWith: [
                     { id: 'face_build', note: '卡尼奥摧毁人头牌+X1，配合幻视(所有牌变人头牌)持续叠倍率' },
-                    { id: 'tarot_build', note: '正义/愚者都是塔罗牌，占卜师可以从中获得额外倍率' }
+                    { id: 'tarot_build', note: '正义/愚者都是塔罗牌，占卜师可以从中获得额外倍率' },
+                    { id: 'remove_card_build', note: '摧毁牌的同时减少牌组，侵蚀每少1张+4倍率，双重收益' }
                 ]
             },
             {
@@ -1916,7 +1921,38 @@ class BalatroApp {
                     { id: 'kq_build', note: '手牌中的K/Q变钢铁牌后，钢铁×1.5+男爵×1.5+射月+13多重叠加' },
                     { id: 'face_build', note: '钢铁牌留手牌触发倍率，人头牌加成在打出时触发，两者互补' },
                     { id: 'flush_build', note: '钢铁牌留手牌不占出牌位，同花凑牌不受影响' },
-                    { id: 'copy_build', note: '蓝图/头脑风暴复制钢铁小丑的X倍率，钢铁牌越多收益越恐怖' }
+                    { id: 'copy_build', note: '蓝图/头脑风暴复制钢铁小丑的X倍率，钢铁牌越多收益越恐怖' },
+                    { id: 'add_card_build', note: '大理石小丑加入的石头牌可变钢铁牌，加牌+钢铁双重收益' }
+                ]
+            },
+            {
+                id: 'add_card_build',
+                name: '➕ 加牌流',
+                difficulty: '⭐⭐ 中等',
+                desc: '持续往牌组添加卡牌，全息影像每加1张+×0.25倍率',
+                detail: '全息影像每往牌组添加1张牌就+×0.25倍率，是加牌流的核心产出。DNA每回合首次出单牌复制加入牌组，证书每选盲注加1张蜡封牌，大理石小丑每选盲注加1张石头牌。配合占卜师/星座，使用塔罗牌/行星牌也能间接触发加牌效果。后期全息倍率滚雪球极其恐怖。',
+                coreCards: ['j_hologram', 'j_dna', 'j_certificate', 'j_marble'],
+                supportCards: ['j_fortune_teller', 'j_constellation', 'j_stone', 'j_half'],
+                tips: '全息影像是核心引擎，DNA是最佳搭档——每回合出单牌就+×0.25。证书和大理石提供被动稳定加牌。注意牌组膨胀后抽牌稳定性会下降',
+                compatibleWith: [
+                    { id: 'tarot_build', note: '塔罗牌使用后触发占卜师+倍率，部分塔罗牌还能间接加牌' },
+                    { id: 'planet_build', note: '行星牌使用后触发星座+X倍率，与全息的X倍率双重叠乘' },
+                    { id: 'steel_build', note: '大理石加入的石头牌可以变钢铁牌，手牌中钢铁×1.5与全息叠乘' }
+                ]
+            },
+            {
+                id: 'remove_card_build',
+                name: '➖ 减牌流',
+                difficulty: '⭐⭐⭐ 高级',
+                desc: '通过摧毁/移除卡牌缩减牌组，侵蚀每少1张+4倍率',
+                detail: '侵蚀的核心机制是牌组每比初始少1张就+4倍率。倒吊人每次移除2张牌=+8倍率，火祭一次摧毁5张=+20倍率且获$20。第六感摧毁6获得幻灵牌同时减少牌组。卡尼奥在人头牌被摧毁时叠×倍率，与侵蚀的+倍率形成双重收益。牌组越精简，抽牌越稳定，倍率越高。',
+                coreCards: ['j_erosion', 'j_canio', 'j_sixth_sense'],
+                supportCards: ['j_glass', 'j_trading', 'j_pareidolia'],
+                tips: '侵蚀+火祭是爆发组合——一次火祭=+20倍率+$20。倒吊人则是稳定的每回合减牌手段。牌组压缩到极限后抽牌极其稳定，配合卡尼奥倍率叠乘恐怖',
+                compatibleWith: [
+                    { id: 'destroy_build', note: '摧毁流的玻璃小丑/仪式匕首在摧毁牌的同时也减少牌组，与侵蚀双重收益' },
+                    { id: 'economy_build', note: '火祭摧毁5张牌获$20，减牌的同时赚大钱，喂给公牛/提靴带' },
+                    { id: 'face_build', note: '卡尼奥+幻视让所有被摧毁的牌都算人头牌，每次摧毁都叠×倍率' }
                 ]
             }
         ];
