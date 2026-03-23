@@ -2405,7 +2405,30 @@ class BalatroApp {
             if (card.effects.mult) effectTags.push(`<span class="tt-tag tt-mult">+${card.effects.mult} 倍率</span>`);
             if (card.effects.chips) effectTags.push(`<span class="tt-tag tt-chips">+${card.effects.chips} 筹码</span>`);
             if (card.effects.money) effectTags.push(`<span class="tt-tag tt-money">+$${card.effects.money}</span>`);
-            if (card.effects.special) effectTags.push(`<span class="tt-tag tt-special">${card.effects.special}</span>`);
+            if (card.effects.special) {
+                const specialMap = {
+                    copy: '复制', copy_left: '复制左侧', copy_right: '复制右侧',
+                    negative_copy: '负片复制', delayed_copy: '延迟复制',
+                    create_joker: '生成小丑', create_tarot: '生成塔罗',
+                    disable_boss: '禁用Boss', disable_boss_all: '禁用全部Boss',
+                    double: '翻倍', double_chance: '双倍概率',
+                    duplicates: '允许重复', dusk: '黄昏触发',
+                    face: '人头牌增强', first_card: '首张牌增强',
+                    four_fingers: '四指', free_planet: '免费行星牌',
+                    gold: '金币', hack: '连续触发',
+                    mime: '模仿', reroll: '重掷',
+                    reset: '重置', reset_face: '重置人头牌',
+                    seal: '封印', soul: '灵魂',
+                    spectral: '幽灵牌', splash: '全牌计分',
+                    stone: '石化', straight_gap: '顺子跳牌',
+                    suit_combine: '花色混合', survive: '存活',
+                    tarot: '塔罗牌', tarot_chance: '塔罗概率',
+                    upgrade: '升级', upgrade_discard: '弃牌升级',
+                    credit: '赊账'
+                };
+                const label = specialMap[card.effects.special] || card.effects.special;
+                effectTags.push(`<span class="tt-tag tt-special">${label}</span>`);
+            }
         }
 
         // 协同提示
