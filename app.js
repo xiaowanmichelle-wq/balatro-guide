@@ -2402,39 +2402,80 @@ class BalatroApp {
         };
         const rInfo = rarityMap[card.rarity] || { name: card.rarity, color: '#999' };
 
-        // 效果标签
+        // 效果标签 — 值翻译映射
+        const effectValueMap = {
+            // 花色
+            hearts: '红心', spades: '黑桃', clubs: '梅花', diamonds: '方块',
+            // 牌面
+            king: 'K', queen: 'Q', jack: 'J', king_queen: 'K/Q', face: '人头牌',
+            // 触发条件
+            slot: '空槽位', planet: '行星牌', tarot: '塔罗牌', steel: '钢铁牌',
+            stone: '石头牌', glass: '玻璃牌', gold: '金牌', lucky: '幸运',
+            rare_joker: '稀有小丑', changing: '随机变化',
+            // 行为
+            discard_j: '弃掉J', destroy_face: '销毁人头牌', destroy_right: '销毁右侧',
+            card_added: '添加卡牌', augment: '消耗增强', sell: '出售', selling: '出售',
+            skip: '跳过商店', discard: '弃牌', play: '出牌', reroll: '重掷商店',
+            hand_used: '已出牌型', consecutive: '连续', discard_count: '弃牌计数',
+            // 经济
+            interest: '利息', nine: '含9', money: '持有金币',
+            face_discard: '弃人头牌', face_hand: '打人头牌',
+            rank_discard: '弃指定点数', single_discard: '首次弃牌',
+            boss_trigger: '触发Boss', unique_planet: '不同行星牌',
+            suit_discard: '弃指定花色', sell_value: '出售价值',
+            // 位置
+            first: '首张', last: '末张', lowest: '最低点数',
+            // 其他
+            deck_remaining: '牌堆剩余', permanent_5: '永久+5',
+            lower_cards: '牌堆不满', uncommon_hand: '未打牌型',
+            random_23: '随机', random: '随机', two_pair: '两对',
+            // special 值
+            copy: '复制', copy_left: '复制左侧', copy_right: '复制右侧',
+            negative_copy: '负片复制', delayed_copy: '延迟复制',
+            create_joker: '生成小丑', create_tarot: '生成塔罗',
+            disable_boss: '禁用Boss', disable_boss_all: '禁用全部Boss',
+            double: '翻倍', double_chance: '双倍概率',
+            duplicates: '允许重复', dusk: '黄昏触发',
+            first_card: '首张牌增强', four_fingers: '四指', free_planet: '免费行星牌',
+            hack: '连续触发', mime: '模仿',
+            reset: '重置', reset_face: '重置人头牌',
+            seal: '封印', soul: '灵魂',
+            spectral: '幽灵牌', splash: '全牌计分',
+            straight_gap: '顺子跳牌', suit_combine: '花色混合', survive: '存活',
+            tarot_chance: '塔罗概率', upgrade: '升级', upgrade_discard: '弃牌升级',
+            credit: '赊账'
+        };
+        const tv = (v) => typeof v === 'string' ? (effectValueMap[v] || v) : v;
+
         const effectTags = [];
         if (card.effects) {
             if (card.effects.xmult) {
-                const v = typeof card.effects.xmult === 'number' ? card.effects.xmult : card.effects.xmult;
-                effectTags.push(`<span class="tt-tag tt-xmult">×${v} 倍率</span>`);
+                const v = card.effects.xmult;
+                if (typeof v === 'number') {
+                    effectTags.push(`<span class="tt-tag tt-xmult">×${v} 倍率</span>`);
+                } else {
+                    effectTags.push(`<span class="tt-tag tt-xmult">×倍率(${tv(v)})</span>`);
+                }
             }
-            if (card.effects.mult) effectTags.push(`<span class="tt-tag tt-mult">+${card.effects.mult} 倍率</span>`);
-            if (card.effects.chips) effectTags.push(`<span class="tt-tag tt-chips">+${card.effects.chips} 筹码</span>`);
+            if (card.effects.mult) {
+                const v = card.effects.mult;
+                if (typeof v === 'number') {
+                    effectTags.push(`<span class="tt-tag tt-mult">+${v} 倍率</span>`);
+                } else {
+                    effectTags.push(`<span class="tt-tag tt-mult">+倍率(${tv(v)})</span>`);
+                }
+            }
+            if (card.effects.chips) {
+                const v = card.effects.chips;
+                if (typeof v === 'number') {
+                    effectTags.push(`<span class="tt-tag tt-chips">+${v} 筹码</span>`);
+                } else {
+                    effectTags.push(`<span class="tt-tag tt-chips">+筹码(${tv(v)})</span>`);
+                }
+            }
             if (card.effects.money) effectTags.push(`<span class="tt-tag tt-money">+$${card.effects.money}</span>`);
             if (card.effects.special) {
-                const specialMap = {
-                    copy: '复制', copy_left: '复制左侧', copy_right: '复制右侧',
-                    negative_copy: '负片复制', delayed_copy: '延迟复制',
-                    create_joker: '生成小丑', create_tarot: '生成塔罗',
-                    disable_boss: '禁用Boss', disable_boss_all: '禁用全部Boss',
-                    double: '翻倍', double_chance: '双倍概率',
-                    duplicates: '允许重复', dusk: '黄昏触发',
-                    face: '人头牌增强', first_card: '首张牌增强',
-                    four_fingers: '四指', free_planet: '免费行星牌',
-                    gold: '金币', hack: '连续触发',
-                    mime: '模仿', reroll: '重掷',
-                    reset: '重置', reset_face: '重置人头牌',
-                    seal: '封印', soul: '灵魂',
-                    spectral: '幽灵牌', splash: '全牌计分',
-                    stone: '石化', straight_gap: '顺子跳牌',
-                    suit_combine: '花色混合', survive: '存活',
-                    tarot: '塔罗牌', tarot_chance: '塔罗概率',
-                    upgrade: '升级', upgrade_discard: '弃牌升级',
-                    credit: '赊账'
-                };
-                const label = specialMap[card.effects.special] || card.effects.special;
-                effectTags.push(`<span class="tt-tag tt-special">${label}</span>`);
+                effectTags.push(`<span class="tt-tag tt-special">${tv(card.effects.special)}</span>`);
             }
         }
 
