@@ -56,6 +56,7 @@ body {
     align-items: center;
     justify-content: center;
     position: relative;
+    z-index: 150;
 }
 
 .header-content {
@@ -109,7 +110,6 @@ body {
     min-width: 130px;
     display: none;
     z-index: 200;
-    overflow: hidden;
 }
 
 .lang-menu.open {
