@@ -2293,13 +2293,13 @@ class BalatroApp {
                 label: 'B',
                 color: '#ffd700',
                 desc: '强力，大部分构筑里表现优秀',
-                cards: ['j_acrobat', 'j_photograph', 'j_lucky_cat', 'j_glass', 'j_baseball', 'j_madness', 'j_ramen', 'j_certificate', 'j_marble', 'j_erosion', 'j_delayed', 'j_rocket', 'j_to_moon', 'j_misprint', 'j_bull', 'j_bootstraps', 'j_hit_road', 'j_sock', 'j_merry_andy', 'j_midas', 'j_diet_cola', 'j_ceremonial', 'j_astronomer', 'j_flower_pot', 'j_stencil', 'j_spare_trousers', 'j_trio', 'j_family', 'j_order', 'j_loyalty', 'j_campfire']
+                cards: ['j_acrobat', 'j_photograph', 'j_baseball', 'j_madness', 'j_ramen', 'j_certificate', 'j_marble', 'j_erosion', 'j_delayed', 'j_rocket', 'j_to_moon', 'j_misprint', 'j_bull', 'j_bootstraps', 'j_hit_road', 'j_sock', 'j_merry_andy', 'j_midas', 'j_diet_cola', 'j_ceremonial', 'j_astronomer', 'j_flower_pot', 'j_stencil', 'j_spare_trousers', 'j_trio', 'j_family', 'j_order', 'j_loyalty', 'j_campfire']
             },
             C: {
                 label: 'C',
                 color: '#2ed573',
                 desc: '可用，有合适的构筑能发挥',
-                cards: ['j_mad', 'j_clever', 'j_jolly', 'j_sly', 'j_crazy', 'j_droll', 'j_four_fingers', 'j_shortcut', 'j_smeared', 'j_bloodstone', 'j_arrowhead', 'j_onyx', 'j_rough_gem', 'j_pareidolia', 'j_showman', 'j_golden', 'j_egg', 'j_cloud9', 'j_chaos', 'j_splash', 'j_burglar', 'j_runner', 'j_gros_michel', 'j_abstract', 'j_fibonacci', 'j_flash', 'j_castle', 'j_turtle_bean', 'j_fortune_teller', 'j_drunkard', 'j_gift_card', 'j_ride_bus', 'j_satellite', 'j_hallucination', 'j_seltzer', 'j_half', 'j_walkie']
+                cards: ['j_lucky_cat', 'j_glass', 'j_mad', 'j_clever', 'j_jolly', 'j_sly', 'j_crazy', 'j_droll', 'j_four_fingers', 'j_shortcut', 'j_smeared', 'j_bloodstone', 'j_arrowhead', 'j_onyx', 'j_rough_gem', 'j_pareidolia', 'j_showman', 'j_golden', 'j_egg', 'j_cloud9', 'j_chaos', 'j_splash', 'j_burglar', 'j_runner', 'j_gros_michel', 'j_abstract', 'j_fibonacci', 'j_flash', 'j_castle', 'j_turtle_bean', 'j_fortune_teller', 'j_drunkard', 'j_gift_card', 'j_ride_bus', 'j_satellite', 'j_hallucination', 'j_seltzer', 'j_half', 'j_walkie']
             },
             D: {
                 label: 'D',
