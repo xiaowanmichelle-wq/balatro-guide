@@ -2287,13 +2287,13 @@ class BalatroApp {
                 label: 'A',
                 color: '#ffa502',
                 desc: '极强，核心构筑基石',
-                cards: ['j_duo', 'j_trio', 'j_family', 'j_order', 'j_tribe', 'j_blackboard', 'j_loyalty', 'j_campfire', 'j_driver_license', 'j_obelisk', 'j_vampire', 'j_dna', 'j_card_sharp', 'j_seeing_double', 'j_ancient', 'j_steel', 'j_hanging_chad', 'j_canio', 'j_invisible', 'j_burnt', 'j_dusk', 'j_hack', 'j_cartomancer', 'j_stuntman', 'j_shoot_moon', 'j_swashbuckler', 'j_riff_raff', 'j_constellation', 'j_cavendish']
+                cards: ['j_duo', 'j_tribe', 'j_blackboard', 'j_driver_license', 'j_obelisk', 'j_vampire', 'j_dna', 'j_card_sharp', 'j_seeing_double', 'j_ancient', 'j_steel', 'j_hanging_chad', 'j_canio', 'j_invisible', 'j_burnt', 'j_dusk', 'j_hack', 'j_cartomancer', 'j_stuntman', 'j_shoot_moon', 'j_swashbuckler', 'j_riff_raff', 'j_constellation', 'j_cavendish', 'j_mime', 'j_throwback']
             },
             B: {
                 label: 'B',
                 color: '#ffd700',
                 desc: '强力，大部分构筑里表现优秀',
-                cards: ['j_acrobat', 'j_photograph', 'j_lucky_cat', 'j_glass', 'j_baseball', 'j_throwback', 'j_madness', 'j_ramen', 'j_certificate', 'j_marble', 'j_erosion', 'j_delayed', 'j_rocket', 'j_to_moon', 'j_misprint', 'j_bull', 'j_bootstraps', 'j_hit_road', 'j_sock', 'j_merry_andy', 'j_midas', 'j_diet_cola', 'j_ceremonial', 'j_astronomer', 'j_flower_pot', 'j_stencil', 'j_spare_trousers', 'j_mime']
+                cards: ['j_acrobat', 'j_photograph', 'j_lucky_cat', 'j_glass', 'j_baseball', 'j_madness', 'j_ramen', 'j_certificate', 'j_marble', 'j_erosion', 'j_delayed', 'j_rocket', 'j_to_moon', 'j_misprint', 'j_bull', 'j_bootstraps', 'j_hit_road', 'j_sock', 'j_merry_andy', 'j_midas', 'j_diet_cola', 'j_ceremonial', 'j_astronomer', 'j_flower_pot', 'j_stencil', 'j_spare_trousers', 'j_trio', 'j_family', 'j_order', 'j_loyalty', 'j_campfire']
             },
             C: {
                 label: 'C',
