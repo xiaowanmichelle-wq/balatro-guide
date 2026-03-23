@@ -2348,16 +2348,131 @@ class BalatroApp {
                         <span class="tier-desc">${tier.desc}</span>
                     </div>
                     <div class="tier-cards">
-                        ${cards.map(card => `
-                            <div class="tier-card" onclick="app.showCardDetail('${card.id}')" title="${card.name}">
+                        ${cards.map(card => {
+                            const desc = (card.description || '').replace(/'/g, '&#39;').replace(/"/g, '&quot;');
+                            const rarity = card.rarity || '';
+                            const effectParts = [];
+                            if (card.effects) {
+                                if (card.effects.xmult) effectParts.push('×' + (typeof card.effects.xmult === 'number' ? card.effects.xmult : card.effects.xmult) + ' 倍率');
+                                if (card.effects.mult) effectParts.push('+' + card.effects.mult + ' 倍率');
+                                if (card.effects.chips) effectParts.push('+' + card.effects.chips + ' 筹码');
+                            }
+                            const effectStr = effectParts.join(' | ');
+                            return `
+                            <div class="tier-card" 
+                                 onclick="app.tierCardClick('${card.id}')"
+                                 onmouseenter="app.showTierTooltip(event, '${card.id}')"
+                                 onmouseleave="app.hideTierTooltip()">
                                 <img src="${card.image}" alt="${card.name}" loading="lazy" width="60" height="84">
                                 <span class="tier-card-name">${card.name}</span>
-                            </div>
-                        `).join('')}
+                            </div>`;
+                        }).join('')}
                     </div>
                 </div>
             `;
         }).join('');
+    }
+
+    // Tier List 卡牌悬停浮窗
+    showTierTooltip(event, cardId) {
+        const card = this.allCards.find(c => c.id === cardId);
+        if (!card) return;
+
+        let tooltip = document.getElementById('tier-tooltip');
+        if (!tooltip) {
+            tooltip = document.createElement('div');
+            tooltip.id = 'tier-tooltip';
+            tooltip.className = 'tier-tooltip';
+            document.body.appendChild(tooltip);
+        }
+
+        // 稀有度中文映射和颜色
+        const rarityMap = {
+            common: { name: '普通', color: '#2ed573' },
+            uncommon: { name: '罕见', color: '#1e90ff' },
+            rare: { name: '稀有', color: '#ffa502' },
+            legendary: { name: '传说', color: '#ff4757' }
+        };
+        const rInfo = rarityMap[card.rarity] || { name: card.rarity, color: '#999' };
+
+        // 效果标签
+        const effectTags = [];
+        if (card.effects) {
+            if (card.effects.xmult) {
+                const v = typeof card.effects.xmult === 'number' ? card.effects.xmult : card.effects.xmult;
+                effectTags.push(`<span class="tt-tag tt-xmult">×${v} 倍率</span>`);
+            }
+            if (card.effects.mult) effectTags.push(`<span class="tt-tag tt-mult">+${card.effects.mult} 倍率</span>`);
+            if (card.effects.chips) effectTags.push(`<span class="tt-tag tt-chips">+${card.effects.chips} 筹码</span>`);
+            if (card.effects.money) effectTags.push(`<span class="tt-tag tt-money">+$${card.effects.money}</span>`);
+            if (card.effects.special) effectTags.push(`<span class="tt-tag tt-special">${card.effects.special}</span>`);
+        }
+
+        // 协同提示
+        const synergyCount = (card.synergies || []).length;
+        const synergyLine = synergyCount > 0
+            ? `<div class="tt-synergy">🔗 ${synergyCount} 个协同组合</div>`
+            : '';
+        const synergyNote = card.synergy_note
+            ? `<div class="tt-synergy-note">${card.synergy_note}</div>`
+            : '';
+
+        tooltip.innerHTML = `
+            <div class="tt-header">
+                <img src="${card.image}" alt="${card.name}" class="tt-img">
+                <div class="tt-info">
+                    <div class="tt-name">${card.name}</div>
+                    <span class="tt-rarity" style="color:${rInfo.color}">${rInfo.name}</span>
+                </div>
+            </div>
+            <div class="tt-desc">${card.description || ''}</div>
+            ${effectTags.length ? '<div class="tt-effects">' + effectTags.join('') + '</div>' : ''}
+            ${synergyLine}
+            ${synergyNote}
+            <div class="tt-action">👆 点击加入牌组匹配</div>
+        `;
+
+        tooltip.classList.add('show');
+
+        // 定位：跟随鼠标附近
+        const rect = event.currentTarget.getBoundingClientRect();
+        const ttWidth = 280;
+        const ttHeight = tooltip.offsetHeight || 200;
+        
+        let left = rect.left + rect.width / 2 - ttWidth / 2;
+        let top = rect.top - ttHeight - 8;
+
+        // 边界检测
+        if (left < 8) left = 8;
+        if (left + ttWidth > window.innerWidth - 8) left = window.innerWidth - ttWidth - 8;
+        if (top < 8) {
+            top = rect.bottom + 8; // 放到下面
+        }
+
+        tooltip.style.left = left + 'px';
+        tooltip.style.top = top + window.scrollY + 'px';
+    }
+
+    hideTierTooltip() {
+        const tooltip = document.getElementById('tier-tooltip');
+        if (tooltip) tooltip.classList.remove('show');
+    }
+
+    // Tier List 卡牌点击 → 加入牌组匹配
+    tierCardClick(cardId) {
+        this.hideTierTooltip();
+        // 如果已在牌组中，直接跳转
+        if (!this.selectedCards.find(c => c.id === cardId)) {
+            const card = this.allCards.find(c => c.id === cardId);
+            if (card) {
+                this.selectedCards.push(card);
+            }
+        }
+        this.renderSelectedCards();
+        this.renderPicker();
+        this.updateRecommendations();
+        this.switchTab('matcher');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 }
 
