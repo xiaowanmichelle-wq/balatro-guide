@@ -2281,37 +2281,37 @@ class BalatroApp {
                 label: 'S',
                 color: '#ff4757',
                 desc: '版本之子，无脑拿',
-                cards: ['j_blueprint', 'j_brainstorm', 'j_triboulet', 'j_perkeo', 'j_chicot', 'j_hologram', 'j_baron', 'j_yorick']
+                cards: ['j_blueprint', 'j_brainstorm', 'j_triboulet', 'j_perkeo', 'j_chicot', 'j_hologram', 'j_baron', 'j_yorick', 'j_wee']
             },
             A: {
                 label: 'A',
                 color: '#ffa502',
                 desc: '极强，核心构筑基石',
-                cards: ['j_duo', 'j_trio', 'j_family', 'j_order', 'j_tribe', 'j_flower_pot', 'j_blackboard', 'j_stencil', 'j_loyalty', 'j_campfire', 'j_driver_license', 'j_obelisk', 'j_vampire', 'j_dna', 'j_card_sharp', 'j_seeing_double', 'j_ancient', 'j_steel', 'j_hanging_chad', 'j_canio']
+                cards: ['j_duo', 'j_trio', 'j_family', 'j_order', 'j_tribe', 'j_flower_pot', 'j_blackboard', 'j_stencil', 'j_loyalty', 'j_campfire', 'j_driver_license', 'j_obelisk', 'j_vampire', 'j_dna', 'j_card_sharp', 'j_seeing_double', 'j_ancient', 'j_steel', 'j_hanging_chad', 'j_canio', 'j_invisible', 'j_burnt', 'j_dusk', 'j_hack', 'j_cartomancer', 'j_stuntman', 'j_shoot_moon', 'j_swashbuckler', 'j_riff_raff']
             },
             B: {
                 label: 'B',
                 color: '#ffd700',
                 desc: '强力，大部分构筑里表现优秀',
-                cards: ['j_cavendish', 'j_acrobat', 'j_photograph', 'j_constellation', 'j_lucky_cat', 'j_glass', 'j_baseball', 'j_throwback', 'j_madness', 'j_ramen', 'j_certificate', 'j_marble', 'j_erosion', 'j_delayed', 'j_rocket', 'j_to_moon', 'j_misprint', 'j_bull', 'j_bootstraps', 'j_hit_road']
+                cards: ['j_cavendish', 'j_acrobat', 'j_photograph', 'j_constellation', 'j_lucky_cat', 'j_glass', 'j_baseball', 'j_throwback', 'j_madness', 'j_ramen', 'j_certificate', 'j_marble', 'j_erosion', 'j_delayed', 'j_rocket', 'j_to_moon', 'j_misprint', 'j_bull', 'j_bootstraps', 'j_hit_road', 'j_sock', 'j_merry_andy', 'j_midas', 'j_diet_cola', 'j_ceremonial', 'j_astronomer']
             },
             C: {
                 label: 'C',
                 color: '#2ed573',
                 desc: '可用，有合适的构筑能发挥',
-                cards: ['j_spare_trousers', 'j_mad', 'j_clever', 'j_jolly', 'j_sly', 'j_crazy', 'j_droll', 'j_four_fingers', 'j_shortcut', 'j_smeared', 'j_bloodstone', 'j_arrowhead', 'j_onyx', 'j_rough_gem', 'j_pareidolia', 'j_showman', 'j_golden', 'j_egg', 'j_cloud9', 'j_chaos', 'j_splash', 'j_burglar', 'j_runner', 'j_gros_michel', 'j_abstract', 'j_fibonacci']
+                cards: ['j_spare_trousers', 'j_mad', 'j_clever', 'j_jolly', 'j_sly', 'j_crazy', 'j_droll', 'j_four_fingers', 'j_shortcut', 'j_smeared', 'j_bloodstone', 'j_arrowhead', 'j_onyx', 'j_rough_gem', 'j_pareidolia', 'j_showman', 'j_golden', 'j_egg', 'j_cloud9', 'j_chaos', 'j_splash', 'j_burglar', 'j_runner', 'j_gros_michel', 'j_abstract', 'j_fibonacci', 'j_flash', 'j_castle', 'j_turtle_bean', 'j_fortune_teller', 'j_drunkard', 'j_gift_card', 'j_ride_bus', 'j_satellite', 'j_hallucination', 'j_seltzer', 'j_half', 'j_walkie']
             },
             D: {
                 label: 'D',
                 color: '#70a1ff',
                 desc: '偏弱/场景局限',
-                cards: ['j_joker', 'j_greedy', 'j_lusty', 'j_wrathful', 'j_gluttonous', 'j_zany', 'j_devious', 'j_crafty', 'j_half_joker', 'j_banner', 'j_mystic_summit', 'j_raised_fist', 'j_even_steven', 'j_odd_todd', 'j_scholar', 'j_walkie_talkie', 'j_business', 'j_hiker', 'j_space', 'j_stone', 'j_mr_bones', 'j_trading', 'j_matador', 'j_green', 'j_red', 'j_blue', 'j_mime', 'j_credit_card', 'j_fortune', 'j_vagabond', 'j_popcorn', 'j_square', 'j_supernova', 'j_ice_cream', 'j_oops_6']
+                cards: ['j_joker', 'j_greedy', 'j_lusty', 'j_wrathful', 'j_gluttonous', 'j_zany', 'j_devious', 'j_crafty', 'j_banner', 'j_mystic_summit', 'j_raised_fist', 'j_even_steven', 'j_odd_todd', 'j_scholar', 'j_hiker', 'j_space', 'j_stone', 'j_mr_bones', 'j_trading', 'j_matador', 'j_green', 'j_red', 'j_blue', 'j_mime', 'j_credit_card', 'j_vagabond', 'j_popcorn', 'j_square', 'j_supernova', 'j_ice_cream', 'j_oops_6', 'j_scary_face', 'j_smiley', 'j_juggler', 'j_troubadour', 'j_luchador', 'j_business_card', 'j_mail_in', 'j_faceless', 'j_todo', 'j_golden_ticket']
             },
             E: {
                 label: 'E',
                 color: '#a0a0a0',
                 desc: '实在没牌了才会选',
-                cards: ['j_idol', 'j_wily', 'j_superposition', 'j_sixth_sense', 'j_seance', 'j_8ball']
+                cards: ['j_idol', 'j_wily', 'j_superposition', 'j_sixth_sense', 'j_seance', 'j_8ball', 'j_reserved']
             }
         };
     }
