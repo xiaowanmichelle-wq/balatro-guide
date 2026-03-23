@@ -2281,25 +2281,25 @@ class BalatroApp {
                 label: 'S',
                 color: '#ff4757',
                 desc: '版本之子，无脑拿',
-                cards: ['j_blueprint', 'j_brainstorm', 'j_triboulet', 'j_perkeo', 'j_chicot', 'j_hologram', 'j_baron']
+                cards: ['j_blueprint', 'j_brainstorm', 'j_triboulet', 'j_perkeo', 'j_chicot', 'j_hologram', 'j_baron', 'j_yorick']
             },
             A: {
                 label: 'A',
                 color: '#ffa502',
                 desc: '极强，核心构筑基石',
-                cards: ['j_duo', 'j_trio', 'j_family', 'j_order', 'j_tribe', 'j_flower_pot', 'j_blackboard', 'j_stencil', 'j_loyalty', 'j_campfire', 'j_driver_license', 'j_obelisk', 'j_vampire', 'j_dna', 'j_card_sharp', 'j_seeing_double', 'j_ancient', 'j_steel', 'j_hanging_chad']
+                cards: ['j_duo', 'j_trio', 'j_family', 'j_order', 'j_tribe', 'j_flower_pot', 'j_blackboard', 'j_stencil', 'j_loyalty', 'j_campfire', 'j_driver_license', 'j_obelisk', 'j_vampire', 'j_dna', 'j_card_sharp', 'j_seeing_double', 'j_ancient', 'j_steel', 'j_hanging_chad', 'j_canio']
             },
             B: {
                 label: 'B',
                 color: '#ffd700',
                 desc: '强力，大部分构筑里表现优秀',
-                cards: ['j_cavendish', 'j_acrobat', 'j_photograph', 'j_constellation', 'j_lucky_cat', 'j_glass', 'j_baseball', 'j_throwback', 'j_madness', 'j_ramen', 'j_yorick', 'j_certificate', 'j_marble', 'j_erosion', 'j_sixth_sense', 'j_delayed', 'j_rocket', 'j_to_moon', 'j_idol', 'j_misprint']
+                cards: ['j_cavendish', 'j_acrobat', 'j_photograph', 'j_constellation', 'j_lucky_cat', 'j_glass', 'j_baseball', 'j_throwback', 'j_madness', 'j_ramen', 'j_certificate', 'j_marble', 'j_erosion', 'j_sixth_sense', 'j_delayed', 'j_rocket', 'j_to_moon', 'j_idol', 'j_misprint']
             },
             C: {
                 label: 'C',
                 color: '#2ed573',
                 desc: '可用，有合适的构筑能发挥',
-                cards: ['j_spare_trousers', 'j_mad', 'j_clever', 'j_jolly', 'j_sly', 'j_crazy', 'j_droll', 'j_four_fingers', 'j_shortcut', 'j_smeared', 'j_bloodstone', 'j_arrowhead', 'j_onyx', 'j_rough_gem', 'j_pareidolia', 'j_oops_6', 'j_showman', 'j_golden', 'j_egg', 'j_cloud9', 'j_bull', 'j_bootstraps', 'j_superposition', 'j_chaos', 'j_splash', 'j_burglar', 'j_runner', 'j_ice_cream', 'j_hit_road', 'j_canio', 'j_gros_michel', 'j_abstract', 'j_fibonacci']
+                cards: ['j_spare_trousers', 'j_mad', 'j_clever', 'j_jolly', 'j_sly', 'j_crazy', 'j_droll', 'j_four_fingers', 'j_shortcut', 'j_smeared', 'j_bloodstone', 'j_arrowhead', 'j_onyx', 'j_rough_gem', 'j_pareidolia', 'j_oops_6', 'j_showman', 'j_golden', 'j_egg', 'j_cloud9', 'j_bull', 'j_bootstraps', 'j_superposition', 'j_chaos', 'j_splash', 'j_burglar', 'j_runner', 'j_ice_cream', 'j_hit_road', 'j_gros_michel', 'j_abstract', 'j_fibonacci']
             },
             D: {
                 label: 'D',
