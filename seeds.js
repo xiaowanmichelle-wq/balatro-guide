@@ -129,7 +129,7 @@ class SeedManager {
         this.isLoading = true;
         
         const grid = document.getElementById('seeds-grid');
-        if (grid) grid.innerHTML = '<div class="seeds-loading">🎴 加载中...</div>';
+        if (grid) grid.innerHTML = `<div class="seeds-loading">${i18n.t('seeds.loadingSeeds')}</div>`;
         
         try {
             // 构建查询参数
@@ -155,7 +155,7 @@ class SeedManager {
         } catch (err) {
             console.error('加载种子失败:', err);
             if (grid) {
-                grid.innerHTML = '<div class="seeds-empty">😵 加载失败，请稍后重试</div>';
+                grid.innerHTML = `<div class="seeds-empty">${i18n.t('seeds.loadError')}</div>`;
             }
         } finally {
             this.isLoading = false;
@@ -171,7 +171,7 @@ class SeedManager {
             grid.innerHTML = `
                 <div class="seeds-empty">
                     <span class="empty-icon">🌱</span>
-                    <p>${this.searchQuery ? '没有找到匹配的种子' : '还没有种子分享，成为第一个投稿的人吧！'}</p>
+                    <p>${this.searchQuery ? i18n.t('seeds.noMatch') : i18n.t('seeds.beFirst')}</p>
                 </div>
             `;
             return;
@@ -194,12 +194,12 @@ class SeedManager {
                     ${seed.recommended_build ? `<span class="seed-build-tag">${this.escapeHtml(seed.recommended_build)}</span>` : ''}
                     <div class="seed-card-footer">
                         <div class="seed-meta">
-                            <span class="seed-author">👤 ${this.escapeHtml(seed.author || '匿名玩家')}</span>
+                            <span class="seed-author">👤 ${this.escapeHtml(seed.author || i18n.t('seeds.anonymous'))}</span>
                             <span class="seed-time">${timeAgo}</span>
                         </div>
                         <button class="seed-like-btn ${isLiked ? 'liked' : ''}" 
                                 onclick="seedManager.toggleLike('${seed.id}')"
-                                ${isLiked ? 'title="已点赞"' : 'title="点赞"'}>
+                                ${isLiked ? `title="${i18n.t('seeds.liked')}"` : `title="${i18n.t('seeds.like')}"`}>
                             <span class="like-icon">${isLiked ? '❤️' : '🤍'}</span>
                             <span class="like-count">${seed.likes || 0}</span>
                         </button>
@@ -261,17 +261,17 @@ class SeedManager {
         const seedCode = document.getElementById('seed-code').value.trim();
         const title = document.getElementById('seed-title').value.trim();
         const description = document.getElementById('seed-desc').value.trim();
-        const author = document.getElementById('seed-author').value.trim() || '匿名玩家';
+        const author = document.getElementById('seed-author').value.trim() || i18n.t('seeds.anonymous');
         const recommendedBuild = document.getElementById('seed-build').value;
         const difficulty = document.getElementById('seed-difficulty').value;
         
         if (!seedCode || !title) {
-            this.showMessage(msgEl, '请填写种子代码和标题', 'error');
+            this.showMessage(msgEl, i18n.t('seeds.validateError'), 'error');
             return;
         }
         
         btn.disabled = true;
-        btn.textContent = '⏳ 提交中...';
+        btn.textContent = i18n.t('seeds.submitting');
         
         try {
             await this.supaFetch('seeds', {
@@ -287,14 +287,14 @@ class SeedManager {
                 }
             });
             
-            this.showMessage(msgEl, '✅ 投稿成功！审核通过后将展示在列表中', 'success');
+            this.showMessage(msgEl, i18n.t('seeds.submitSuccess'), 'success');
             document.getElementById('seed-form').reset();
         } catch (err) {
             console.error('投稿失败:', err);
-            this.showMessage(msgEl, '❌ 投稿失败，请稍后重试', 'error');
+            this.showMessage(msgEl, i18n.t('seeds.submitError'), 'error');
         } finally {
             btn.disabled = false;
-            btn.textContent = '🚀 提交种子';
+            btn.textContent = i18n.t('seeds.submitBtn');
         }
     }
     
@@ -354,12 +354,13 @@ class SeedManager {
         const now = new Date();
         const diff = Math.floor((now - date) / 1000);
         
-        if (diff < 60) return '刚刚';
-        if (diff < 3600) return `${Math.floor(diff / 60)} 分钟前`;
-        if (diff < 86400) return `${Math.floor(diff / 3600)} 小时前`;
-        if (diff < 604800) return `${Math.floor(diff / 86400)} 天前`;
+        if (diff < 60) return i18n.t('seeds.justNow');
+        if (diff < 3600) return i18n.t('seeds.minutesAgo', {n: Math.floor(diff / 60)});
+        if (diff < 86400) return i18n.t('seeds.hoursAgo', {n: Math.floor(diff / 3600)});
+        if (diff < 604800) return i18n.t('seeds.daysAgo', {n: Math.floor(diff / 86400)});
         
-        return date.toLocaleDateString('zh-CN', { month: 'short', day: 'numeric' });
+        const locale = i18n.currentLang === 'ja' ? 'ja-JP' : i18n.currentLang === 'en' ? 'en-US' : 'zh-CN';
+        return date.toLocaleDateString(locale, { month: 'short', day: 'numeric' });
     }
     
     // XSS 防护

@@ -17,7 +17,7 @@ class BalatroApp {
         // 当前筛选条件
         this.filters = {
             types: ['joker', 'tarot', 'planet', 'spectral'],
-            rarities: ['common', 'rare', 'legendary', 'secret'],
+            rarities: ['common', 'rare', 'legendary'],
             effects: [],
             hands: [],
             search: ''
@@ -78,7 +78,7 @@ class BalatroApp {
         if (this.filters.search) activeFilters++;
         // 类型和稀有度如果不是全选也算
         if (this.filters.types.length < 4) activeFilters += (4 - this.filters.types.length);
-        if (this.filters.rarities.length < 4) activeFilters += (4 - this.filters.rarities.length);
+        if (this.filters.rarities.length < 3) activeFilters += (3 - this.filters.rarities.length);
         
         if (activeFilters > 0) {
             badge.textContent = activeFilters;
@@ -205,8 +205,8 @@ class BalatroApp {
             // 类型筛选
             if (!this.filters.types.includes(card.cardType)) return false;
             
-            // 稀有度筛选
-            if (!this.filters.rarities.includes(card.rarity)) return false;
+            // 稀有度筛选（消耗牌没有 rarity 字段，跳过此筛选）
+            if (card.rarity && !this.filters.rarities.includes(card.rarity)) return false;
             
             // 效果类型筛选
             if (this.filters.effects.length > 0) {
@@ -243,11 +243,33 @@ class BalatroApp {
         const filtered = this.filterCards();
         const grid = document.getElementById('cards-grid');
         
-        document.getElementById('total-count').textContent = filtered.length;
+        // 搜索时按匹配优先级排序：名称完全匹配 > 名称开头匹配 > 名称包含 > 描述/协同匹配
+        if (this.filters.search) {
+            const search = this.filters.search;
+            filtered.sort((a, b) => {
+                const aName = a.name.toLowerCase();
+                const bName = b.name.toLowerCase();
+                const aExact = aName === search;
+                const bExact = bName === search;
+                if (aExact !== bExact) return aExact ? -1 : 1;
+                const aStart = aName.startsWith(search);
+                const bStart = bName.startsWith(search);
+                if (aStart !== bStart) return aStart ? -1 : 1;
+                const aContain = aName.includes(search);
+                const bContain = bName.includes(search);
+                if (aContain !== bContain) return aContain ? -1 : 1;
+                return 0;
+            });
+        }
+        
+        const resultCountEl = document.getElementById('result-count-text');
+        if (resultCountEl) {
+            resultCountEl.textContent = i18n.t('gallery.resultCount', { count: filtered.length });
+        }
         this.updateFilterBadge();
         
         if (filtered.length === 0) {
-            grid.innerHTML = '<p class="empty-state">没有找到匹配的卡牌</p>';
+            grid.innerHTML = `<p class="empty-state">${i18n.t('ui.noResults')}</p>`;
             return;
         }
         
@@ -269,30 +291,34 @@ class BalatroApp {
         // 获取适合牌型
         let handTag = '';
         if (card.best_with && card.best_with.length > 0 && card.best_with[0] !== 'all') {
-            const handNames = {
-                'high_card': '高牌', 'one_pair': '对子', 'two_pair': '两对',
-                'three_of_a_kind': '三条', 'straight': '顺子', 'flush': '同花',
-                'full_house': '葫芦', 'four_of_a_kind': '四条', 'straight_flush': '同花顺'
-            };
-            const handName = handNames[card.best_with[0]] || card.best_with[0];
+            const handName = i18n.t(`gallery.hands.${card.best_with[0]}`) || card.best_with[0];
             handTag = `<span class="card-hand">${handName}</span>`;
         }
         
-        const typeNames = { joker: 'Joker', tarot: '塔罗', planet: '行星', spectral: '灵魂' };
+        const typeNames = {
+            joker: i18n.t('gallery.typeShort.joker'),
+            tarot: i18n.t('gallery.typeShort.tarot'),
+            planet: i18n.t('gallery.typeShort.planet'),
+            spectral: i18n.t('gallery.typeShort.spectral')
+        };
         
         // 卡牌图片
         const imageHTML = card.image 
             ? `<div class="card-image"><img src="${card.image}" alt="${card.name}" loading="lazy" onerror="this.parentElement.style.display='none'"></div>` 
             : '';
         
+        // i18n 翻译卡牌名和描述
+        const cardName = i18n.cardT(card.id, 'name') || card.name;
+        const cardDesc = i18n.cardT(card.id, 'description') || card.description;
+        
         return `
             <div class="card ${rarityClass} ${card.image ? 'has-image' : ''}" onclick="app.selectCard('${card.id}')">
                 <div class="card-header">
-                    <span class="card-name">${card.name}</span>
+                    <span class="card-name">${cardName}</span>
                     <span class="card-type ${card.cardType}">${typeNames[card.cardType]}</span>
                 </div>
                 ${imageHTML}
-                <p class="card-description">${card.description}</p>
+                <p class="card-description">${cardDesc}</p>
                 <div class="card-tags">
                     ${tags}
                     ${handTag}
@@ -308,7 +334,7 @@ class BalatroApp {
         
         this.filters = {
             types: ['joker', 'tarot', 'planet', 'spectral'],
-            rarities: ['common', 'rare', 'legendary', 'secret'],
+            rarities: ['common', 'rare', 'legendary'],
             effects: [],
             hands: [],
             search: ''
@@ -340,15 +366,22 @@ class BalatroApp {
         document.getElementById('selected-count').textContent = this.selectedCards.length;
         
         if (this.selectedCards.length === 0) {
-            container.innerHTML = '<p class="empty-state">点击卡牌添加到你的卡组</p>';
+            container.innerHTML = `<p class="empty-state">${i18n.t('matcher.emptyDeck')}</p>`;
             return;
         }
         
-        const rarityLabels = { common: '普通', rare: '稀有', legendary: '传奇', secret: '隐藏' };
+        const rarityLabels = {
+            common: i18n.t('gallery.rarity.common'),
+            rare: i18n.t('gallery.rarity.rare'),
+            legendary: i18n.t('gallery.rarity.legendary'),
+            secret: i18n.t('gallery.rarity.secret')
+        };
         
         container.innerHTML = this.selectedCards.map(card => {
+            const cardName = i18n.cardT(card.id, 'name') || card.name;
+            const cardDesc = i18n.cardT(card.id, 'description') || card.description;
             const thumbHTML = card.image 
-                ? `<img class="selected-card-thumb" src="${card.image}" alt="${card.name}" loading="lazy" onerror="this.style.display='none'">` 
+                ? `<img class="selected-card-thumb" src="${card.image}" alt="${cardName}" loading="lazy" onerror="this.style.display='none'">` 
                 : '';
             return `
             <div class="selected-card">
@@ -356,11 +389,11 @@ class BalatroApp {
                     ${thumbHTML}
                     <div class="selected-card-info">
                         <div class="selected-card-header">
-                            <span class="selected-card-name">${card.name}</span>
+                            <span class="selected-card-name">${cardName}</span>
                             <span class="selected-card-rarity">${rarityLabels[card.rarity] || ''}</span>
                             <span class="remove" onclick="event.stopPropagation(); app.removeCard('${card.id}')">&times;</span>
                         </div>
-                        <div class="selected-card-desc">${card.description || ''}</div>
+                        <div class="selected-card-desc">${cardDesc || ''}</div>
                     </div>
                 </div>
             </div>
@@ -376,7 +409,7 @@ class BalatroApp {
     clearDeck() {
         this.selectedCards = [];
         this.renderSelectedCards();
-        document.getElementById('recommendations').innerHTML = '<p class="empty-state">选择卡牌后，系统将为你推荐最佳搭配</p>';
+        document.getElementById('recommendations').innerHTML = `<p class="empty-state">${i18n.t('matcher.emptyRec')}</p>`;
     }
     
     // 卡牌选择器下拉展开/收起
@@ -411,24 +444,31 @@ class BalatroApp {
         // 排除已选择的卡牌
         const availableCards = this.allCards.filter(c => 
             !this.selectedCards.find(s => s.id === c.id) &&
-            (search === '' || c.name.toLowerCase().includes(search))
+            (search === '' || c.name.toLowerCase().includes(search) || (i18n.cardT(c.id, 'name') || '').toLowerCase().includes(search))
         );
         
-        const typeNames = { joker: 'Joker', tarot: '塔罗', planet: '行星', spectral: '灵魂' };
+        const typeNames = {
+            joker: i18n.t('gallery.typeShort.joker'),
+            tarot: i18n.t('gallery.typeShort.tarot'),
+            planet: i18n.t('gallery.typeShort.planet'),
+            spectral: i18n.t('gallery.typeShort.spectral')
+        };
         
         container.innerHTML = availableCards.slice(0, 50).map(card => {
+            const cardName = i18n.cardT(card.id, 'name') || card.name;
+            const cardDesc = i18n.cardT(card.id, 'description') || card.description;
             const thumbHTML = card.image 
-                ? `<img class="picker-item-thumb" src="${card.image}" alt="${card.name}" loading="lazy" onerror="this.style.display='none'">` 
+                ? `<img class="picker-item-thumb" src="${card.image}" alt="${cardName}" loading="lazy" onerror="this.style.display='none'">` 
                 : '';
             return `
             <label class="picker-item">
                 <div class="picker-item-header">
                     <input type="checkbox" value="${card.id}" onchange="app.togglePickerCard('${card.id}', this.checked)">
                     ${thumbHTML}
-                    <span class="name">${card.name}</span>
+                    <span class="name">${cardName}</span>
                     <span class="type">${typeNames[card.cardType] || 'Joker'}</span>
                 </div>
-                <div class="picker-item-desc">${card.description || ''}</div>
+                <div class="picker-item-desc">${cardDesc || ''}</div>
             </label>
         `}).join('');
     }
@@ -448,7 +488,7 @@ class BalatroApp {
         const container = document.getElementById('recommendations');
         
         if (this.selectedCards.length === 0) {
-            container.innerHTML = '<p class="empty-state">选择卡牌后，系统将为你推荐最佳搭配</p>';
+            container.innerHTML = `<p class="empty-state">${i18n.t('matcher.emptyRec')}</p>`;
             return;
         }
         
@@ -469,34 +509,36 @@ class BalatroApp {
         // 展示匹配到的构筑思路
         if (matchedBuilds.length > 0) {
             html += '<div class="matched-builds">';
-            html += '<h3 class="matched-title">🧭 匹配到的构筑方向</h3>';
+            html += `<h3 class="matched-title">${i18n.t('matcher.matchedBuilds')}</h3>`;
             html += matchedBuilds.map(mb => {
+                const strategyName = i18n.strategyT(mb.strategy.id, 'name') || mb.strategy.name;
+                const strategyDesc = i18n.strategyT(mb.strategy.id, 'desc') || mb.strategy.desc;
                 const missingNames = mb.missingCore.map(id => {
                     const c = this.allCards.find(c => c.id === id);
-                    return c ? c.name : '';
+                    return c ? (i18n.cardT(c.id, 'name') || c.name) : '';
                 }).filter(Boolean);
                 const missingHtml = missingNames.length > 0 
-                    ? `<span class="missing-cards">还缺: ${missingNames.join('、')}</span>` 
-                    : '<span class="build-complete">✅ 核心已齐全！</span>';
+                    ? `<span class="missing-cards">${i18n.t('matcher.missingCards', {cards: missingNames.join('、')})}</span>` 
+                    : `<span class="build-complete">${i18n.t('matcher.coreComplete')}</span>`;
                 // 获取兼容流派简要提示
                 const strategies = this.getBuildStrategies();
                 let compatBrief = '';
                 if (mb.strategy.compatibleWith && mb.strategy.compatibleWith.length > 0) {
                     const compatNames = mb.strategy.compatibleWith.map(comp => {
                         const target = strategies.find(st => st.id === comp.id);
-                        return target ? target.name : '';
+                        return target ? (i18n.strategyT(target.id, 'name') || target.name) : '';
                     }).filter(Boolean);
                     if (compatNames.length > 0) {
-                        compatBrief = `<span class="compat-brief">🔗 可兼容: ${compatNames.join('、')}</span>`;
+                        compatBrief = `<span class="compat-brief">${i18n.t('matcher.compatBrief', {names: compatNames.join('、')})}</span>`;
                     }
                 }
                 return `
                     <div class="matched-build ${mb.matchRate >= 0.7 ? 'high-match' : mb.matchRate >= 0.4 ? 'mid-match' : 'low-match'}">
                         <div class="build-match-header">
-                            <span class="build-name">${mb.strategy.name}</span>
-                            <span class="match-rate">${Math.round(mb.matchRate * 100)}% 匹配</span>
+                            <span class="build-name">${strategyName}</span>
+                            <span class="match-rate">${i18n.t('matcher.matchRate', {rate: Math.round(mb.matchRate * 100)})}</span>
                         </div>
-                        <p class="build-desc">${mb.strategy.desc}</p>
+                        <p class="build-desc">${strategyDesc}</p>
                         ${missingHtml}
                         ${compatBrief}
                     </div>
@@ -506,7 +548,7 @@ class BalatroApp {
         }
         
         if (recommendations.length === 0) {
-            html += '<p class="empty-state">没有找到推荐卡牌，试试添加更多卡牌</p>';
+            html += `<p class="empty-state">${i18n.t('matcher.noRec')}</p>`;
             container.innerHTML = html;
             return;
         }
@@ -526,22 +568,24 @@ class BalatroApp {
         
         const renderRecCard = (rec) => {
             const scoreClass = rec.score >= 70 ? 'high' : rec.score >= 40 ? 'medium' : 'low';
-            const rarityLabel = rec.card.rarity === 'legendary' ? '传奇' : rec.card.rarity === 'rare' ? '稀有' : rec.card.rarity === 'secret' ? '隐藏' : '普通';
-            const typeLabel = rec.card.cardType === 'joker' ? 'Joker' : rec.card.cardType === 'tarot' ? '塔罗' : rec.card.cardType === 'planet' ? '行星' : '灵魂';
+            const rarityLabel = i18n.t(`gallery.rarity.${rec.card.rarity}`) || rec.card.rarity;
+            const typeLabel = i18n.t(`gallery.typeShort.${rec.card.cardType}`) || rec.card.cardType;
+            const recCardName = i18n.cardT(rec.card.id, 'name') || rec.card.name;
+            const recCardDesc = i18n.cardT(rec.card.id, 'description') || rec.card.description;
             const buildTag = rec.buildTag ? `<span class="card-tag build-tag">${rec.buildTag}</span>` : '';
             const recThumbHTML = rec.card.image 
-                ? `<img class="rec-thumb" src="${rec.card.image}" alt="${rec.card.name}" loading="lazy" onerror="this.style.display='none'">` 
+                ? `<img class="rec-thumb" src="${rec.card.image}" alt="${recCardName}" loading="lazy" onerror="this.style.display='none'">` 
                 : '';
             return `
                 <div class="recommendation-card ${rec.card.image ? 'has-thumb' : ''}">
                     <div class="rec-header">
                         ${recThumbHTML}
                         <div class="rec-header-text">
-                            <span class="rec-name">${rec.card.name}</span>
-                            <span class="rec-score ${scoreClass}">${rec.score}分</span>
+                            <span class="rec-name">${recCardName}</span>
+                            <span class="rec-score ${scoreClass}">${i18n.t('matcher.score', {score: rec.score})}</span>
                         </div>
                     </div>
-                    <p class="rec-desc">${rec.card.description || ''}</p>
+                    <p class="rec-desc">${recCardDesc || ''}</p>
                     <p class="rec-reason">${rec.reason}</p>
                     ${rec.synergy ? `<p class="rec-synergy">✨ ${rec.synergy}</p>` : ''}
                     <div class="rec-tags">
@@ -555,7 +599,7 @@ class BalatroApp {
         
         // Joker 推荐
         if (jokerRecs.length > 0) {
-            html += '<h3 class="rec-title">🎯 推荐 Joker</h3>';
+            html += `<h3 class="rec-title">${i18n.t('matcher.recJoker')}</h3>`;
             html += '<div class="rec-section">';
             html += jokerRecs.slice(0, 8).map(renderRecCard).join('');
             html += '</div>';
@@ -563,7 +607,7 @@ class BalatroApp {
         
         // 塔罗牌推荐
         if (enhancedTarotRecs.length > 0) {
-            html += '<h3 class="rec-title rec-title-tarot">🔮 推荐塔罗牌</h3>';
+            html += `<h3 class="rec-title rec-title-tarot">${i18n.t('matcher.recTarot')}</h3>`;
             html += '<div class="rec-section rec-section-tarot">';
             html += enhancedTarotRecs.slice(0, 6).map(renderRecCard).join('');
             html += '</div>';
@@ -571,7 +615,7 @@ class BalatroApp {
         
         // 行星牌推荐
         if (enhancedPlanetRecs.length > 0) {
-            html += '<h3 class="rec-title rec-title-planet">🪐 推荐行星牌</h3>';
+            html += `<h3 class="rec-title rec-title-planet">${i18n.t('matcher.recPlanet')}</h3>`;
             html += '<div class="rec-section rec-section-planet">';
             html += enhancedPlanetRecs.slice(0, 6).map(renderRecCard).join('');
             html += '</div>';
@@ -579,7 +623,7 @@ class BalatroApp {
         
         // 灵魂牌推荐
         if (enhancedSpectralRecs.length > 0) {
-            html += '<h3 class="rec-title rec-title-spectral">👻 推荐灵魂牌</h3>';
+            html += `<h3 class="rec-title rec-title-spectral">${i18n.t('matcher.recSpectral')}</h3>`;
             html += '<div class="rec-section rec-section-spectral">';
             html += enhancedSpectralRecs.slice(0, 6).map(renderRecCard).join('');
             html += '</div>';
@@ -587,7 +631,7 @@ class BalatroApp {
         
         // 如果没有任何推荐
         if (jokerRecs.length === 0 && enhancedTarotRecs.length === 0 && enhancedPlanetRecs.length === 0 && enhancedSpectralRecs.length === 0) {
-            html += '<p class="empty-state">没有找到推荐卡牌</p>';
+            html += `<p class="empty-state">${i18n.t('matcher.noRec')}</p>`;
         }
         
         container.innerHTML = html;
@@ -914,7 +958,7 @@ class BalatroApp {
                     }
                     // 未断选票 + 老千小丑(重复牌型)
                     if (card.id === 'j_card_sharp') {
-                        score += 45;
+                        score += 40;
                         synergy = synergy || '未断选票+老千小丑重复触发X3';
                     }
                     // 未断选票 + 大麦克香蕉(更多自毁机会)
@@ -994,9 +1038,9 @@ class BalatroApp {
                         score += 45;
                         synergy = synergy || '未断选票让K/Q卡牌重复触发';
                     }
-                    // 点数效果卡
+                    // 点数效果卡（偶数/奇数/斐波那契等，与未断选票最配）
                     if (['j_fibonacci', 'j_even_steven', 'j_odd_todd', 'j_scholar', 'j_walkie', 'j_hack'].includes(card.id)) {
-                        score += 45;
+                        score += 50;
                         synergy = synergy || '未断选票让单牌点数效果触发3次';
                     }
                     // 花色效果卡
@@ -1060,39 +1104,7 @@ class BalatroApp {
                         synergy = synergy || '幻视让所有牌变人头牌，特里布莱全牌×2';
                     }
                 }
-                // 哑剧演员 + 手牌效果协同（男爵/射月/钢铁牌）
-                if (selectedIds.includes('j_mime')) {
-                    // 哑剧演员 + 男爵（手牌中K的×1.5额外触发）
-                    if (card.id === 'j_baron') {
-                        score += 55;
-                        synergy = synergy || '哑剧演员让手牌K的男爵×1.5额外触发1次';
-                    }
-                    // 哑剧演员 + 射月（手牌中Q的+13倍率额外触发）
-                    if (card.id === 'j_shoot_moon') {
-                        score += 50;
-                        synergy = synergy || '哑剧演员让手牌Q的射月+13倍率额外触发1次';
-                    }
-                    // 哑剧演员 + 钢铁牌（战车创建钢铁牌）
-                    if (card.id === 'j_steel') {
-                        score += 50;
-                        synergy = synergy || '哑剧演员让手牌中钢铁牌×1.5额外触发1次';
-                    }
-                }
-                // 反向：已选男爵/射月/钢铁小丑，推荐哑剧演员
-                if (card.id === 'j_mime') {
-                    if (selectedIds.includes('j_baron')) {
-                        score += 50;
-                        synergy = synergy || '哑剧演员让手牌K的男爵×1.5额外触发';
-                    }
-                    if (selectedIds.includes('j_shoot_moon')) {
-                        score += 45;
-                        synergy = synergy || '哑剧演员让手牌Q的射月+13倍率额外触发';
-                    }
-                    if (selectedIds.includes('j_steel')) {
-                        score += 45;
-                        synergy = synergy || '哑剧演员让手牌中钢铁牌效果额外触发';
-                    }
-                }
+                // （哑剧演员/钢铁协同已移至 face 块外，避免 tags 门槛问题）
                 // 照片 + 恐怖面孔
                 if (selectedIds.includes('j_photograph') && card.id === 'j_scary_face') {
                     score += 40;
@@ -1184,6 +1196,71 @@ class BalatroApp {
                 }
             }
             
+            // 5.5 手牌效果协同（哑剧演员/钢铁/男爵/射月/证书 —— 不依赖 face 标签）
+            // 哑剧演员 + 手牌效果协同（男爵/射月/钢铁牌）
+            if (selectedIds.includes('j_mime')) {
+                if (card.id === 'j_baron') {
+                    score += 55;
+                    synergy = synergy || '哑剧演员让手牌K的男爵×1.5额外触发1次';
+                }
+                if (card.id === 'j_shoot_moon') {
+                    score += 50;
+                    synergy = synergy || '哑剧演员让手牌Q的射月+13倍率额外触发1次';
+                }
+                if (card.id === 'j_steel') {
+                    score += 50;
+                    synergy = synergy || '哑剧演员让手牌中钢铁牌×1.5额外触发1次';
+                }
+            }
+            // 反向：已选男爵/射月/钢铁小丑，推荐哑剧演员
+            if (card.id === 'j_mime') {
+                if (selectedIds.includes('j_baron')) {
+                    score += 50;
+                    synergy = synergy || '哑剧演员让手牌K的男爵×1.5额外触发';
+                }
+                if (selectedIds.includes('j_shoot_moon')) {
+                    score += 45;
+                    synergy = synergy || '哑剧演员让手牌Q的射月+13倍率额外触发';
+                }
+                if (selectedIds.includes('j_steel')) {
+                    score += 45;
+                    synergy = synergy || '哑剧演员让手牌中钢铁牌效果额外触发';
+                }
+            }
+            // 钢铁小丑 + 男爵/射月
+            if (selectedIds.includes('j_steel')) {
+                if (card.id === 'j_baron') {
+                    score += 50;
+                    synergy = synergy || '钢铁牌K同时触发钢铁×1.5和男爵×1.5双重叠乘';
+                }
+                if (card.id === 'j_shoot_moon') {
+                    score += 45;
+                    synergy = synergy || '钢铁牌Q同时触发钢铁×1.5和射月+13';
+                }
+            }
+            // 反向：已选男爵/射月/证书，推荐钢铁小丑
+            if (card.id === 'j_steel') {
+                if (selectedIds.includes('j_baron')) {
+                    score += 50;
+                    synergy = synergy || '手牌K同时触发男爵×1.5和钢铁×1.5双重叠乘';
+                }
+                if (selectedIds.includes('j_shoot_moon')) {
+                    score += 45;
+                    synergy = synergy || '手牌Q同时触发射月+13和钢铁×1.5';
+                }
+                if (selectedIds.includes('j_certificate')) {
+                    score += 40;
+                    synergy = synergy || '证书每回合加牌扩大牌组，配合战车变钢铁牌';
+                }
+            }
+            // 钢铁小丑 + 证书
+            if (selectedIds.includes('j_steel')) {
+                if (card.id === 'j_certificate') {
+                    score += 40;
+                    synergy = synergy || '证书加牌后用战车变钢铁牌，钢铁小丑每张+×0.2';
+                }
+            }
+            
             // 6. 花色协同
             if (tags.includes('suit')) {
                 const suitCards = ['j_greedy', 'j_lusty', 'j_wrathful', 'j_gluttonous', 'j_flower_pot'];
@@ -1197,13 +1274,6 @@ class BalatroApp {
                 if (selectedIds.includes('j_smeared') && suitMatches.length >= 1) {
                     score += 20;
                     synergy = synergy || '模糊小丑扩大花色触发范围';
-                }
-                
-                // 箭头 + 黑板 (黑桃+梅花)
-                if ((selectedIds.includes('j_arrowhead') && card.id === 'j_blackboard') ||
-                    (selectedIds.includes('j_blackboard') && card.id === 'j_arrowhead')) {
-                    score += 45;
-                    synergy = synergy || '箭头+黑板黑桃/梅花协同';
                 }
                 
                 // 璞玉 + 部落 (方块牌收益)
@@ -1228,6 +1298,110 @@ class BalatroApp {
                 if (economyMatches.length >= 1) {
                     score += 20;
                     synergy = synergy || '经济类卡牌组合，增加收入';
+                }
+            }
+            
+            // 7.5 出售体系协同（礼品卡/鸡蛋/侠盗/仪式匕首/篝火）
+            if (selectedIds.includes('j_gift_card')) {
+                if (card.id === 'j_swashbuckler') {
+                    score += 50;
+                    synergy = synergy || '礼品卡每回合给所有小丑售价+$1，侠盗将总售价转化为倍率';
+                }
+                if (card.id === 'j_ceremonial') {
+                    score += 45;
+                    synergy = synergy || '礼品卡抬高小丑售价，仪式匕首摧毁时获得更高永久倍率';
+                }
+            }
+            if (card.id === 'j_gift_card') {
+                if (selectedIds.includes('j_swashbuckler')) {
+                    score += 50;
+                    synergy = synergy || '侠盗将小丑总售价转倍率，礼品卡每回合+$1售价直接涨倍率';
+                }
+                if (selectedIds.includes('j_ceremonial')) {
+                    score += 45;
+                    synergy = synergy || '仪式匕首摧毁小丑获售价2倍倍率，礼品卡抬高售价加大收益';
+                }
+            }
+            // 鸡蛋 ↔ 侠盗/仪式匕首
+            if (selectedIds.includes('j_egg')) {
+                if (card.id === 'j_swashbuckler') {
+                    score += 55;
+                    synergy = synergy || '鸡蛋每回合售价+$3，侠盗将所有小丑总售价转化为倍率，持续涨倍';
+                }
+                if (card.id === 'j_ceremonial') {
+                    score += 50;
+                    synergy = synergy || '鸡蛋售价快速膨胀，被仪式匕首摧毁时获得超高永久倍率';
+                }
+            }
+            if (card.id === 'j_egg') {
+                if (selectedIds.includes('j_swashbuckler')) {
+                    score += 55;
+                    synergy = synergy || '侠盗将总售价转倍率，鸡蛋每回合+$3售价为侠盗持续涨倍';
+                }
+                if (selectedIds.includes('j_ceremonial')) {
+                    score += 50;
+                    synergy = synergy || '仪式匕首摧毁高售价小丑获2倍永久倍率，鸡蛋售价增长最快';
+                }
+            }
+            // 篝火 ↔ 乌合之众/卡牌术士（产出卡牌出售喂篝火）
+            if (selectedIds.includes('j_campfire')) {
+                if (card.id === 'j_riff_raff') {
+                    score += 50;
+                    synergy = synergy || '乌合之众每盲注生成2张小丑，出售喂篝火+×0.5倍率';
+                }
+                if (card.id === 'j_cartomancer') {
+                    score += 45;
+                    synergy = synergy || '卡牌术士每盲注生成塔罗牌，出售喂篝火+×0.25倍率';
+                }
+            }
+            if (card.id === 'j_campfire') {
+                if (selectedIds.includes('j_riff_raff')) {
+                    score += 50;
+                    synergy = synergy || '篝火每出售+×0.25，乌合之众每盲注生成2张小丑可出售喂火';
+                }
+                if (selectedIds.includes('j_cartomancer')) {
+                    score += 45;
+                    synergy = synergy || '篝火每出售+×0.25，卡牌术士每盲注生成塔罗牌可出售喂火';
+                }
+            }
+            
+            // 7.6 搭乘巴士数字牌体系（只打数字牌叠倍率）
+            if (selectedIds.includes('j_ride_bus')) {
+                if (card.id === 'j_even_steven') {
+                    score += 45;
+                    synergy = synergy || '搭乘巴士只打数字牌，偶数史蒂文给偶数牌+4倍率完美配合';
+                }
+                if (card.id === 'j_odd_todd') {
+                    score += 45;
+                    synergy = synergy || '搭乘巴士只打数字牌，奇数托德给奇数牌+31筹码完美配合';
+                }
+                if (card.id === 'j_fibonacci') {
+                    score += 40;
+                    synergy = synergy || '搭乘巴士只打数字牌，斐波那契给2/3/5/8+8倍率';
+                }
+                if (card.id === 'j_walkie') {
+                    score += 35;
+                    synergy = synergy || '搭乘巴士只打数字牌，对讲机给10和4加成';
+                }
+                if (card.id === 'j_hack') {
+                    score += 40;
+                    synergy = synergy || '搭乘巴士只打数字牌，烂脱口秀演员让2/3/4/5额外触发1次';
+                }
+                if (card.id === 'j_wee') {
+                    score += 35;
+                    synergy = synergy || '搭乘巴士只打数字牌，小小丑打2永久+8筹码';
+                }
+                if (card.id === 'j_scholar') {
+                    score += 40;
+                    synergy = synergy || '搭乘巴士只打数字牌，学者给A+4倍率+20筹码，A是数字牌不破连续';
+                }
+            }
+            if (card.id === 'j_ride_bus') {
+                const numberJokers = ['j_even_steven', 'j_odd_todd', 'j_fibonacci', 'j_walkie', 'j_hack', 'j_wee', 'j_scholar'];
+                const matched = numberJokers.filter(id => selectedIds.includes(id));
+                if (matched.length > 0) {
+                    score += 40 * matched.length;
+                    synergy = synergy || '搭乘巴士鼓励只打数字牌，已选的数字牌加成小丑完美配合';
                 }
             }
             
@@ -1276,11 +1450,26 @@ class BalatroApp {
                 }
             }
             
+            // 9.5 流浪者 + 信用卡协同（信用卡允许负债，更容易保持≤$4触发流浪者）
+            if (selectedIds.includes('j_vagabond')) {
+                if (card.id === 'j_credit_card') {
+                    score += 35;
+                    synergy = synergy || '信用卡允许负债到-$20，更容易保持≤$4触发流浪者产出塔罗牌';
+                }
+            }
+            if (selectedIds.includes('j_credit_card')) {
+                if (card.id === 'j_vagabond') {
+                    score += 35;
+                    synergy = synergy || '流浪者在≤$4时生成塔罗牌，信用卡负债让条件更容易达成';
+                }
+            }
+            
             // 10. 行星牌协同
             if (tags.includes('planet') || card.cardType === 'planet') {
                 const planetSynergies = [
                     { cards: ['j_constellation', 'j_astronomer'], name: '星座天文学' },
                     { cards: ['j_satellite', 'j_constellation'], name: '卫星星座' },
+                    { cards: ['j_satellite', 'j_astronomer'], name: '卫星天文学' },
                     { cards: ['t_priestess', 'j_constellation'], name: '女祭司星座' },
                     { cards: ['j_showman', 'j_constellation'], name: '马戏团长行星' },
                     { cards: ['j_crazy', 'p_saturn'], name: '顺子行星' },
@@ -1353,7 +1542,6 @@ class BalatroApp {
                 const riskySynergies = [
                     // 注意：大麦克香蕉和卡文迪什互斥，大麦克香蕉灭绝后才出现卡文迪什
                     { cards: ['j_gros_michel', 'j_bloodstone'], name: '风险血石' },
-                    { cards: ['j_cavendish', 'j_oops_6'], name: '卡文迪什全6' },
                     { cards: ['j_madness', 'j_abstract'], name: '疯狂抽象' }
                 ];
                 
@@ -1401,6 +1589,7 @@ class BalatroApp {
         
         // 定义 Joker → 塔罗牌 的匹配关系
         const jokerTarotMap = {
+            'j_hanging_chad': { tarots: ['t_justice'], reason: '正义创造玻璃牌，第1张计分的玻璃牌触发3次×2倍率效果极其恐怖' },
             'j_steel': { tarots: ['t_chariot'], reason: '战车创造钢铁牌，钢铁小丑每张钢卡+0.2倍率' },
             'j_glass': { tarots: ['t_justice', 't_fool'], reason: '正义创造玻璃牌供摧毁叠加倍率，愚者可复制正义' },
             'j_vampire': { tarots: ['t_empress', 't_emperor', 't_devil'], reason: '持续给牌附增强供吸血鬼吸收叠加X倍率' },
@@ -1915,7 +2104,7 @@ class BalatroApp {
                 desc: '用战车塔罗创造钢铁牌，手牌中钢铁牌提供持续X1.5倍率',
                 detail: '钢铁牌留在手牌中时每张提供×1.5倍率，不需要打出即可生效。钢铁小丑每有1张钢铁牌+×0.2倍率。哑剧演员让手牌中钢铁牌的×1.5额外触发1次（变为×2.25）。配合男爵(K×1.5)和射月(Q+13)，手牌中的K/Q既触发钢铁又触发皇室加成，倍率叠乘极其恐怖。',
                 coreCards: ['j_steel', 'j_mime', 't_chariot'],
-                supportCards: ['j_baron', 'j_shoot_moon', 'j_hanging_chad', 'j_pareidolia'],
+                supportCards: ['j_baron', 'j_shoot_moon', 'j_certificate', 'j_hanging_chad', 'j_pareidolia'],
                 tips: '钢铁牌的核心优势是"不打出就能加倍率"——用战车把手牌中不需要打出的牌变钢铁牌，配合哑剧演员让每张钢铁牌的×1.5额外触发1次。手牌全钢铁时倍率指数级增长',
                 compatibleWith: [
                     { id: 'kq_build', note: '手牌中的K/Q变钢铁牌后，钢铁×1.5+男爵×1.5+射月+13多重叠加' },
@@ -1970,9 +2159,15 @@ class BalatroApp {
         const strategies = this.getBuildStrategies();
         
         container.innerHTML = strategies.map(s => {
+            const sName = i18n.strategyT(s.id, 'name') || s.name;
+            const sDifficulty = i18n.strategyT(s.id, 'difficulty') || s.difficulty;
+            const sDesc = i18n.strategyT(s.id, 'desc') || s.desc;
+            const sDetail = i18n.strategyT(s.id, 'detail') || s.detail;
+            const sTips = i18n.strategyT(s.id, 'tips') || s.tips;
+            
             const coreNames = s.coreCards.map(id => {
                 const c = this.allCards.find(c => c.id === id);
-                return c ? c.name : '';
+                return c ? (i18n.cardT(c.id, 'name') || c.name) : '';
             }).filter(Boolean);
             
             // 渲染兼容性提示
@@ -1980,12 +2175,12 @@ class BalatroApp {
             if (s.compatibleWith && s.compatibleWith.length > 0) {
                 const compatItems = s.compatibleWith.map(comp => {
                     const target = strategies.find(st => st.id === comp.id);
-                    const targetName = target ? target.name : comp.id;
+                    const targetName = target ? (i18n.strategyT(target.id, 'name') || target.name) : comp.id;
                     return `<div class="compat-item"><span class="compat-target">${targetName}</span><span class="compat-note">${comp.note}</span></div>`;
                 }).join('');
                 compatHtml = `
                     <div class="strategy-compat">
-                        <span class="compat-label">🔗 可兼容流派：</span>
+                        <span class="compat-label">${i18n.t('guide.compatLabel')}</span>
                         <div class="compat-list">${compatItems}</div>
                     </div>
                 `;
@@ -1994,18 +2189,18 @@ class BalatroApp {
             return `
                 <div class="guide-card strategy-card" data-strategy="${s.id}">
                     <div class="strategy-header">
-                        <h4>${s.name}</h4>
-                        <span class="strategy-difficulty">${s.difficulty}</span>
+                        <h4>${sName}</h4>
+                        <span class="strategy-difficulty">${sDifficulty}</span>
                     </div>
-                    <p>${s.desc}</p>
-                    <p class="strategy-detail">${s.detail}</p>
+                    <p>${sDesc}</p>
+                    <p class="strategy-detail">${sDetail}</p>
                     <div class="strategy-core">
-                        <span class="core-label">核心卡牌：</span>
+                        <span class="core-label">${i18n.t('guide.coreCards')}</span>
                         <span class="core-cards">${coreNames.join('、')}</span>
                     </div>
                     ${compatHtml}
-                    <p class="strategy-tip">💡 ${s.tips}</p>
-                    <button class="btn btn-small btn-try" onclick="app.tryBuild('${s.id}')">试试这个构筑 →</button>
+                    <p class="strategy-tip">💡 ${sTips}</p>
+                    <button class="btn btn-small btn-try" onclick="app.tryBuild('${s.id}')">${i18n.t('guide.tryBuild')}</button>
                 </div>
             `;
         }).join('');
@@ -2016,12 +2211,12 @@ class BalatroApp {
         const cardsContainer = document.getElementById('recommended-cards');
         
         const categories = [
-            { id: 'all_star', name: '🌟 全明星', cards: ['j_blueprint', 'j_brainstorm', 'j_perkeo', 'j_chicot', 'j_triboulet', 'j_baron', 'j_order', 'j_tribe', 'j_family', 'j_duo'] },
-            { id: 'early_game', name: '🌱 前期好用', cards: ['j_joker', 'j_greedy', 'j_lusty', 'j_wrathful', 'j_gluttonous', 'j_jolly', 'j_sly', 'j_crazy', 'j_golden', 'j_egg', 'j_ice_cream', 'j_popcorn'] },
-            { id: 'scaling', name: '📈 成长型', cards: ['j_ride_bus', 'j_runner', 'j_green', 'j_square', 'j_castle', 'j_flash', 'j_red', 'j_throwback', 'j_hiker', 'j_constellation', 'j_supernova', 'j_campfire'] },
-            { id: 'xmult', name: '🔥 倍率炸弹', cards: ['j_cavendish', 'j_loyalty', 'j_ramen', 'j_acrobat', 'j_card_sharp', 'j_ancient', 'j_obelisk', 'j_stencil', 'j_driver_license', 'j_seeing_double'] },
-            { id: 'economy_picks', name: '💰 经济好牌', cards: ['j_golden', 'j_to_moon', 'j_rocket', 'j_egg', 'j_cloud9', 'j_bull', 'j_bootstraps', 'j_delayed', 'j_trading', 'j_matador'] },
-            { id: 'utility', name: '🔧 万能辅助', cards: ['j_four_fingers', 'j_shortcut', 'j_smeared', 'j_pareidolia', 'j_oops_6', 'j_showman', 'j_chaos', 'j_mr_bones', 'j_burglar', 'j_splash'] }
+            { id: 'all_star', name: i18n.t('guide.recCategories.all_star'), cards: ['j_blueprint', 'j_brainstorm', 'j_perkeo', 'j_chicot', 'j_triboulet', 'j_baron', 'j_order', 'j_tribe', 'j_family', 'j_duo'] },
+            { id: 'early_game', name: i18n.t('guide.recCategories.early_game'), cards: ['j_joker', 'j_greedy', 'j_lusty', 'j_wrathful', 'j_gluttonous', 'j_jolly', 'j_sly', 'j_crazy', 'j_golden', 'j_egg', 'j_ice_cream', 'j_popcorn'] },
+            { id: 'scaling', name: i18n.t('guide.recCategories.scaling'), cards: ['j_ride_bus', 'j_runner', 'j_green', 'j_square', 'j_castle', 'j_flash', 'j_red', 'j_throwback', 'j_hiker', 'j_constellation', 'j_supernova', 'j_campfire'] },
+            { id: 'xmult', name: i18n.t('guide.recCategories.xmult'), cards: ['j_cavendish', 'j_loyalty', 'j_ramen', 'j_acrobat', 'j_card_sharp', 'j_ancient', 'j_obelisk', 'j_stencil', 'j_driver_license', 'j_seeing_double'] },
+            { id: 'economy_picks', name: i18n.t('guide.recCategories.economy_picks'), cards: ['j_golden', 'j_to_moon', 'j_rocket', 'j_egg', 'j_cloud9', 'j_bull', 'j_bootstraps', 'j_delayed', 'j_trading', 'j_matador'] },
+            { id: 'utility', name: i18n.t('guide.recCategories.utility'), cards: ['j_four_fingers', 'j_shortcut', 'j_smeared', 'j_pareidolia', 'j_oops_6', 'j_showman', 'j_chaos', 'j_mr_bones', 'j_burglar', 'j_splash'] }
         ];
         
         // 渲染 Tab 按钮
