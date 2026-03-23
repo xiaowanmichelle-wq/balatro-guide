@@ -1004,6 +1004,214 @@ body {
     gap: 15px;
 }
 
+/* Tier List */
+.tierlist-filters {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 16px;
+}
+
+.tier-filter-btn {
+    padding: 6px 16px;
+    border-radius: 16px;
+    border: 1px solid var(--border-color);
+    background: rgba(255, 255, 255, 0.04);
+    color: var(--text-secondary);
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-family: var(--font-main);
+}
+
+.tier-filter-btn:hover {
+    background: rgba(255, 255, 255, 0.08);
+    color: var(--text-primary);
+}
+
+.tier-filter-btn.active {
+    background: var(--accent-gold);
+    color: #000;
+    border-color: var(--accent-gold);
+    font-weight: 600;
+}
+
+.tierlist-container {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid var(--border-color);
+}
+
+.tier-row {
+    display: flex;
+    min-height: 90px;
+    background: var(--bg-card);
+}
+
+.tier-label {
+    width: 90px;
+    min-width: 90px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 6px;
+    color: #fff;
+    font-weight: 700;
+    text-shadow: 0 1px 3px rgba(0,0,0,0.5);
+}
+
+.tier-letter {
+    font-size: 1.8rem;
+    line-height: 1;
+}
+
+.tier-desc {
+    font-size: 0.65rem;
+    font-weight: 400;
+    opacity: 0.9;
+    margin-top: 4px;
+    text-align: center;
+    line-height: 1.2;
+}
+
+.tier-cards {
+    flex: 1;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    padding: 8px 10px;
+    align-items: center;
+    align-content: flex-start;
+    border-left: 1px solid rgba(255,255,255,0.05);
+}
+
+.tier-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+    width: 64px;
+}
+
+.tier-card:hover {
+    transform: scale(1.12);
+    z-index: 2;
+}
+
+.tier-card img {
+    width: 60px;
+    height: 84px;
+    object-fit: contain;
+    border-radius: 4px;
+    border: 1px solid rgba(255,255,255,0.1);
+    background: rgba(0,0,0,0.3);
+}
+
+.tier-card-name {
+    font-size: 0.6rem;
+    color: var(--text-secondary);
+    text-align: center;
+    margin-top: 2px;
+    line-height: 1.2;
+    max-width: 64px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* Share Bar */
+.share-bar {
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+    border-top: 1px solid var(--border-color);
+    border-bottom: 1px solid var(--border-color);
+    padding: 18px 20px;
+    text-align: center;
+    margin-top: 30px;
+}
+
+.share-label {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    margin-right: 12px;
+    vertical-align: middle;
+}
+
+.share-buttons {
+    display: inline-flex;
+    gap: 10px;
+    vertical-align: middle;
+}
+
+.share-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 8px 16px;
+    border-radius: 20px;
+    border: 1px solid var(--border-color);
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--text-secondary);
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    font-family: var(--font-main);
+}
+
+.share-btn:hover {
+    border-color: var(--accent-gold);
+    color: var(--accent-gold);
+    background: rgba(255, 215, 0, 0.08);
+    transform: translateY(-1px);
+}
+
+.share-btn svg {
+    flex-shrink: 0;
+}
+
+.share-weibo:hover {
+    border-color: #e6162d;
+    color: #e6162d;
+    background: rgba(230, 22, 45, 0.1);
+}
+
+.share-xiaohongshu:hover {
+    border-color: #fe2c55;
+    color: #fe2c55;
+    background: rgba(254, 44, 85, 0.1);
+}
+
+.share-copy:hover {
+    border-color: var(--accent-green);
+    color: var(--accent-green);
+    background: rgba(46, 204, 113, 0.1);
+}
+
+.share-toast {
+    display: none;
+    margin-top: 10px;
+    padding: 8px 18px;
+    background: rgba(46, 204, 113, 0.15);
+    border: 1px solid var(--accent-green);
+    border-radius: 8px;
+    color: var(--accent-green);
+    font-size: 0.85rem;
+    animation: toastFadeIn 0.3s ease;
+}
+
+.share-toast.show {
+    display: inline-block;
+}
+
+@keyframes toastFadeIn {
+    from { opacity: 0; transform: translateY(-5px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
 /* Footer */
 .footer {
     background: var(--bg-secondary);
@@ -2238,6 +2446,51 @@ body {
     
     .compat-note {
         font-size: 0.68rem;
+    }
+
+    /* Share Bar */
+    .share-bar {
+        padding: 14px 12px;
+        margin-top: 20px;
+    }
+    .share-label {
+        display: block;
+        margin-bottom: 10px;
+        margin-right: 0;
+    }
+    .share-btn span {
+        display: none;
+    }
+    .share-btn {
+        padding: 10px 14px;
+    }
+
+    /* Tier List */
+    .tier-label {
+        width: 55px;
+        min-width: 55px;
+        padding: 8px 4px;
+    }
+    .tier-letter {
+        font-size: 1.3rem;
+    }
+    .tier-desc {
+        font-size: 0.55rem;
+    }
+    .tier-card {
+        width: 48px;
+    }
+    .tier-card img {
+        width: 44px;
+        height: 62px;
+    }
+    .tier-card-name {
+        font-size: 0.5rem;
+        max-width: 48px;
+    }
+    .tier-cards {
+        gap: 4px;
+        padding: 6px;
     }
 
     /* Footer */

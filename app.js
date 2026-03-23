@@ -2152,6 +2152,8 @@ class BalatroApp {
         this.renderBuildStrategies();
         // 渲染推荐卡牌分类Tab和卡牌
         this.renderRecommendedTabs();
+        // 渲染 Tier List
+        this.renderTierList();
     }
     
     renderBuildStrategies() {
@@ -2270,6 +2272,92 @@ class BalatroApp {
         this.switchTab('matcher');
         // 滚动到牌组匹配页面顶端
         window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // ============ Tier List ============
+    getTierListData() {
+        return {
+            S: {
+                label: 'S',
+                color: '#ff4757',
+                desc: '版本之子，无脑拿',
+                cards: ['j_blueprint', 'j_brainstorm', 'j_triboulet', 'j_perkeo', 'j_chicot', 'j_hologram', 'j_baron', 'j_idol']
+            },
+            A: {
+                label: 'A',
+                color: '#ffa502',
+                desc: '极强，核心构筑基石',
+                cards: ['j_duo', 'j_trio', 'j_family', 'j_order', 'j_tribe', 'j_flower_pot', 'j_blackboard', 'j_stencil', 'j_loyalty', 'j_campfire', 'j_driver_license', 'j_obelisk', 'j_vampire', 'j_dna', 'j_card_sharp', 'j_seeing_double', 'j_ancient', 'j_steel']
+            },
+            B: {
+                label: 'B',
+                color: '#ffd700',
+                desc: '强力，大部分构筑里表现优秀',
+                cards: ['j_cavendish', 'j_acrobat', 'j_photograph', 'j_constellation', 'j_lucky_cat', 'j_glass', 'j_baseball', 'j_throwback', 'j_madness', 'j_ramen', 'j_yorick', 'j_certificate', 'j_marble', 'j_erosion', 'j_sixth_sense', 'j_delayed', 'j_rocket', 'j_to_moon']
+            },
+            C: {
+                label: 'C',
+                color: '#2ed573',
+                desc: '可用，有合适的构筑能发挥',
+                cards: ['j_spare_trousers', 'j_mad', 'j_clever', 'j_jolly', 'j_sly', 'j_crazy', 'j_droll', 'j_four_fingers', 'j_shortcut', 'j_smeared', 'j_bloodstone', 'j_arrowhead', 'j_onyx', 'j_rough_gem', 'j_pareidolia', 'j_oops_6', 'j_showman', 'j_golden', 'j_egg', 'j_cloud9', 'j_bull', 'j_bootstraps', 'j_superposition', 'j_chaos', 'j_hanging_chad', 'j_splash', 'j_burglar', 'j_runner', 'j_ice_cream', 'j_hit_road', 'j_canio']
+            },
+            D: {
+                label: 'D',
+                color: '#70a1ff',
+                desc: '偏弱/场景局限',
+                cards: ['j_joker', 'j_greedy', 'j_lusty', 'j_wrathful', 'j_gluttonous', 'j_zany', 'j_wily', 'j_devious', 'j_crafty', 'j_half_joker', 'j_banner', 'j_mystic_summit', 'j_8_ball', 'j_misprint', 'j_raised_fist', 'j_fibonacci', 'j_even_steven', 'j_odd_todd', 'j_scholar', 'j_walkie_talkie', 'j_business', 'j_hiker', 'j_space', 'j_stone', 'j_mr_bones', 'j_trading', 'j_matador', 'j_green', 'j_red', 'j_blue', 'j_abstract', 'j_mime', 'j_credit_card', 'j_fortune', 'j_vagabond', 'j_popcorn', 'j_gros_michel', 'j_square', 'j_supernova']
+            }
+        };
+    }
+
+    renderTierList(filter) {
+        const container = document.getElementById('tierlist-container');
+        const filtersContainer = document.getElementById('tierlist-filters');
+        if (!container) return;
+
+        const tiers = this.getTierListData();
+        const filters = [
+            { id: 'all', name: '全部' },
+            { id: 'S', name: 'S tier' },
+            { id: 'A', name: 'A tier' },
+            { id: 'B', name: 'B tier' },
+            { id: 'C', name: 'C tier' },
+            { id: 'D', name: 'D tier' }
+        ];
+        const activeFilter = filter || 'all';
+
+        // 渲染筛选按钮
+        filtersContainer.innerHTML = filters.map(f =>
+            `<button class="tier-filter-btn ${f.id === activeFilter ? 'active' : ''}" 
+                     style="${f.id !== 'all' && tiers[f.id] ? 'border-color:'+tiers[f.id].color+';' : ''}"
+                     onclick="app.renderTierList('${f.id}')">${f.name}</button>`
+        ).join('');
+
+        // 渲染 Tier 行
+        const tiersToShow = activeFilter === 'all' ? Object.keys(tiers) : [activeFilter];
+        
+        container.innerHTML = tiersToShow.map(tierKey => {
+            const tier = tiers[tierKey];
+            if (!tier) return '';
+            const cards = tier.cards.map(id => this.allCards.find(c => c.id === id)).filter(Boolean);
+            
+            return `
+                <div class="tier-row">
+                    <div class="tier-label" style="background: ${tier.color}">
+                        <span class="tier-letter">${tier.label}</span>
+                        <span class="tier-desc">${tier.desc}</span>
+                    </div>
+                    <div class="tier-cards">
+                        ${cards.map(card => `
+                            <div class="tier-card" onclick="app.showCardDetail('${card.id}')" title="${card.name}">
+                                <img src="${card.image}" alt="${card.name}" loading="lazy" width="60" height="84">
+                                <span class="tier-card-name">${card.name}</span>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+        }).join('');
     }
 }
 
