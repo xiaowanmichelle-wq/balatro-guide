@@ -2299,13 +2299,13 @@ class BalatroApp {
                 label: 'C',
                 color: '#2ed573',
                 desc: '可用，有合适的构筑能发挥',
-                cards: ['j_spare_trousers', 'j_mad', 'j_clever', 'j_jolly', 'j_sly', 'j_crazy', 'j_droll', 'j_four_fingers', 'j_shortcut', 'j_smeared', 'j_bloodstone', 'j_arrowhead', 'j_onyx', 'j_rough_gem', 'j_pareidolia', 'j_oops_6', 'j_showman', 'j_golden', 'j_egg', 'j_cloud9', 'j_idol', 'j_chaos', 'j_splash', 'j_burglar', 'j_runner', 'j_gros_michel', 'j_abstract', 'j_fibonacci']
+                cards: ['j_spare_trousers', 'j_mad', 'j_clever', 'j_jolly', 'j_sly', 'j_crazy', 'j_droll', 'j_four_fingers', 'j_shortcut', 'j_smeared', 'j_bloodstone', 'j_arrowhead', 'j_onyx', 'j_rough_gem', 'j_pareidolia', 'j_showman', 'j_golden', 'j_egg', 'j_cloud9', 'j_idol', 'j_chaos', 'j_splash', 'j_burglar', 'j_runner', 'j_gros_michel', 'j_abstract', 'j_fibonacci']
             },
             D: {
                 label: 'D',
                 color: '#70a1ff',
                 desc: '偏弱/场景局限',
-                cards: ['j_joker', 'j_greedy', 'j_lusty', 'j_wrathful', 'j_gluttonous', 'j_zany', 'j_wily', 'j_devious', 'j_crafty', 'j_half_joker', 'j_banner', 'j_mystic_summit', 'j_8_ball', 'j_raised_fist', 'j_even_steven', 'j_odd_todd', 'j_scholar', 'j_walkie_talkie', 'j_business', 'j_hiker', 'j_space', 'j_stone', 'j_mr_bones', 'j_trading', 'j_matador', 'j_green', 'j_red', 'j_blue', 'j_mime', 'j_credit_card', 'j_fortune', 'j_vagabond', 'j_popcorn', 'j_square', 'j_supernova', 'j_sixth_sense', 'j_ice_cream', 'j_superposition']
+                cards: ['j_joker', 'j_greedy', 'j_lusty', 'j_wrathful', 'j_gluttonous', 'j_zany', 'j_wily', 'j_devious', 'j_crafty', 'j_half_joker', 'j_banner', 'j_mystic_summit', 'j_8_ball', 'j_raised_fist', 'j_even_steven', 'j_odd_todd', 'j_scholar', 'j_walkie_talkie', 'j_business', 'j_hiker', 'j_space', 'j_stone', 'j_mr_bones', 'j_trading', 'j_matador', 'j_green', 'j_red', 'j_blue', 'j_mime', 'j_credit_card', 'j_fortune', 'j_vagabond', 'j_popcorn', 'j_square', 'j_supernova', 'j_sixth_sense', 'j_ice_cream', 'j_superposition', 'j_oops_6']
             }
         };
     }
