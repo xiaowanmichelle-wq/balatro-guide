@@ -14,7 +14,7 @@ body {
 }
 
 .container {
-    width: 1200px;
+    width: 1400px;
     margin: 0 auto;
     padding: 40px 30px;
 }
@@ -22,8 +22,8 @@ body {
 /* 标题区域 */
 .header {
     text-align: center;
-    margin-bottom: 32px;
-    padding-bottom: 24px;
+    margin-bottom: 28px;
+    padding-bottom: 20px;
     border-bottom: 3px solid #ffd700;
 }
 
@@ -51,19 +51,41 @@ body {
     margin-top: 6px;
 }
 
+/* 图例 */
+.legend {
+    display: flex;
+    justify-content: center;
+    gap: 24px;
+    margin-bottom: 20px;
+    padding: 10px 0;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.8rem;
+}
+
+.legend-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+}
+
 /* Tier 行 */
 .tier-row {
     display: flex;
-    margin-bottom: 3px;
-    min-height: 80px;
+    margin-bottom: 4px;
+    min-height: 90px;
     background: #1a1a28;
     border-radius: 8px;
     overflow: hidden;
 }
 
 .tier-label {
-    width: 100px;
-    min-width: 100px;
+    width: 110px;
+    min-width: 110px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -74,13 +96,13 @@ body {
 }
 
 .tier-letter {
-    font-size: 2.4rem;
+    font-size: 1.5rem;
     font-weight: 900;
     line-height: 1;
 }
 
 .tier-desc {
-    font-size: 0.7rem;
+    font-size: 0.65rem;
     font-weight: 400;
     opacity: 0.95;
     margin-top: 4px;
@@ -98,46 +120,63 @@ body {
     flex: 1;
     display: flex;
     flex-wrap: wrap;
-    gap: 4px;
-    padding: 8px 12px;
-    align-items: center;
-    align-content: center;
+    gap: 6px;
+    padding: 10px 14px;
+    align-items: flex-start;
+    align-content: flex-start;
     border-left: 1px solid rgba(255,255,255,0.05);
 }
 
-.card-chip {
-    display: inline-flex;
+/* 单张卡牌 */
+.card-item {
+    display: flex;
+    flex-direction: column;
     align-items: center;
+    width: 68px;
     gap: 2px;
-    padding: 4px 10px;
-    border-radius: 14px;
-    font-size: 0.78rem;
-    font-weight: 500;
-    background: rgba(255, 255, 255, 0.06);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    color: #d0d0e0;
+}
+
+.card-img {
+    width: 56px;
+    height: 56px;
+    object-fit: contain;
+    border-radius: 6px;
+    background: rgba(255,255,255,0.04);
+    border: 2px solid rgba(255,255,255,0.08);
+    transition: transform 0.2s;
+}
+
+/* 稀有度边框 */
+.card-item.legendary .card-img {
+    border-color: rgba(243, 156, 18, 0.5);
+    box-shadow: 0 0 8px rgba(243, 156, 18, 0.2);
+}
+
+.card-item.rare .card-img {
+    border-color: rgba(52, 152, 219, 0.4);
+    box-shadow: 0 0 6px rgba(52, 152, 219, 0.15);
+}
+
+/* 夯 tier 特殊发光 */
+.tier-row.tier-夯 .card-img {
+    border-color: rgba(255, 71, 87, 0.5);
+    box-shadow: 0 0 10px rgba(255, 71, 87, 0.25);
+}
+
+.card-name {
+    font-size: 0.55rem;
+    color: #a0a0b0;
+    text-align: center;
+    line-height: 1.15;
+    max-width: 68px;
+    overflow: hidden;
+    text-overflow: ellipsis;
     white-space: nowrap;
-    transition: all 0.2s;
 }
 
-/* 按稀有度给卡牌名加颜色 */
-.card-chip.legendary { color: #f39c12; border-color: rgba(243, 156, 18, 0.3); }
-.card-chip.rare { color: #3498db; border-color: rgba(52, 152, 219, 0.3); }
-.card-chip.common { color: #95a5a6; border-color: rgba(149, 165, 166, 0.2); }
-
-/* S tier 特殊高亮 */
-.tier-row.tier-S .card-chip {
-    background: rgba(255, 71, 87, 0.08);
-    border-color: rgba(255, 71, 87, 0.25);
-    color: #ff8a95;
-    font-weight: 600;
-}
-
-/* A tier */
-.tier-row.tier-A .card-chip {
-    background: rgba(255, 165, 2, 0.06);
-    border-color: rgba(255, 165, 2, 0.2);
-}
+/* 夯 tier 名字高亮 */
+.tier-row.tier-夯 .card-name { color: #ff8a95; font-weight: 600; }
+.tier-row.tier-顶级 .card-name { color: #ffcc70; }
 
 /* 底部水印 */
 .footer {
@@ -152,12 +191,6 @@ body {
     color: #ffd700;
     font-weight: bold;
     letter-spacing: 1px;
-}
-
-.footer .info {
-    font-size: 0.8rem;
-    color: #555566;
-    margin-top: 6px;
 }
 
 .footer .features {
@@ -179,26 +212,68 @@ body {
     font-size: 1.1rem;
 }
 
-/* 图例 */
-.legend {
-    display: flex;
-    justify-content: center;
-    gap: 20px;
-    margin-bottom: 20px;
-    padding: 10px 0;
-}
-
-.legend-item {
-    display: flex;
-    align-items: center;
-    gap: 6px;
+.footer .info {
     font-size: 0.8rem;
+    color: #555566;
+    margin-top: 8px;
 }
 
-.legend-dot {
-    width: 10px;
-    height: 10px;
+/* 模式切换 Tab */
+.mode-tabs {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.mode-btn {
+    padding: 10px 36px;
+    font-size: 1.1rem;
+    font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif;
+    color: #8888a0;
+    background: #1a1a28;
+    border: 2px solid #333;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-weight: 500;
+}
+
+.mode-btn:hover {
+    border-color: #ffd700;
+    color: #e8e8f0;
+}
+
+.mode-btn.active {
+    background: linear-gradient(135deg, rgba(255, 165, 2, 0.15), rgba(255, 71, 87, 0.15));
+    color: #ffd700;
+    border-color: #ffd700;
+    font-weight: 700;
+    box-shadow: 0 0 16px rgba(255, 215, 0, 0.15);
+}
+
+/* 加载状态 */
+.loading {
+    text-align: center;
+    padding: 60px;
+    color: #8888a0;
+    font-size: 1.2rem;
+}
+
+.loading .spinner {
+    display: inline-block;
+    width: 24px;
+    height: 24px;
+    border: 3px solid #333;
+    border-top-color: #ffd700;
     border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    margin-right: 10px;
+    vertical-align: middle;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
 }
 </style>
 </head>
@@ -206,8 +281,13 @@ body {
 <div class="container" id="tierlist">
     <div class="header">
         <h1>🃏 Balatro 小丑 Tier List</h1>
-        <div class="subtitle"><span>150</span> 张小丑牌完整评级 · S → E 六档分级</div>
+        <div class="subtitle"><span>150</span> 张小丑牌完整评级 · 前八轮 / 无限轮 分开评价</div>
         <div class="version">基于当前版本 · 制作：Balatro 新手助手</div>
+    </div>
+
+    <div class="mode-tabs">
+        <button class="mode-btn active" onclick="switchMode('early')">🎯 前八轮 (Ante 1-8)</button>
+        <button class="mode-btn" onclick="switchMode('endless')">♾️ 无限轮 (Endless)</button>
     </div>
 
     <div class="legend">
@@ -216,7 +296,9 @@ body {
         <div class="legend-item"><div class="legend-dot" style="background:#95a5a6"></div><span style="color:#95a5a6">普通</span></div>
     </div>
 
-    <div id="tiers"></div>
+    <div id="tiers">
+        <div class="loading"><span class="spinner"></span>正在加载卡牌数据...</div>
+    </div>
 
     <div class="footer">
         <div class="url">🔗 xiaowanmichelle-wq.github.io/balatro-guide</div>
@@ -231,44 +313,83 @@ body {
     </div>
 </div>
 
+<script src="data.js"></script>
 <script>
-const tierData = [
-    { key: 'S', color: '#ff4757', desc: '版本之子\n无脑拿', cards: [
-        {n:'蓝图',r:'legendary'},{n:'头脑风暴',r:'legendary'},{n:'特里布莱',r:'legendary'},{n:'帕奇欧',r:'legendary'},{n:'希科',r:'legendary'},{n:'全息影像',r:'rare'},{n:'男爵',r:'legendary'},{n:'约里克',r:'legendary'},{n:'小小丑',r:'legendary'}
-    ]},
-    { key: 'A', color: '#ffa502', desc: '极强\n核心构筑基石', cards: [
-        {n:'二重奏',r:'legendary'},{n:'三重奏',r:'legendary'},{n:'一家人',r:'legendary'},{n:'秩序',r:'legendary'},{n:'部落',r:'legendary'},{n:'花盆',r:'rare'},{n:'黑板',r:'rare'},{n:'模具小丑',r:'rare'},{n:'积分卡',r:'rare'},{n:'篝火',r:'legendary'},{n:'驾驶执照',r:'legendary'},{n:'方尖石塔',r:'legendary'},{n:'吸血鬼',r:'rare'},{n:'DNA',r:'legendary'},{n:'老千小丑',r:'rare'},{n:'重影',r:'rare'},{n:'古老小丑',r:'legendary'},{n:'钢铁小丑',r:'rare'},{n:'未断选票',r:'common'},{n:'卡尼奥',r:'legendary'},{n:'隐形小丑',r:'legendary'},{n:'烧焦小丑',r:'legendary'},{n:'黄昏',r:'rare'},{n:'烂脱口秀演员',r:'rare'},{n:'卡牌术士',r:'rare'},{n:'特技演员',r:'legendary'},{n:'射月',r:'common'},{n:'侠盗',r:'common'},{n:'乌合之众',r:'common'}
-    ]},
-    { key: 'B', color: '#ffd700', desc: '强力\n大部分构筑优秀', cards: [
-        {n:'卡文迪什',r:'common'},{n:'杂技演员',r:'rare'},{n:'照片',r:'common'},{n:'星座',r:'rare'},{n:'招财猫',r:'rare'},{n:'玻璃小丑',r:'rare'},{n:'棒球卡',r:'legendary'},{n:'回溯',r:'rare'},{n:'疯狂',r:'rare'},{n:'拉面',r:'rare'},{n:'证书',r:'rare'},{n:'大理石小丑',r:'rare'},{n:'侵蚀',r:'rare'},{n:'延迟满足',r:'common'},{n:'火箭',r:'rare'},{n:'冲向月球',r:'rare'},{n:'印错小丑',r:'common'},{n:'斗牛',r:'rare'},{n:'提靴带',r:'rare'},{n:'上路吧杰克',r:'legendary'},{n:'喜与悲',r:'rare'},{n:'快乐安迪',r:'rare'},{n:'迈达斯面具',r:'rare'},{n:'零糖可乐',r:'rare'},{n:'仪式匕首',r:'rare'},{n:'天文学家',r:'rare'}
-    ]},
-    { key: 'C', color: '#2ed573', desc: '可用\n有合适构筑能发挥', cards: [
-        {n:'备用裤子',r:'rare'},{n:'疯狂小丑',r:'common'},{n:'聪敏小丑',r:'common'},{n:'开心小丑',r:'common'},{n:'奸诈小丑',r:'common'},{n:'狂野小丑',r:'common'},{n:'滑稽小丑',r:'common'},{n:'四指',r:'rare'},{n:'捷径',r:'rare'},{n:'模糊小丑',r:'rare'},{n:'血石',r:'rare'},{n:'箭头',r:'rare'},{n:'缟玛瑙',r:'rare'},{n:'璞玉',r:'rare'},{n:'幻视',r:'rare'},{n:'马戏团长',r:'rare'},{n:'黄金小丑',r:'common'},{n:'鸡蛋',r:'common'},{n:'9霄云外',r:'rare'},{n:'混沌小丑',r:'common'},{n:'飞溅',r:'common'},{n:'窃贼',r:'rare'},{n:'跑步选手',r:'common'},{n:'大麦克香蕉',r:'common'},{n:'抽象小丑',r:'common'},{n:'斐波那契',r:'rare'},{n:'抽认卡',r:'rare'},{n:'城堡',r:'rare'},{n:'黑龟豆',r:'rare'},{n:'占卜师',r:'common'},{n:'醉汉',r:'common'},{n:'礼品卡',r:'rare'},{n:'搭乘巴士',r:'common'},{n:'卫星',r:'rare'},{n:'幻觉',r:'common'},{n:'苏打水',r:'rare'},{n:'半张小丑',r:'common'},{n:'对讲机',r:'common'}
-    ]},
-    { key: 'D', color: '#70a1ff', desc: '偏弱\n场景局限', cards: [
-        {n:'小丑',r:'common'},{n:'贪婪小丑',r:'common'},{n:'色欲小丑',r:'common'},{n:'愤怒小丑',r:'common'},{n:'暴食小丑',r:'common'},{n:'古怪小丑',r:'common'},{n:'阴险小丑',r:'common'},{n:'精明小丑',r:'common'},{n:'旗帜',r:'common'},{n:'神秘之峰',r:'common'},{n:'致胜之拳',r:'common'},{n:'偶数史蒂文',r:'common'},{n:'奇数托德',r:'common'},{n:'学者',r:'common'},{n:'徒步者',r:'rare'},{n:'太空小丑',r:'rare'},{n:'石头小丑',r:'rare'},{n:'骷髅先生',r:'rare'},{n:'交易卡',r:'rare'},{n:'斗牛士',r:'rare'},{n:'绿色小丑',r:'common'},{n:'红牌',r:'common'},{n:'蓝色小丑',r:'common'},{n:'哑剧演员',r:'rare'},{n:'信用卡',r:'common'},{n:'流浪者',r:'legendary'},{n:'爆米花',r:'common'},{n:'方形小丑',r:'common'},{n:'超新星',r:'common'},{n:'冰淇淋',r:'common'},{n:'六六大顺',r:'rare'},{n:'恐怖面孔',r:'common'},{n:'微笑表情',r:'common'},{n:'杂耍师',r:'common'},{n:'游吟诗人',r:'rare'},{n:'摔跤手',r:'rare'},{n:'名片',r:'common'},{n:'邮寄回扣',r:'common'},{n:'无面小丑',r:'common'},{n:'待办清单',r:'common'},{n:'黄金门票',r:'common'}
-    ]},
-    { key: 'E', color: '#a0a0a0', desc: '实在没牌了\n才会选', cards: [
-        {n:'偶像',r:'rare'},{n:'狡猾小丑',r:'common'},{n:'叠加态',r:'common'},{n:'第六感',r:'rare'},{n:'通灵',r:'rare'},{n:'8号球',r:'common'},{n:'私人车位',r:'common'}
-    ]}
+// 从 data.js 构建 id → {name, image, rarity} 映射
+const cardMap = {};
+if (typeof CARD_DATA !== 'undefined' && CARD_DATA.jokers) {
+    CARD_DATA.jokers.forEach(j => {
+        cardMap[j.id] = { name: j.name, image: j.image, rarity: j.rarity };
+    });
+}
+
+const tierMeta = [
+    { key: '夯', color: '#ff4757', desc: '版本之子\n无脑拿' },
+    { key: '顶级', color: '#ffa502', desc: '极强\n核心构筑基石' },
+    { key: '人上人', color: '#ffd700', desc: '强力\n大部分构筑优秀' },
+    { key: 'NPC', color: '#2ed573', desc: '可用\n有合适构筑能发挥' },
+    { key: '拉', color: '#70a1ff', desc: '偏弱\n场景局限' },
+    { key: '拉完了', color: '#a0a0a0', desc: '实在没牌了\n才会选' }
 ];
 
-const container = document.getElementById('tiers');
-tierData.forEach(tier => {
-    const row = document.createElement('div');
-    row.className = `tier-row tier-${tier.key}`;
-    row.innerHTML = `
-        <div class="tier-label" style="background:${tier.color}">
-            <span class="tier-letter">${tier.key}</span>
-            <span class="tier-desc">${tier.desc.replace('\n','<br>')}</span>
-            <span class="tier-count">${tier.cards.length}张</span>
-        </div>
-        <div class="tier-cards">
-            ${tier.cards.map(c => `<span class="card-chip ${c.r}">${c.n}</span>`).join('')}
-        </div>
-    `;
-    container.appendChild(row);
-});
+const tierCardsByMode = {
+    early: {
+        '夯': ['j_blueprint','j_brainstorm','j_triboulet','j_hologram','j_hanging_chad','j_cavendish','j_canio'],
+        '顶级': ['j_perkeo','j_baron','j_yorick','j_duo','j_tribe','j_blackboard','j_driver_license','j_obelisk','j_vampire','j_card_sharp','j_seeing_double','j_invisible','j_burnt','j_hack','j_cartomancer','j_stuntman','j_shoot_moon','j_swashbuckler','j_riff_raff','j_constellation','j_mime','j_throwback','j_fortune_teller','j_fibonacci','j_chicot','j_wee','j_photograph','j_baseball','j_misprint','j_bootstraps','j_spare_trousers','j_gros_michel','j_abstract','j_castle'],
+        '人上人': ['j_dna','j_ancient','j_steel','j_dusk','j_acrobat','j_madness','j_ramen','j_certificate','j_erosion','j_delayed','j_rocket','j_to_moon','j_bull','j_sock','j_ceremonial','j_flower_pot','j_stencil','j_trio','j_family','j_order','j_smeared','j_mr_bones','j_mad','j_jolly','j_droll','j_four_fingers','j_shortcut','j_golden','j_half'],
+        'NPC': ['j_hit_road','j_merry_andy','j_midas','j_astronomer','j_loyalty','j_campfire','j_clever','j_sly','j_bloodstone','j_arrowhead','j_onyx','j_pareidolia','j_egg','j_cloud9','j_splash','j_burglar','j_runner','j_flash','j_ride_bus','j_hallucination','j_marble','j_mystic_summit','j_raised_fist','j_even_steven','j_green','j_red','j_vagabond','j_square','j_supernova','j_scary_face','j_smiley','j_mail_in'],
+        '拉': ['j_glass','j_crazy','j_rough_gem','j_showman','j_chaos','j_turtle_bean','j_drunkard','j_gift_card','j_satellite','j_seltzer','j_walkie','j_greedy','j_lusty','j_wrathful','j_gluttonous','j_zany','j_devious','j_crafty','j_banner','j_odd_todd','j_scholar','j_hiker','j_space','j_stone','j_blue','j_credit_card','j_popcorn','j_ice_cream','j_juggler','j_troubadour','j_todo','j_golden_ticket','j_diet_cola'],
+        '拉完了': ['j_lucky_cat','j_joker','j_trading','j_matador','j_oops_6','j_luchador','j_business_card','j_faceless','j_idol','j_wily','j_superposition','j_sixth_sense','j_seance','j_8ball','j_reserved']
+    },
+    endless: {
+        '夯': ['j_blueprint','j_brainstorm','j_triboulet','j_perkeo','j_hologram','j_baron','j_hanging_chad','j_cavendish','j_mime','j_wee'],
+        '顶级': ['j_canio','j_blackboard','j_driver_license','j_vampire','j_dna','j_card_sharp','j_invisible','j_swashbuckler','j_constellation','j_throwback','j_fortune_teller','j_fibonacci','j_photograph','j_baseball','j_spare_trousers','j_trio','j_family'],
+        '人上人': ['j_yorick','j_duo','j_tribe','j_obelisk','j_seeing_double','j_steel','j_burnt','j_hack','j_stuntman','j_shoot_moon','j_chicot','j_madness','j_rocket','j_to_moon','j_misprint','j_bootstraps','j_sock','j_flower_pot','j_stencil','j_order','j_gros_michel','j_smeared','j_abstract','j_castle','j_droll','j_four_fingers','j_shortcut'],
+        'NPC': ['j_ancient','j_dusk','j_cartomancer','j_riff_raff','j_acrobat','j_ramen','j_certificate','j_erosion','j_delayed','j_bull','j_hit_road','j_merry_andy','j_midas','j_ceremonial','j_astronomer','j_loyalty','j_campfire','j_mr_bones','j_mad','j_jolly','j_bloodstone','j_arrowhead','j_onyx','j_pareidolia','j_egg','j_splash','j_burglar','j_runner','j_flash','j_ride_bus','j_hallucination','j_half','j_marble','j_mystic_summit','j_raised_fist','j_even_steven','j_green','j_red','j_vagabond','j_square','j_supernova','j_scary_face','j_smiley','j_mail_in'],
+        '拉': ['j_clever','j_sly','j_crazy','j_rough_gem','j_showman','j_golden','j_cloud9','j_chaos','j_turtle_bean','j_drunkard','j_gift_card','j_satellite','j_seltzer','j_walkie','j_greedy','j_lusty','j_wrathful','j_gluttonous','j_zany','j_devious','j_crafty','j_banner','j_odd_todd','j_scholar','j_hiker','j_space','j_stone','j_blue','j_credit_card','j_popcorn','j_ice_cream','j_juggler','j_troubadour','j_todo','j_golden_ticket','j_diet_cola'],
+        '拉完了': ['j_lucky_cat','j_glass','j_joker','j_trading','j_matador','j_oops_6','j_luchador','j_business_card','j_faceless','j_idol','j_wily','j_superposition','j_sixth_sense','j_seance','j_8ball','j_reserved']
+    }
+};
+
+function renderTiers(mode) {
+    const container = document.getElementById('tiers');
+    container.innerHTML = '';
+    const modeCards = tierCardsByMode[mode];
+
+    tierMeta.forEach(tier => {
+        const ids = modeCards[tier.key];
+        const row = document.createElement('div');
+        row.className = `tier-row tier-${tier.key}`;
+
+        const cardsHTML = ids.map(id => {
+            const c = cardMap[id];
+            if (!c) return `<div class="card-item"><div class="card-img" style="display:flex;align-items:center;justify-content:center;font-size:0.5rem;color:#666">?</div><span class="card-name">${id}</span></div>`;
+            return `<div class="card-item ${c.rarity}">
+                <img class="card-img" src="${c.image}" alt="${c.name}" loading="lazy" onerror="this.style.display='none'">
+                <span class="card-name">${c.name}</span>
+            </div>`;
+        }).join('');
+
+        row.innerHTML = `
+            <div class="tier-label" style="background:${tier.color}">
+                <span class="tier-letter">${tier.key}</span>
+                <span class="tier-desc">${tier.desc.replace('\n','<br>')}</span>
+                <span class="tier-count">${ids.length}张</span>
+            </div>
+            <div class="tier-cards">${cardsHTML}</div>
+        `;
+        container.appendChild(row);
+    });
+}
+
+function switchMode(mode) {
+    document.querySelectorAll('.mode-btn').forEach(btn => btn.classList.remove('active'));
+    event.currentTarget.classList.add('active');
+    renderTiers(mode);
+}
+
+// 默认渲染前八轮
+renderTiers('early');
 </script>
 </body>
 </html>

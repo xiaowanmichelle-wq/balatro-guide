@@ -6,20 +6,17 @@
 
 ### 帖子 1：Tier List 向
 
-**标题**：Balatro 150张小丑牌完整 Tier List！S级9张你集齐了吗🃏
+**标题**：Balatro 150张小丑牌 Tier List！前八轮 vs 无限轮分开评🃏
 
 **正文**：
 
 姐妹们/兄弟们！花了超多时间整理了 Balatro 全部 150 张小丑的强度排名 📊
+而且分了**前八轮**和**无限轮**两套评级，因为很多卡前期后期差异巨大！
 
-🔴 S级（9张）无脑拿：蓝图、头脑风暴、特里布莱、帕奇欧、希科、全息影像、男爵、约里克、小小丑
+🎯 前八轮 S级（7张）：蓝图、头脑风暴、特里布莱、全息影像、未断选票、卡文迪什、卡尼奥
+♾️ 无限轮 S级（10张）：蓝图、头脑风暴、特里布莱、帕奇欧、全息影像、男爵、未断选票、卡文迪什、哑剧演员、小小丑
 
-🟠 A级（29张）核心构筑基石：DNA、隐形小丑、烧焦小丑、卡尼奥、黄昏、烂脱口秀演员、特技演员...
-
-🟡 B级（26张）大部分构筑都很强
-🟢 C级（38张）有合适构筑能发挥
-🔵 D级（41张）偏弱/场景局限
-⚪ E级（7张）实在没牌了才选
+Tab 一键切换，再也不用纠结前期后期该拿什么了 ✨
 
 完整图鉴+构筑推荐+智能匹配搭配，全都在 ⬇️
 🔗 xiaowanmichelle-wq.github.io/balatro-guide
@@ -101,10 +98,10 @@
 收录了全部 Joker、塔罗牌、行星牌、灵魂牌，带有完整的中文效果说明。支持按类型、稀有度、效果类型、适合牌型多维度筛选。
 
 ### 🏆 小丑 Tier List（150张完整评级）
-S→E 六档，覆盖游戏中所有 150 张小丑牌：
-- **S tier (9张)**：蓝图、头脑风暴、特里布莱、帕奇欧、希科、全息影像、男爵、约里克、小小丑
-- **A tier (29张)**：二重奏、三重奏、DNA、隐形小丑、烧焦小丑等核心构筑基石
-- **B ~ E tier**：详细分级，点击卡牌可查看效果和协同关系
+分为**前八轮**和**无限轮**两套独立评价，Tab 一键切换：
+- **前八轮 S tier (7张)**：蓝图、头脑风暴、特里布莱、全息影像、未断选票、卡文迪什、卡尼奥
+- **无限轮 S tier (10张)**：蓝图、头脑风暴、特里布莱、帕奇欧、全息影像、男爵、未断选票、卡文迪什、哑剧演员、小小丑
+- 点击卡牌可查看效果和协同关系
 
 ### 🎯 智能牌组匹配
 选择你已有的卡牌，系统基于卡牌之间的协同关系自动推荐最佳搭配。不知道该选什么卡？试试这个功能。
@@ -142,10 +139,10 @@ Hey everyone! I built a free online tool for Balatro players and wanted to share
 All Jokers, Tarots, Planets, and Spectrals with complete effect descriptions. Filter by type, rarity, effect type, or best hand type.
 
 ### 🏆 Complete Joker Tier List (150 cards rated)
-Every single Joker rated from S to E tier:
-- **S tier (9)**: Blueprint, Brainstorm, Triboulet, Perkeo, Chicot, Hologram, Baron, Yorick, Wee Joker
-- **A tier (29)**: The Duo, The Trio, The Family, DNA, Invisible Joker, Burnt Joker, and more
-- Click any card to see full details and synergies
+Every Joker rated from S to E, split into **Early Game (Ante 1-8)** and **Endless** modes:
+- **Early S tier (7)**: Blueprint, Brainstorm, Triboulet, Hologram, Hanging Chad, Cavendish, Canio
+- **Endless S tier (10)**: Blueprint, Brainstorm, Triboulet, Perkeo, Hologram, Baron, Hanging Chad, Cavendish, Mime, Wee Joker
+- Tab to switch between modes. Click any card for full details and synergies
 
 ### 🎯 Smart Deck Matcher
 Select the cards you already have → get AI-powered recommendations for the best synergy picks. No more guessing what to buy.

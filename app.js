@@ -2213,10 +2213,10 @@ class BalatroApp {
         const cardsContainer = document.getElementById('recommended-cards');
         
         const categories = [
-            { id: 'all_star', name: i18n.t('guide.recCategories.all_star'), cards: ['j_blueprint', 'j_brainstorm', 'j_perkeo', 'j_chicot', 'j_triboulet', 'j_baron', 'j_order', 'j_tribe', 'j_family', 'j_duo'] },
-            { id: 'early_game', name: i18n.t('guide.recCategories.early_game'), cards: ['j_joker', 'j_greedy', 'j_lusty', 'j_wrathful', 'j_gluttonous', 'j_jolly', 'j_sly', 'j_crazy', 'j_golden', 'j_egg', 'j_ice_cream', 'j_popcorn'] },
+            { id: 'all_star', name: i18n.t('guide.recCategories.all_star'), cards: ['j_blueprint', 'j_brainstorm', 'j_triboulet', 'j_perkeo', 'j_hologram', 'j_baron', 'j_yorick', 'j_hanging_chad', 'j_cavendish', 'j_canio'] },
+            { id: 'early_game', name: i18n.t('guide.recCategories.early_game'), cards: ['j_joker', 'j_greedy', 'j_lusty', 'j_wrathful', 'j_gluttonous', 'j_jolly', 'j_sly', 'j_crazy', 'j_golden', 'j_ice_cream', 'j_popcorn'] },
             { id: 'scaling', name: i18n.t('guide.recCategories.scaling'), cards: ['j_ride_bus', 'j_runner', 'j_green', 'j_square', 'j_castle', 'j_flash', 'j_red', 'j_throwback', 'j_hiker', 'j_constellation', 'j_supernova', 'j_campfire'] },
-            { id: 'xmult', name: i18n.t('guide.recCategories.xmult'), cards: ['j_cavendish', 'j_loyalty', 'j_ramen', 'j_acrobat', 'j_card_sharp', 'j_ancient', 'j_obelisk', 'j_stencil', 'j_driver_license', 'j_seeing_double'] },
+            { id: 'xmult', name: i18n.t('guide.recCategories.xmult'), cards: ['j_baron', 'j_cavendish', 'j_loyalty', 'j_ramen', 'j_acrobat', 'j_card_sharp', 'j_ancient', 'j_obelisk', 'j_stencil', 'j_driver_license', 'j_seeing_double'] },
             { id: 'economy_picks', name: i18n.t('guide.recCategories.economy_picks'), cards: ['j_golden', 'j_to_moon', 'j_rocket', 'j_egg', 'j_cloud9', 'j_bull', 'j_bootstraps', 'j_delayed', 'j_trading', 'j_matador'] },
             { id: 'utility', name: i18n.t('guide.recCategories.utility'), cards: ['j_four_fingers', 'j_shortcut', 'j_smeared', 'j_pareidolia', 'j_oops_6', 'j_showman', 'j_chaos', 'j_mr_bones', 'j_burglar', 'j_splash'] }
         ];
@@ -2275,45 +2275,45 @@ class BalatroApp {
     }
 
     // ============ Tier List ============
-    getTierListData() {
-        return {
-            S: {
-                label: 'S',
-                color: '#ff4757',
-                desc: '版本之子，无脑拿',
-                cards: ['j_blueprint', 'j_brainstorm', 'j_triboulet', 'j_perkeo', 'j_chicot', 'j_hologram', 'j_baron', 'j_yorick', 'j_wee']
+    getTierListData(mode) {
+        const tierMeta = {
+            '夯': { label: '夯', color: '#ff4757', desc: '版本之子，无脑拿' },
+            '顶级': { label: '顶级', color: '#ffa502', desc: '极强，核心构筑基石' },
+            '人上人': { label: '人上人', color: '#ffd700', desc: '强力，大部分构筑里表现优秀' },
+            'NPC': { label: 'NPC', color: '#2ed573', desc: '可用，有合适的构筑能发挥' },
+            '拉': { label: '拉', color: '#70a1ff', desc: '偏弱/场景局限' },
+            '拉完了': { label: '拉完了', color: '#a0a0a0', desc: '实在没牌了才会选' }
+        };
+        const cardsByMode = {
+            early: {
+                '夯': ['j_blueprint', 'j_brainstorm', 'j_triboulet', 'j_hologram', 'j_hanging_chad', 'j_cavendish', 'j_canio'],
+                '顶级': ['j_perkeo', 'j_baron', 'j_yorick', 'j_duo', 'j_tribe', 'j_blackboard', 'j_driver_license', 'j_obelisk', 'j_vampire', 'j_card_sharp', 'j_seeing_double', 'j_invisible', 'j_burnt', 'j_hack', 'j_cartomancer', 'j_stuntman', 'j_shoot_moon', 'j_swashbuckler', 'j_riff_raff', 'j_constellation', 'j_mime', 'j_throwback', 'j_fortune_teller', 'j_fibonacci', 'j_chicot', 'j_wee', 'j_photograph', 'j_baseball', 'j_misprint', 'j_bootstraps', 'j_spare_trousers', 'j_gros_michel', 'j_abstract', 'j_castle'],
+                '人上人': ['j_dna', 'j_ancient', 'j_steel', 'j_dusk', 'j_acrobat', 'j_madness', 'j_ramen', 'j_certificate', 'j_erosion', 'j_delayed', 'j_rocket', 'j_to_moon', 'j_bull', 'j_sock', 'j_ceremonial', 'j_flower_pot', 'j_stencil', 'j_trio', 'j_family', 'j_order', 'j_smeared', 'j_mr_bones', 'j_mad', 'j_jolly', 'j_droll', 'j_four_fingers', 'j_shortcut', 'j_golden', 'j_half'],
+                'NPC': ['j_hit_road', 'j_merry_andy', 'j_midas', 'j_astronomer', 'j_loyalty', 'j_campfire', 'j_clever', 'j_sly', 'j_bloodstone', 'j_arrowhead', 'j_onyx', 'j_pareidolia', 'j_egg', 'j_cloud9', 'j_splash', 'j_burglar', 'j_runner', 'j_flash', 'j_ride_bus', 'j_hallucination', 'j_marble', 'j_mystic_summit', 'j_raised_fist', 'j_even_steven', 'j_green', 'j_red', 'j_vagabond', 'j_square', 'j_supernova', 'j_scary_face', 'j_smiley', 'j_mail_in'],
+                '拉': ['j_glass', 'j_crazy', 'j_rough_gem', 'j_showman', 'j_chaos', 'j_turtle_bean', 'j_drunkard', 'j_gift_card', 'j_satellite', 'j_seltzer', 'j_walkie', 'j_greedy', 'j_lusty', 'j_wrathful', 'j_gluttonous', 'j_zany', 'j_devious', 'j_crafty', 'j_banner', 'j_odd_todd', 'j_scholar', 'j_hiker', 'j_space', 'j_stone', 'j_blue', 'j_credit_card', 'j_popcorn', 'j_ice_cream', 'j_juggler', 'j_troubadour', 'j_todo', 'j_golden_ticket', 'j_diet_cola'],
+                '拉完了': ['j_lucky_cat', 'j_joker', 'j_trading', 'j_matador', 'j_oops_6', 'j_luchador', 'j_business_card', 'j_faceless', 'j_idol', 'j_wily', 'j_superposition', 'j_sixth_sense', 'j_seance', 'j_8ball', 'j_reserved']
             },
-            A: {
-                label: 'A',
-                color: '#ffa502',
-                desc: '极强，核心构筑基石',
-                cards: ['j_duo', 'j_tribe', 'j_blackboard', 'j_driver_license', 'j_obelisk', 'j_vampire', 'j_dna', 'j_card_sharp', 'j_seeing_double', 'j_ancient', 'j_steel', 'j_hanging_chad', 'j_canio', 'j_invisible', 'j_burnt', 'j_dusk', 'j_hack', 'j_cartomancer', 'j_stuntman', 'j_shoot_moon', 'j_swashbuckler', 'j_riff_raff', 'j_constellation', 'j_cavendish', 'j_mime', 'j_throwback']
-            },
-            B: {
-                label: 'B',
-                color: '#ffd700',
-                desc: '强力，大部分构筑里表现优秀',
-                cards: ['j_acrobat', 'j_photograph', 'j_baseball', 'j_madness', 'j_ramen', 'j_certificate', 'j_marble', 'j_erosion', 'j_delayed', 'j_rocket', 'j_to_moon', 'j_misprint', 'j_bull', 'j_bootstraps', 'j_hit_road', 'j_sock', 'j_merry_andy', 'j_midas', 'j_diet_cola', 'j_ceremonial', 'j_astronomer', 'j_flower_pot', 'j_stencil', 'j_spare_trousers', 'j_trio', 'j_family', 'j_order', 'j_loyalty', 'j_campfire']
-            },
-            C: {
-                label: 'C',
-                color: '#2ed573',
-                desc: '可用，有合适的构筑能发挥',
-                cards: ['j_lucky_cat', 'j_glass', 'j_mad', 'j_clever', 'j_jolly', 'j_sly', 'j_crazy', 'j_droll', 'j_four_fingers', 'j_shortcut', 'j_smeared', 'j_bloodstone', 'j_arrowhead', 'j_onyx', 'j_rough_gem', 'j_pareidolia', 'j_showman', 'j_golden', 'j_egg', 'j_cloud9', 'j_chaos', 'j_splash', 'j_burglar', 'j_runner', 'j_gros_michel', 'j_abstract', 'j_fibonacci', 'j_flash', 'j_castle', 'j_turtle_bean', 'j_fortune_teller', 'j_drunkard', 'j_gift_card', 'j_ride_bus', 'j_satellite', 'j_hallucination', 'j_seltzer', 'j_half', 'j_walkie']
-            },
-            D: {
-                label: 'D',
-                color: '#70a1ff',
-                desc: '偏弱/场景局限',
-                cards: ['j_joker', 'j_greedy', 'j_lusty', 'j_wrathful', 'j_gluttonous', 'j_zany', 'j_devious', 'j_crafty', 'j_banner', 'j_mystic_summit', 'j_raised_fist', 'j_even_steven', 'j_odd_todd', 'j_scholar', 'j_hiker', 'j_space', 'j_stone', 'j_mr_bones', 'j_trading', 'j_matador', 'j_green', 'j_red', 'j_blue', 'j_credit_card', 'j_vagabond', 'j_popcorn', 'j_square', 'j_supernova', 'j_ice_cream', 'j_oops_6', 'j_scary_face', 'j_smiley', 'j_juggler', 'j_troubadour', 'j_luchador', 'j_business_card', 'j_mail_in', 'j_faceless', 'j_todo', 'j_golden_ticket']
-            },
-            E: {
-                label: 'E',
-                color: '#a0a0a0',
-                desc: '实在没牌了才会选',
-                cards: ['j_idol', 'j_wily', 'j_superposition', 'j_sixth_sense', 'j_seance', 'j_8ball', 'j_reserved']
+            endless: {
+                '夯': ['j_blueprint', 'j_brainstorm', 'j_triboulet', 'j_perkeo', 'j_hologram', 'j_baron', 'j_hanging_chad', 'j_cavendish', 'j_mime', 'j_wee'],
+                '顶级': ['j_canio', 'j_blackboard', 'j_driver_license', 'j_vampire', 'j_dna', 'j_card_sharp', 'j_invisible', 'j_swashbuckler', 'j_constellation', 'j_throwback', 'j_fortune_teller', 'j_fibonacci', 'j_photograph', 'j_baseball', 'j_spare_trousers', 'j_trio', 'j_family'],
+                '人上人': ['j_yorick', 'j_duo', 'j_tribe', 'j_obelisk', 'j_seeing_double', 'j_steel', 'j_burnt', 'j_hack', 'j_stuntman', 'j_shoot_moon', 'j_chicot', 'j_madness', 'j_rocket', 'j_to_moon', 'j_misprint', 'j_bootstraps', 'j_sock', 'j_flower_pot', 'j_stencil', 'j_order', 'j_gros_michel', 'j_smeared', 'j_abstract', 'j_castle', 'j_droll', 'j_four_fingers', 'j_shortcut'],
+                'NPC': ['j_ancient', 'j_dusk', 'j_cartomancer', 'j_riff_raff', 'j_acrobat', 'j_ramen', 'j_certificate', 'j_erosion', 'j_delayed', 'j_bull', 'j_hit_road', 'j_merry_andy', 'j_midas', 'j_ceremonial', 'j_astronomer', 'j_loyalty', 'j_campfire', 'j_mr_bones', 'j_mad', 'j_jolly', 'j_bloodstone', 'j_arrowhead', 'j_onyx', 'j_pareidolia', 'j_egg', 'j_splash', 'j_burglar', 'j_runner', 'j_flash', 'j_ride_bus', 'j_hallucination', 'j_half', 'j_marble', 'j_mystic_summit', 'j_raised_fist', 'j_even_steven', 'j_green', 'j_red', 'j_vagabond', 'j_square', 'j_supernova', 'j_scary_face', 'j_smiley', 'j_mail_in'],
+                '拉': ['j_clever', 'j_sly', 'j_crazy', 'j_rough_gem', 'j_showman', 'j_golden', 'j_cloud9', 'j_chaos', 'j_turtle_bean', 'j_drunkard', 'j_gift_card', 'j_satellite', 'j_seltzer', 'j_walkie', 'j_greedy', 'j_lusty', 'j_wrathful', 'j_gluttonous', 'j_zany', 'j_devious', 'j_crafty', 'j_banner', 'j_odd_todd', 'j_scholar', 'j_hiker', 'j_space', 'j_stone', 'j_blue', 'j_credit_card', 'j_popcorn', 'j_ice_cream', 'j_juggler', 'j_troubadour', 'j_todo', 'j_golden_ticket', 'j_diet_cola'],
+                '拉完了': ['j_lucky_cat', 'j_glass', 'j_joker', 'j_trading', 'j_matador', 'j_oops_6', 'j_luchador', 'j_business_card', 'j_faceless', 'j_idol', 'j_wily', 'j_superposition', 'j_sixth_sense', 'j_seance', 'j_8ball', 'j_reserved']
             }
         };
+        const m = mode || this.currentTierMode || 'early';
+        const modeCards = cardsByMode[m];
+        const result = {};
+        for (const tier of ['夯', '顶级', '人上人', 'NPC', '拉', '拉完了']) {
+            result[tier] = { ...tierMeta[tier], cards: modeCards[tier] };
+        }
+        return result;
+    }
+
+    switchTierMode(mode) {
+        this.currentTierMode = mode;
+        this.renderTierList(this.currentTierFilter || 'all');
     }
 
     renderTierList(filter) {
@@ -2321,24 +2321,38 @@ class BalatroApp {
         const filtersContainer = document.getElementById('tierlist-filters');
         if (!container) return;
 
-        const tiers = this.getTierListData();
+        if (!this.currentTierMode) this.currentTierMode = 'early';
+        const currentMode = this.currentTierMode;
+        const tiers = this.getTierListData(currentMode);
         const filters = [
             { id: 'all', name: '全部' },
-            { id: 'S', name: 'S tier' },
-            { id: 'A', name: 'A tier' },
-            { id: 'B', name: 'B tier' },
-            { id: 'C', name: 'C tier' },
-            { id: 'D', name: 'D tier' },
-            { id: 'E', name: 'E tier' }
+            { id: '夯', name: '夯' },
+            { id: '顶级', name: '顶级' },
+            { id: '人上人', name: '人上人' },
+            { id: 'NPC', name: 'NPC' },
+            { id: '拉', name: '拉' },
+            { id: '拉完了', name: '拉完了' }
         ];
         const activeFilter = filter || 'all';
+        this.currentTierFilter = activeFilter;
 
-        // 渲染筛选按钮
-        filtersContainer.innerHTML = filters.map(f =>
+        // 渲染模式切换 Tab + 筛选按钮
+        const modeTabsHtml = `
+            <div class="tier-mode-tabs">
+                <button class="tier-mode-btn ${currentMode === 'early' ? 'active' : ''}" onclick="app.switchTierMode('early')">
+                    🎯 前八轮 (Ante 1-8)
+                </button>
+                <button class="tier-mode-btn ${currentMode === 'endless' ? 'active' : ''}" onclick="app.switchTierMode('endless')">
+                    ♾️ 无限轮 (Endless)
+                </button>
+            </div>
+        `;
+        const filterBtnsHtml = filters.map(f =>
             `<button class="tier-filter-btn ${f.id === activeFilter ? 'active' : ''}" 
                      style="${f.id !== 'all' && tiers[f.id] ? 'border-color:'+tiers[f.id].color+';' : ''}"
                      onclick="app.renderTierList('${f.id}')">${f.name}</button>`
         ).join('');
+        filtersContainer.innerHTML = modeTabsHtml + `<div class="tier-filter-row">${filterBtnsHtml}</div>`;
 
         // 渲染 Tier 行
         const tiersToShow = activeFilter === 'all' ? Object.keys(tiers) : [activeFilter];
