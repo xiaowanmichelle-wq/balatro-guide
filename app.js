@@ -20,7 +20,8 @@ class BalatroApp {
             rarities: ['common', 'rare', 'legendary'],
             effects: [],
             hands: [],
-            search: ''
+            search: '',
+            unlockOnly: false
         };
         
         // 用户的卡组
@@ -76,6 +77,7 @@ class BalatroApp {
         if (this.filters.effects.length > 0) activeFilters += this.filters.effects.length;
         if (this.filters.hands.length > 0) activeFilters += this.filters.hands.length;
         if (this.filters.search) activeFilters++;
+        if (this.filters.unlockOnly) activeFilters++;
         // 类型和稀有度如果不是全选也算
         if (this.filters.types.length < 4) activeFilters += (4 - this.filters.types.length);
         if (this.filters.rarities.length < 3) activeFilters += (3 - this.filters.rarities.length);
@@ -111,20 +113,29 @@ class BalatroApp {
         });
         
         // 效果类型筛选
-        document.querySelectorAll('.filter-section:nth-child(3) .checkbox-label input').forEach(input => {
+        document.querySelectorAll('.filter-section:nth-child(4) .checkbox-label input').forEach(input => {
             input.addEventListener('change', () => {
-                this.filters.effects = Array.from(document.querySelectorAll('.filter-section:nth-child(3) .checkbox-label input:checked')).map(i => i.value);
+                this.filters.effects = Array.from(document.querySelectorAll('.filter-section:nth-child(4) .checkbox-label input:checked')).map(i => i.value);
                 this.renderCards();
             });
         });
         
         // 牌型筛选
-        document.querySelectorAll('.filter-section:nth-child(4) .checkbox-label input').forEach(input => {
+        document.querySelectorAll('.filter-section:nth-child(5) .checkbox-label input').forEach(input => {
             input.addEventListener('change', () => {
-                this.filters.hands = Array.from(document.querySelectorAll('.filter-section:nth-child(4) .checkbox-label input:checked')).map(i => i.value);
+                this.filters.hands = Array.from(document.querySelectorAll('.filter-section:nth-child(5) .checkbox-label input:checked')).map(i => i.value);
                 this.renderCards();
             });
         });
+        
+        // 解锁条件筛选
+        const unlockCheckbox = document.getElementById('filter-unlock-only');
+        if (unlockCheckbox) {
+            unlockCheckbox.addEventListener('change', () => {
+                this.filters.unlockOnly = unlockCheckbox.checked;
+                this.renderCards();
+            });
+        }
         
         // 搜索 - 实时搜索 + 按钮点击
         const searchInput = document.getElementById('search-input');
@@ -220,6 +231,11 @@ class BalatroApp {
                 if (!this.filters.hands.some(h => cardHands.includes(h))) return false;
             }
             
+            // 解锁条件筛选
+            if (this.filters.unlockOnly) {
+                if (!card.unlock) return false;
+            }
+            
             // 搜索筛选 - 支持名称和描述搜索
             if (this.filters.search) {
                 const searchText = (card.name + ' ' + card.description).toLowerCase();
@@ -311,14 +327,22 @@ class BalatroApp {
         const cardName = i18n.cardT(card.id, 'name') || card.name;
         const cardDesc = i18n.cardT(card.id, 'description') || card.description;
         
+        // 解锁条件
+        let unlockHTML = '';
+        if (card.unlock) {
+            const unlockText = i18n.cardT(card.id, 'unlock') || card.unlock;
+            unlockHTML = `<div class="card-unlock"><span class="unlock-icon">🔒</span> ${unlockText}</div>`;
+        }
+        
         return `
-            <div class="card ${rarityClass} ${card.image ? 'has-image' : ''}" onclick="app.selectCard('${card.id}')">
+            <div class="card ${rarityClass} ${card.image ? 'has-image' : ''} ${card.unlock ? 'has-unlock' : ''}" onclick="app.selectCard('${card.id}')">
                 <div class="card-header">
                     <span class="card-name">${cardName}</span>
                     <span class="card-type ${card.cardType}">${typeNames[card.cardType]}</span>
                 </div>
                 ${imageHTML}
                 <p class="card-description">${cardDesc}</p>
+                ${unlockHTML}
                 <div class="card-tags">
                     ${tags}
                     ${handTag}
@@ -329,7 +353,12 @@ class BalatroApp {
     
     clearFilters() {
         document.querySelectorAll('.checkbox-label input').forEach(input => {
-            input.checked = true;
+            // 解锁筛选默认不勾选，其他默认勾选
+            if (input.id === 'filter-unlock-only') {
+                input.checked = false;
+            } else {
+                input.checked = true;
+            }
         });
         
         this.filters = {
@@ -337,7 +366,8 @@ class BalatroApp {
             rarities: ['common', 'rare', 'legendary'],
             effects: [],
             hands: [],
-            search: ''
+            search: '',
+            unlockOnly: false
         };
         
         document.getElementById('search-input').value = '';

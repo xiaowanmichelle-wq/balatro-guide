@@ -274,6 +274,20 @@
                         </div>
                     </div>
 
+                    <div class="filter-section collapsible" id="unlock-filter-section">
+                        <h3 class="filter-header" onclick="app.toggleFilter(this)">
+                            <span data-i18n="gallery.filterUnlock">解锁条件</span>
+                            <span class="collapse-icon">▾</span>
+                        </h3>
+                        <div class="filter-group filter-body">
+                            <label class="checkbox-label unlock-filter-label">
+                                <input type="checkbox" id="filter-unlock-only" value="unlock_only">
+                                <span class="checkmark unlock-checkmark">🔒</span>
+                                <span data-i18n="gallery.unlockOnly">仅显示需解锁</span>
+                            </label>
+                        </div>
+                    </div>
+
                     <div class="filter-section collapsible">
                         <h3 class="filter-header" onclick="app.toggleFilter(this)">
                             效果类型

@@ -77,6 +77,8 @@ i18n.register('ja', {
             straight_flush: 'ストレートフラッシュ',
         },
         clearFilter: 'フィルターをクリア',
+        filterUnlock: 'アンロック条件',
+        unlockOnly: 'アンロック必要のみ',
         resultCount: '{{count}} 枚のカードが見つかりました',
         searchPlaceholder: 'カード名、効果で検索...',
     },

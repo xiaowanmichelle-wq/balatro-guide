@@ -77,6 +77,8 @@ i18n.register('en', {
             straight_flush: 'Straight Flush',
         },
         clearFilter: 'Clear Filters',
+        filterUnlock: 'Unlock Conditions',
+        unlockOnly: 'Unlockable Only',
         resultCount: 'Found {{count}} cards',
         searchPlaceholder: 'Search card name, effect...',
     },

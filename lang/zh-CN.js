@@ -96,6 +96,8 @@ i18n.register('zh-CN', {
         },
         
         clearFilter: '清除筛选',
+        filterUnlock: '解锁条件',
+        unlockOnly: '仅显示需解锁',
         resultCount: '找到 {{count}} 张卡牌',
         searchPlaceholder: '搜索卡牌名称、效果...',
     },
