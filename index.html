@@ -417,6 +417,7 @@
                             <!-- 已选卡牌 -->
                         </div>
                         <button class="btn btn-secondary" id="clear-deck">清空卡组</button>
+                        <button class="btn btn-primary" onclick="syncToCalculator()" title="将已选卡牌同步到计算器 Joker 栏">🔢 同步到计算器</button>
                     </div>
 
                     <div class="card-picker">
@@ -839,6 +840,34 @@
             document.body.removeChild(ta);
             showShareToast('✅ 小红书分享文案已复制！', 3000);
         });
+    }
+
+    function syncToCalculator() {
+        if (typeof app === 'undefined' || !app.selectedCards || app.selectedCards.length === 0) {
+            alert('请先在牌组匹配中添加卡牌');
+            return;
+        }
+        if (typeof calculator === 'undefined') return;
+        // 清空计算器现有 Joker
+        calculator.state.jokers = [];
+        // 将牌组匹配中的卡牌同步到计算器
+        app.selectedCards.forEach(function(card) {
+            if (card.type === 'joker') {
+                calculator.state.jokers.push(Object.assign({}, card));
+            }
+        });
+        calculator.renderJokerSlots();
+        calculator.recalc();
+        // 切换到计算器 Tab
+        document.querySelectorAll('.tab').forEach(function(t) { t.classList.remove('active'); t.setAttribute('aria-selected', 'false'); });
+        document.querySelectorAll('.tab-content').forEach(function(c) { c.classList.remove('active'); });
+        var calcTab = document.querySelector('[data-tab="calculator"]');
+        var calcContent = document.getElementById('calculator');
+        if (calcTab) { calcTab.classList.add('active'); calcTab.setAttribute('aria-selected', 'true'); }
+        if (calcContent) calcContent.classList.add('active');
+        // 提示
+        showShareToast('✅ 已同步 ' + calculator.state.jokers.length + ' 张 Joker 到计算器', 2000);
+        window.scrollTo(0, 0);
     }
 
     function copyShareLink() {
