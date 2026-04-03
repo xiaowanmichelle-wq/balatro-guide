@@ -3868,6 +3868,7 @@ body {
 .calc-held-card { border-color: #1abc9c; background: rgba(26,188,156,0.08); }
 .calc-card-rank { font-weight: bold; font-size: 0.8rem; color: var(--text-primary); }
 .calc-card-suit { font-size: 0.9rem; }
+.calc-stone-btn { grid-column: span 2; background: rgba(149,165,166,0.1); border-color: #95a5a6; }
 
 /* 已选手牌 */
 #calc-hand-area { display: flex; gap: 10px; flex-wrap: wrap; }

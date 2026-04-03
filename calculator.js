@@ -390,6 +390,28 @@ function renderDeck() {
       grid.appendChild(btn);
     });
   });
+  // 石头牌（无花色无点数，+50筹码）
+  const stoneBtn = document.createElement('button');
+  stoneBtn.className = 'calc-card-btn calc-stone-btn';
+  stoneBtn.dataset.suit = 'none';
+  stoneBtn.dataset.rank = 'Stone';
+  stoneBtn.innerHTML = '<span class="calc-card-rank" style="font-size:0.6rem">石头</span><span class="calc-card-suit" style="color:#95a5a6">\u{1faa8}</span>';
+  stoneBtn.title = '石头牌 +50筹码（无花色无点数）';
+  stoneBtn.onclick = () => addStoneCard();
+  grid.appendChild(stoneBtn);
+}
+
+function addStoneCard() {
+  if (!heldMode && state.selectedCards.length >= 5) return;
+  const card = {suit:'none', rank:'Stone', enhancement:'stone', edition:'none', seal:'none'};
+  if (heldMode) {
+    state.handCards.push(card);
+    renderHeldCards();
+  } else {
+    state.selectedCards.push(card);
+    renderSelectedHand();
+  }
+  recalc();
 }
 
 function renderSelectedHand() {
@@ -400,13 +422,14 @@ function renderSelectedHand() {
     return;
   }
   area.innerHTML = state.selectedCards.map((c, i) => {
-    const sym = SUIT_SYMBOLS[c.suit];
-    const color = SUIT_COLORS[c.suit];
+    const sym = SUIT_SYMBOLS[c.suit] || '\u{1faa8}';
+    const color = SUIT_COLORS[c.suit] || '#95a5a6';
+    const displayRank = c.rank === 'Stone' ? '石头' : c.rank;
     const enh = ENHANCEMENTS.find(e => e.id === c.enhancement) || ENHANCEMENTS[0];
     const edi = EDITIONS.find(e => e.id === c.edition) || EDITIONS[0];
     const seal = SEALS.find(s => s.id === c.seal) || SEALS[0];
     return '<div class="calc-hand-card">' +
-      '<div class="calc-hc-face" style="color:'+color+'"><span class="calc-hc-rank">'+c.rank+'</span><span class="calc-hc-suit">'+sym+'</span></div>' +
+      '<div class="calc-hc-face" style="color:'+color+'"><span class="calc-hc-rank">'+displayRank+'</span><span class="calc-hc-suit">'+sym+'</span></div>' +
       '<div class="calc-hc-mods">' +
         '<select class="calc-mod-sel" data-idx="'+i+'" data-field="enhancement" onchange="calculator.onModChange(this)">' +
           ENHANCEMENTS.map(e => '<option value="'+e.id+'"'+(c.enhancement===e.id?' selected':'')+'>'+e.name+'</option>').join('') +
@@ -472,28 +495,17 @@ function toggleHeldMode() {
 
 function toggleCard(suit, rank, btn) {
   if (heldMode) {
-    // 留手牌模式
-    const idx = state.handCards.findIndex(c => c.suit===suit && c.rank===rank);
-    if (idx >= 0) {
-      state.handCards.splice(idx, 1);
-      btn.classList.remove('held');
-    } else {
-      state.handCards.push({suit, rank, enhancement:'none', edition:'none', seal:'none'});
-      btn.classList.add('held');
-    }
+    // 留手牌模式：每次点击添加一张（允许重复）
+    state.handCards.push({suit, rank, enhancement:'none', edition:'none', seal:'none'});
+    btn.classList.add('held');
     renderHeldCards();
     recalc();
     return;
   }
-  // 打出手牌模式
-  const idx = state.selectedCards.findIndex(c => c.suit===suit && c.rank===rank);
-  if (idx >= 0) {
-    state.selectedCards.splice(idx, 1);
-    btn.classList.remove('selected');
-  } else {
-    if (state.selectedCards.length >= 5) return;
-    state.selectedCards.push({suit, rank, enhancement:'none', edition:'none', seal:'none'});
-    btn.classList.add('selected');
+  // 打出手牌模式：每次点击添加一张（允许重复，最多5张）
+  if (state.selectedCards.length >= 5) return;
+  state.selectedCards.push({suit, rank, enhancement:'none', edition:'none', seal:'none'});
+  btn.classList.add('selected');
   }
   renderSelectedHand();
   recalc();
@@ -579,15 +591,10 @@ function searchJoker(query) {
 function addJoker(id) {
   const j = allJokerData.find(c => c.id === id);
   if (!j) return;
-  if (state.jokers.find(x => x.id === id)) {
-    // 已有则移除
-    state.jokers = state.jokers.filter(x => x.id !== id);
-  } else {
-    state.jokers.push(j);
-  }
+  // 每次添加一个副本（允许重复，如负片/全息等场景）
+  state.jokers.push(Object.assign({}, j));
   renderJokerSlots();
   recalc();
-  // 刷新网格选中状态
   const searchInput = document.getElementById('calc-joker-search');
   if (searchInput) showJokerGrid(searchInput.value);
 }
