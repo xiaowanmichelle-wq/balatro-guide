@@ -508,7 +508,6 @@ function toggleCard(suit, rank, btn) {
   if (state.selectedCards.length >= 5) return;
   state.selectedCards.push({suit, rank, enhancement:'none', edition:'none', seal:'none'});
   btn.classList.add('selected');
-  }
   renderSelectedHand();
   recalc();
 }
