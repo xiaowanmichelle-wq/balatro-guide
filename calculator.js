@@ -482,12 +482,13 @@ function renderHeldCards() {
   area.innerHTML = state.handCards.map((c, i) => {
     const sym = SUIT_SYMBOLS[c.suit];
     const color = SUIT_COLORS[c.suit];
-    const enh = ENHANCEMENTS.find(e => e.id === c.enhancement) || ENHANCEMENTS[0];
     return '<div class="calc-hand-card calc-held-card">' +
       '<div class="calc-hc-face" style="color:'+color+'"><span class="calc-hc-rank">'+c.rank+'</span><span class="calc-hc-suit">'+sym+'</span></div>' +
-      '<select class="calc-mod-sel" data-idx="'+i+'" data-field="heldEnhancement" onchange="calculator.onHeldModChange(this)">' +
-        ENHANCEMENTS.map(e => '<option value="'+e.id+'"'+(c.enhancement===e.id?' selected':'')+'>'+e.name+'</option>').join('') +
-      '</select>' +
+      '<div class="calc-hc-mods">' +
+        '<select class="calc-mod-sel" data-idx="'+i+'" data-field="heldEnhancement" onchange="calculator.onHeldModChange(this)">' +
+          ENHANCEMENTS.map(e => '<option value="'+e.id+'"'+(c.enhancement===e.id?' selected':'')+'>'+e.name+'</option>').join('') +
+        '</select>' +
+      '</div>' +
       '<button class="calc-hc-remove" onclick="calculator.removeHeldCard('+i+')">\u2715</button>' +
     '</div>';
   }).join('');
