@@ -666,7 +666,11 @@
                     <h3 class="calc-section-title">🃏 Joker 栏 <span class="calc-section-hint">（从左到右依次触发，负片可超过5张）</span></h3>
                     <div class="calc-joker-bar">
                         <div id="calc-joker-slots"><p class="calc-empty">点击下方「+ 添加 Joker」选择</p></div>
-                        <button class="btn btn-secondary btn-small calc-joker-toggle" id="calc-joker-toggle" onclick="calculator.toggleJokerPanel()">+ 添加 Joker</button>
+                        <div class="calc-joker-order-tip" id="calc-joker-order-tip"></div>
+                        <div class="calc-joker-actions">
+                            <button class="btn btn-secondary btn-small calc-joker-toggle" id="calc-joker-toggle" onclick="calculator.toggleJokerPanel()">+ 添加 Joker</button>
+                            <span class="calc-drag-hint" id="calc-drag-hint" style="display:none;">💡 拖拽 Joker 卡片可调整顺序</span>
+                        </div>
                         <div class="calc-joker-panel" id="calc-joker-panel" style="display:none;">
                             <input type="text" id="calc-joker-search" class="calc-search-input" placeholder="搜索 Joker 名称或效果..." oninput="calculator.searchJoker(this.value)">
                             <div id="calc-joker-search-results" class="calc-joker-results">

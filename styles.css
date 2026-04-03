@@ -3879,8 +3879,12 @@ body {
 
 /* Joker 栏 */
 .calc-joker-bar { display: flex; flex-direction: column; gap: 10px; }
-#calc-joker-slots { display: flex; gap: 8px; flex-wrap: wrap; min-height: 40px; align-items: center; }
-.calc-joker-chip { background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 8px; padding: 6px 10px; display: flex; align-items: center; gap: 8px; }
+#calc-joker-slots { display: flex; gap: 8px; flex-wrap: wrap; min-height: 40px; align-items: flex-start; }
+.calc-joker-chip { background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 8px; padding: 6px 10px; display: flex; flex-direction: column; align-items: center; gap: 4px; position: relative; cursor: grab; transition: all 0.15s; }
+.calc-joker-chip:active { cursor: grabbing; }
+.calc-jc-drag-handle { font-size: 0.7rem; color: var(--text-muted); cursor: grab; user-select: none; line-height: 1; }
+.calc-jc-dragging { opacity: 0.4; border-color: var(--accent-gold); }
+.calc-jc-dragover { border-color: var(--accent-gold); background: rgba(255,215,0,0.1); box-shadow: 0 0 8px rgba(255,215,0,0.3); }
 .calc-jc-img { width: 104px; height: 104px; border-radius: 6px; object-fit: contain; }
 .calc-jc-name { font-size: 0.82rem; color: var(--text-primary); white-space: nowrap; }
 .calc-jc-remove { background: none; border: none; color: var(--text-muted); cursor: pointer; font-size: 0.8rem; margin-left: 4px; }
@@ -3891,6 +3895,10 @@ body {
 .calc-jc-sc-input { width: 56px; background: var(--bg-primary); color: var(--text-primary); border: 1px solid var(--border-color); border-radius: 4px; padding: 2px 4px; font-size: 0.8rem; text-align: center; }
 .calc-jc-sc-input:focus { border-color: var(--accent-gold); outline: none; }
 .calc-jc-sc-desc { font-size: 0.6rem; color: var(--text-muted); white-space: nowrap; }
+.calc-joker-order-tip { margin: 6px 0; }
+.calc-order-tip-line { font-size: 0.78rem; color: var(--accent-orange); padding: 2px 0; }
+.calc-joker-actions { display: flex; align-items: center; gap: 12px; margin-top: 6px; }
+.calc-drag-hint { font-size: 0.75rem; color: var(--text-muted); }
 .calc-joker-search-wrap { position: relative; }
 .calc-joker-toggle { margin-top: 8px; }
 .calc-joker-panel { margin-top: 10px; }

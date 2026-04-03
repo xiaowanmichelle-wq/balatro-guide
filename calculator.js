@@ -631,8 +631,14 @@ function renderJokerSlots() {
   if (!area) return;
   if (state.jokers.length === 0) {
     area.innerHTML = '<p class="calc-empty">点击下方「+ 添加 Joker」选择</p>';
+    updateOrderTip();
+    const dh = document.getElementById('calc-drag-hint');
+    if (dh) dh.style.display = 'none';
     return;
   }
+  const dh = document.getElementById('calc-drag-hint');
+  if (dh) dh.style.display = state.jokers.length > 1 ? 'inline' : 'none';
+
   area.innerHTML = state.jokers.map((j, i) => {
     const sc = SCALING_JOKERS[j.id];
     let inputHtml = '';
@@ -644,12 +650,86 @@ function renderJokerSlots() {
         '<span class="calc-jc-sc-desc">' + sc.desc + '</span>' +
       '</div>';
     }
-    return '<div class="calc-joker-chip' + (sc ? ' calc-jc-scaling-chip' : '') + '" title="' + j.name + '">' +
+    return '<div class="calc-joker-chip" title="' + j.name + '" draggable="true" data-jidx="' + i + '">' +
+      '<div class="calc-jc-drag-handle">\u2630</div>' +
       (j.image ? '<img class="calc-jc-img" src="' + j.image + '" loading="lazy">' : '') +
       inputHtml +
       '<button class="calc-jc-remove" onclick="calculator.removeJoker(' + i + ')">\u2715</button>' +
     '</div>';
   }).join('');
+
+  // 绑定拖拽事件
+  area.querySelectorAll('.calc-joker-chip').forEach(el => {
+    el.addEventListener('dragstart', onJokerDragStart);
+    el.addEventListener('dragover', onJokerDragOver);
+    el.addEventListener('drop', onJokerDrop);
+    el.addEventListener('dragend', onJokerDragEnd);
+  });
+  updateOrderTip();
+}
+
+// 拖拽排序
+let dragJokerIdx = -1;
+
+function onJokerDragStart(e) {
+  dragJokerIdx = parseInt(e.currentTarget.dataset.jidx);
+  e.currentTarget.classList.add('calc-jc-dragging');
+  e.dataTransfer.effectAllowed = 'move';
+}
+function onJokerDragOver(e) {
+  e.preventDefault();
+  e.dataTransfer.dropEffect = 'move';
+  e.currentTarget.classList.add('calc-jc-dragover');
+}
+function onJokerDrop(e) {
+  e.preventDefault();
+  const toIdx = parseInt(e.currentTarget.dataset.jidx);
+  e.currentTarget.classList.remove('calc-jc-dragover');
+  if (dragJokerIdx >= 0 && dragJokerIdx !== toIdx) {
+    const moved = state.jokers.splice(dragJokerIdx, 1)[0];
+    state.jokers.splice(toIdx, 0, moved);
+    renderJokerSlots();
+    recalc();
+  }
+}
+function onJokerDragEnd(e) {
+  e.currentTarget.classList.remove('calc-jc-dragging');
+  document.querySelectorAll('.calc-jc-dragover').forEach(el => el.classList.remove('calc-jc-dragover'));
+  dragJokerIdx = -1;
+}
+
+// Joker 顺序建议
+function updateOrderTip() {
+  const tip = document.getElementById('calc-joker-order-tip');
+  if (!tip) return;
+  if (state.jokers.length < 2) { tip.innerHTML = ''; return; }
+
+  const tips = [];
+  const ids = state.jokers.map(j => j.id);
+  // 蓝图应该在要复制的 Joker 左边
+  if (ids.includes('j_blueprint')) {
+    const bi = ids.indexOf('j_blueprint');
+    if (bi === ids.length - 1) tips.push('⚠️ 蓝图在最右边没有可复制的 Joker');
+  }
+  // 头脑风暴复制最左侧
+  if (ids.includes('j_brainstorm')) {
+    const bsi = ids.indexOf('j_brainstorm');
+    if (bsi === 0) tips.push('⚠️ 头脑风暴在最左边会复制自己（无效）');
+  }
+  // +mult 应在 xmult 左边
+  const hasAddMult = state.jokers.some(j => {
+    const e = j.effects || {};
+    return (typeof e.mult === 'number' && e.mult > 0) || (SCALING_JOKERS[j.id] && SCALING_JOKERS[j.id].field === 'mult');
+  });
+  const hasXMult = state.jokers.some(j => {
+    const e = j.effects || {};
+    return (typeof e.xmult === 'number' && e.xmult > 0) || (SCALING_JOKERS[j.id] && SCALING_JOKERS[j.id].field === 'xmult');
+  });
+  if (hasAddMult && hasXMult) {
+    tips.push('💡 建议：+倍率 Joker 放左边，×倍率 Joker 放右边（先加后乘收益最大）');
+  }
+
+  tip.innerHTML = tips.map(t => '<div class="calc-order-tip-line">' + t + '</div>').join('');
 }
 
 function onJokerValChange(input) {
