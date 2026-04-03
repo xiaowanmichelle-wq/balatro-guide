@@ -3858,6 +3858,10 @@ body {
 .calc-card-btn:hover { border-color: var(--accent-gold); background: var(--bg-card-hover); }
 .calc-card-btn.selected { background: rgba(255,215,0,0.15); border-color: var(--accent-gold); box-shadow: 0 0 8px rgba(255,215,0,0.3); }
 .calc-card-btn.selected .calc-card-rank { color: #fff; }
+.calc-card-btn.held { background: rgba(26,188,156,0.15); border-color: #1abc9c; box-shadow: 0 0 6px rgba(26,188,156,0.3); }
+.calc-card-btn.held .calc-card-rank { color: #1abc9c; }
+.calc-card-btn.held-mode { cursor: crosshair; }
+.calc-held-card { border-color: #1abc9c; background: rgba(26,188,156,0.08); }
 .calc-card-rank { font-weight: bold; font-size: 0.8rem; color: var(--text-primary); }
 .calc-card-suit { font-size: 0.9rem; }
 
@@ -3916,6 +3920,8 @@ body {
 .calc-bd-row { font-size: 0.8rem; padding: 3px 0; color: var(--text-secondary); }
 .calc-bd-base { color: var(--accent-gold); font-weight: bold; }
 .calc-bd-joker { color: var(--accent-orange); }
+.calc-bd-hand_steel { color: #1abc9c; }
+.calc-bd-seal { color: #9b59b6; }
 .calc-bd-xmult { color: #f39c12; font-weight: bold; }
 .bd-chips { color: #3498db; font-weight: bold; }
 .bd-mult { color: #e74c3c; font-weight: bold; }

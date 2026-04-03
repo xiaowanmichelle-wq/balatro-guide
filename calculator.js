@@ -157,38 +157,59 @@ function calculate() {
   let xmultList = [];
   breakdown.push({label: type.name + ' Lv.' + lv, chips: chips, mult: mult, type:'base'});
 
+  // 检查哪些 Joker 有重触发效果
+  let jokerRetriggers = 0;
+  state.jokers.forEach(j => {
+    if (j.id === 'j_hanging_chad') jokerRetriggers = Math.max(jokerRetriggers, 2); // 首张计分牌额外触发2次
+    if (j.id === 'j_sock') jokerRetriggers = Math.max(jokerRetriggers, 1); // 人头牌额外触发1次
+    if (j.id === 'j_hack') jokerRetriggers = Math.max(jokerRetriggers, 1); // 2345额外触发1次
+  });
+
   // 遍历计分牌
-  scoringCards.forEach(card => {
+  scoringCards.forEach((card, cardIdx) => {
     const enh = ENHANCEMENTS.find(e => e.id === card.enhancement) || ENHANCEMENTS[0];
     const edi = EDITIONS.find(e => e.id === card.edition) || EDITIONS[0];
     const seal = SEALS.find(s => s.id === card.seal) || SEALS[0];
-    const retriggers = 1 + (seal.retrigger || 0);
+    let retriggers = 1 + (seal.retrigger || 0);
+    // 未断选票：首张计分牌额外触发
+    if (cardIdx === 0 && state.jokers.some(j => j.id === 'j_hanging_chad')) retriggers += 2;
+    // 长袜与半身裤：人头牌额外触发
+    if (['J','Q','K'].includes(card.rank) && state.jokers.some(j => j.id === 'j_sock')) retriggers += 1;
+    // 烂脱口秀演员：2345额外触发
+    if (['2','3','4','5'].includes(card.rank) && state.jokers.some(j => j.id === 'j_hack')) retriggers += 1;
+
     for (let t = 0; t < retriggers; t++) {
-      // 卡牌点数
       if (!enh.noRank) {
         const rv = RANK_VALUES[card.rank] || 0;
         chips += rv;
         if (t === 0) breakdown.push({label: SUIT_SYMBOLS[card.suit]+card.rank, chips:rv, type:'card'});
       }
-      // 增强 chips/mult
-      if (enh.chips) { chips += enh.chips; breakdown.push({label: enh.name + ' +' + enh.chips + '筹码', chips:enh.chips, type:'enh'}); }
-      if (enh.mult) { mult += enh.mult; breakdown.push({label: enh.name + ' +' + enh.mult + '倍率', mult:enh.mult, type:'enh'}); }
-      if (enh.xmult && enh.xmult > 0) { xmultList.push({val:enh.xmult,label:enh.name+' \u00d7'+enh.xmult}); }
-      // 版本
-      if (edi.chips) { chips += edi.chips; breakdown.push({label:edi.name+' +'+edi.chips+'筹码', chips:edi.chips, type:'edi'}); }
-      if (edi.mult) { mult += edi.mult; breakdown.push({label:edi.name+' +'+edi.mult+'倍率', mult:edi.mult, type:'edi'}); }
-      if (edi.xmult && edi.xmult > 0) { xmultList.push({val:edi.xmult,label:edi.name+' \u00d7'+edi.xmult}); }
-      // 重触发提示
-      if (t > 0) breakdown.push({label: '\u21bb 红印重触发', type:'seal'});
+      if (enh.chips) { chips += enh.chips; breakdown.push({label: enh.name, chips:enh.chips, type:'enh'}); }
+      if (enh.mult) { mult += enh.mult; breakdown.push({label: enh.name, mult:enh.mult, type:'enh'}); }
+      if (enh.xmult && enh.xmult > 0) xmultList.push({val:enh.xmult,label:enh.name+' \u00d7'+enh.xmult});
+      if (edi.chips) { chips += edi.chips; breakdown.push({label:edi.name, chips:edi.chips, type:'edi'}); }
+      if (edi.mult) { mult += edi.mult; breakdown.push({label:edi.name, mult:edi.mult, type:'edi'}); }
+      if (edi.xmult && edi.xmult > 0) xmultList.push({val:edi.xmult,label:edi.name+' \u00d7'+edi.xmult});
+      if (t > 0) breakdown.push({label: '\u21bb 重触发 #'+(t+1), type:'seal'});
     }
   });
 
-  // 遍历 Joker（从左到右）
-  state.jokers.forEach(joker => {
+  // 手牌中的钢铁牌提供 ×1.5
+  state.handCards.forEach(card => {
+    if (card.enhancement === 'steel') {
+      xmultList.push({val:1.5, label:SUIT_SYMBOLS[card.suit]+card.rank+' 钢铁牌(手牌) \u00d71.5'});
+      breakdown.push({label:SUIT_SYMBOLS[card.suit]+card.rank+' 钢铁牌(手牌中)', type:'hand_steel'});
+    }
+  });
+
+  // 遍历 Joker（从左到右），支持 Blueprint/Brainstorm
+  const jokerEffects = resolveJokerOrder(state.jokers);
+  jokerEffects.forEach(({joker, sourceLabel}) => {
     const result = applyJoker(joker, {type, scoringCards, cards, handCards: state.handCards});
-    if (result.chips) { chips += result.chips; breakdown.push({label:joker.name+' +'+result.chips+'筹码', chips:result.chips, type:'joker'}); }
-    if (result.mult) { mult += result.mult; breakdown.push({label:joker.name+' +'+result.mult+'倍率', mult:result.mult, type:'joker'}); }
-    if (result.xmult) { xmultList.push({val:result.xmult, label:joker.name+' \u00d7'+result.xmult}); }
+    const label = sourceLabel || joker.name;
+    if (result.chips) { chips += result.chips; breakdown.push({label:label+' +'+result.chips+'筹码', chips:result.chips, type:'joker'}); }
+    if (result.mult) { mult += result.mult; breakdown.push({label:label+' +'+result.mult+'倍率', mult:result.mult, type:'joker'}); }
+    if (result.xmult) xmultList.push({val:result.xmult, label:label+' \u00d7'+result.xmult});
   });
 
   // 应用所有 xmult
@@ -201,6 +222,30 @@ function calculate() {
   const total = Math.round(chips * finalMult);
   state.breakdown = breakdown;
   return {chips, mult: finalMult, total, handName: type.name + ' Lv.' + lv, breakdown};
+}
+
+// Blueprint/Brainstorm 解析
+function resolveJokerOrder(jokers) {
+  const results = [];
+  for (let i = 0; i < jokers.length; i++) {
+    const j = jokers[i];
+    if (j.id === 'j_blueprint') {
+      // 复制右侧 Joker
+      const right = jokers[i + 1];
+      if (right && right.id !== 'j_blueprint' && right.id !== 'j_brainstorm') {
+        results.push({joker: right, sourceLabel: '\u{1f4cb} 蓝图\u2192' + right.name});
+      }
+    } else if (j.id === 'j_brainstorm') {
+      // 复制最左侧 Joker
+      const left = jokers[0];
+      if (left && left.id !== 'j_blueprint' && left.id !== 'j_brainstorm') {
+        results.push({joker: left, sourceLabel: '\u{1f9e0} 头脑风暴\u2192' + left.name});
+      }
+    } else {
+      results.push({joker: j, sourceLabel: null});
+    }
+  }
+  return results;
 }
 
 // ============ Joker 效果计算 ============
@@ -310,20 +355,6 @@ function renderDeck() {
   });
 }
 
-function toggleCard(suit, rank, btn) {
-  const idx = state.selectedCards.findIndex(c => c.suit===suit && c.rank===rank);
-  if (idx >= 0) {
-    state.selectedCards.splice(idx, 1);
-    btn.classList.remove('selected');
-  } else {
-    if (state.selectedCards.length >= 5) return;
-    state.selectedCards.push({suit, rank, enhancement:'none', edition:'none', seal:'none'});
-    btn.classList.add('selected');
-  }
-  renderSelectedHand();
-  recalc();
-}
-
 function renderSelectedHand() {
   const area = document.getElementById('calc-hand-area');
   if (!area) return;
@@ -377,9 +408,94 @@ function removeCard(idx) {
 function clearAll() {
   state.selectedCards = [];
   state.jokers = [];
+  state.handCards = [];
+  heldMode = false;
   document.querySelectorAll('.calc-card-btn.selected').forEach(b => b.classList.remove('selected'));
-  document.querySelectorAll('.calc-joker-slot').forEach(s => s.innerHTML = '<span class="calc-joker-empty">+</span>');
+  document.querySelectorAll('.calc-card-btn.held').forEach(b => b.classList.remove('held'));
   renderSelectedHand();
+  renderHeldCards();
+  renderJokerSlots();
+  recalc();
+  const mBtn = document.getElementById('calc-held-mode-btn');
+  if (mBtn) mBtn.textContent = '切换到：选留手牌模式';
+}
+
+// 留手牌模式
+let heldMode = false;
+
+function toggleHeldMode() {
+  heldMode = !heldMode;
+  const btn = document.getElementById('calc-held-mode-btn');
+  if (btn) btn.textContent = heldMode ? '当前：留手牌模式 ✋（点击扑克牌添加留手牌）' : '切换到：选留手牌模式';
+  // 更新提示
+  document.querySelectorAll('.calc-card-btn').forEach(b => {
+    b.classList.toggle('held-mode', heldMode);
+  });
+}
+
+function toggleCard(suit, rank, btn) {
+  if (heldMode) {
+    // 留手牌模式
+    const idx = state.handCards.findIndex(c => c.suit===suit && c.rank===rank);
+    if (idx >= 0) {
+      state.handCards.splice(idx, 1);
+      btn.classList.remove('held');
+    } else {
+      state.handCards.push({suit, rank, enhancement:'none', edition:'none', seal:'none'});
+      btn.classList.add('held');
+    }
+    renderHeldCards();
+    recalc();
+    return;
+  }
+  // 打出手牌模式
+  const idx = state.selectedCards.findIndex(c => c.suit===suit && c.rank===rank);
+  if (idx >= 0) {
+    state.selectedCards.splice(idx, 1);
+    btn.classList.remove('selected');
+  } else {
+    if (state.selectedCards.length >= 5) return;
+    state.selectedCards.push({suit, rank, enhancement:'none', edition:'none', seal:'none'});
+    btn.classList.add('selected');
+  }
+  renderSelectedHand();
+  recalc();
+}
+
+function renderHeldCards() {
+  const area = document.getElementById('calc-held-area');
+  if (!area) return;
+  if (state.handCards.length === 0) {
+    area.innerHTML = '<p class="calc-empty">切换到留手牌模式后点击扑克牌添加</p>';
+    return;
+  }
+  area.innerHTML = state.handCards.map((c, i) => {
+    const sym = SUIT_SYMBOLS[c.suit];
+    const color = SUIT_COLORS[c.suit];
+    const enh = ENHANCEMENTS.find(e => e.id === c.enhancement) || ENHANCEMENTS[0];
+    return '<div class="calc-hand-card calc-held-card">' +
+      '<div class="calc-hc-face" style="color:'+color+'"><span class="calc-hc-rank">'+c.rank+'</span><span class="calc-hc-suit">'+sym+'</span></div>' +
+      '<select class="calc-mod-sel" data-idx="'+i+'" data-field="heldEnhancement" onchange="calculator.onHeldModChange(this)">' +
+        ENHANCEMENTS.map(e => '<option value="'+e.id+'"'+(c.enhancement===e.id?' selected':'')+'>'+e.name+'</option>').join('') +
+      '</select>' +
+      '<button class="calc-hc-remove" onclick="calculator.removeHeldCard('+i+')">\u2715</button>' +
+    '</div>';
+  }).join('');
+}
+
+function onHeldModChange(sel) {
+  const i = parseInt(sel.dataset.idx);
+  state.handCards[i].enhancement = sel.value;
+  recalc();
+}
+
+function removeHeldCard(idx) {
+  const c = state.handCards[idx];
+  state.handCards.splice(idx, 1);
+  document.querySelectorAll('.calc-card-btn').forEach(btn => {
+    if (btn.dataset.suit === c.suit && btn.dataset.rank === c.rank) btn.classList.remove('held');
+  });
+  renderHeldCards();
   recalc();
 }
 
@@ -527,6 +643,7 @@ function formatNum(n) {
 return {
   init, recalc, toggleCard, removeCard, clearAll,
   searchJoker, addJoker, removeJoker, toggleJokerPanel,
+  toggleHeldMode, removeHeldCard, onHeldModChange,
   changeLevel, onModChange,
   renderSelectedHand, renderJokerSlots,
   get state() { return state; }

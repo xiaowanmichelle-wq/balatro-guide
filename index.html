@@ -682,6 +682,15 @@
                     <div id="calc-hand-area"><p class="calc-empty">点击下方扑克牌选择手牌（最多5张）</p></div>
                 </div>
 
+                <!-- 留在手中的牌 -->
+                <div class="calc-section">
+                    <h3 class="calc-section-title">🤚 留在手中的牌 <span class="calc-section-hint">（未打出的牌，钢铁牌在手中提供×1.5倍率）</span></h3>
+                    <div id="calc-held-area"><p class="calc-empty">点击下方扑克牌后按「留手牌」添加</p></div>
+                    <div class="calc-held-actions" style="margin-top:8px;">
+                        <button class="btn btn-secondary btn-small" id="calc-held-mode-btn" onclick="calculator.toggleHeldMode()">切换到：选留手牌模式</button>
+                    </div>
+                </div>
+
                 <!-- 计分结果 -->
                 <div class="calc-section calc-result-section">
                     <div class="calc-result-header">
