@@ -221,7 +221,7 @@ body {
 .tab-new-tooltip {
     display: none;
     position: absolute;
-    bottom: calc(100% + 8px);
+    top: calc(100% + 8px);
     left: 50%;
     transform: translateX(-50%);
     background: #1a1a2e;
@@ -237,11 +237,11 @@ body {
 .tab-new-tooltip::after {
     content: '';
     position: absolute;
-    top: 100%;
+    bottom: 100%;
     left: 50%;
     transform: translateX(-50%);
     border: 6px solid transparent;
-    border-top-color: var(--accent-gold);
+    border-bottom-color: var(--accent-gold);
 }
 .tab-new:hover .tab-new-tooltip { display: block; }
 
