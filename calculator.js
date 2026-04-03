@@ -405,16 +405,15 @@ function showJokerGrid(query) {
     const q = query.toLowerCase();
     list = allJokerData.filter(j => j.name.toLowerCase().includes(q) || j.id.includes(q) || (j.description||'').toLowerCase().includes(q));
   }
-  const shown = list.slice(0, 40);
+  const shown = list;
   if (shown.length === 0) {
     container.innerHTML = '<p class="calc-empty">没有匹配的 Joker</p>';
     return;
   }
   container.innerHTML = shown.map(j => {
     const inDeck = state.jokers.find(x => x.id === j.id);
-    return '<div class="calc-joker-grid-item' + (inDeck ? ' calc-jgi-selected' : '') + '" onclick="calculator.addJoker(\'' + j.id + '\')" title="' + (j.description||'').replace(/"/g,'&quot;') + '">' +
+    return '<div class="calc-joker-grid-item' + (inDeck ? ' calc-jgi-selected' : '') + '" onclick="calculator.addJoker(\'' + j.id + '\')" title="' + j.name + ': ' + (j.description||'').replace(/"/g,'&quot;') + '">' +
       (j.image ? '<img class="calc-jgi-img" src="' + j.image + '" loading="lazy">' : '<div class="calc-jgi-placeholder">🃏</div>') +
-      '<span class="calc-jgi-name">' + j.name + '</span>' +
     '</div>';
   }).join('');
 }
