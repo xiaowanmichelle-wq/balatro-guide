@@ -254,6 +254,16 @@ function applyJoker(joker, ctx) {
   const tags = joker.tags || [];
   let chips = 0, mult = 0, xmult = 0;
 
+  // === 成长型 Joker：使用用户输入的自定义值 ===
+  const sc = SCALING_JOKERS[joker.id];
+  if (sc && joker._customVal !== undefined) {
+    const val = joker._customVal;
+    if (sc.field === 'mult') return {chips:0, mult:val, xmult:0};
+    if (sc.field === 'chips') return {chips:val, mult:0, xmult:0};
+    if (sc.field === 'xmult') return {chips:0, mult:0, xmult: val > 0 ? val : 0};
+    return {chips:0, mult:0, xmult:0};
+  }
+
   // === 无条件效果 ===
   if (!joker.suit && !joker.hand && !e.hand && !e.rank && !e.suit && !(tags.includes('face')) && !(tags.includes('rank'))) {
     if (typeof e.mult === 'number' && !tags.includes('suit') && !tags.includes('hand') && !tags.includes('rank') && !tags.includes('face')) mult = e.mult;
@@ -560,19 +570,67 @@ function removeJoker(idx) {
   recalc();
 }
 
+// 成长型 Joker 定义：需要用户输入当前累积值
+const SCALING_JOKERS = {
+  j_spare_trousers: {field:'mult', label:'+倍率', default:0, step:2, desc:'每弃一次两对+2'},
+  j_wee: {field:'chips', label:'+筹码', default:0, step:8, desc:'每打出A+8'},
+  j_green: {field:'mult', label:'+倍率', default:0, step:1, desc:'每出牌+1/弃牌-1'},
+  j_red_card: {field:'mult', label:'+倍率', default:0, step:3, desc:'每跳过补充包+3'},
+  j_hologram: {field:'xmult', label:'\u00d7倍率', default:1, step:0.25, desc:'每添加牌到牌组+0.25'},
+  j_obelisk: {field:'xmult', label:'\u00d7倍率', default:1, step:0.2, desc:'连续不打最常用牌型+0.2'},
+  j_swashbuckler: {field:'mult', label:'+倍率', default:0, step:1, desc:'=其他Joker售价总和'},
+  j_flash: {field:'mult', label:'+倍率', default:0, step:2, desc:'每次重掷+2'},
+  j_trousers: {field:'mult', label:'+倍率', default:0, step:2, desc:'每弃两对+2'},
+  j_castle: {field:'chips', label:'+筹码', default:0, step:3, desc:'每弃对应花色+3'},
+  j_vampire: {field:'xmult', label:'\u00d7倍率', default:1, step:0.1, desc:'吸收增强牌+0.1'},
+  j_rocket: {field:'money', label:'$盲注后', default:1, step:1, desc:'击败Boss+$2'},
+  j_turtle_bean: {field:'hand_size', label:'手牌上限', default:5, step:1, desc:'每轮-1'},
+  j_bootstraps: {field:'mult', label:'+倍率', default:0, step:2, desc:'每$5加+2倍率'},
+  j_canio: {field:'xmult', label:'\u00d7倍率', default:1, step:1, desc:'摧毁人头牌+\u00d71'},
+  j_yorick: {field:'xmult', label:'\u00d7倍率', default:1, step:1, desc:'每弃23张+\u00d71'},
+  j_throwback: {field:'xmult', label:'\u00d7倍率', default:1, step:0.25, desc:'每跳过盲注+0.25'},
+  j_glass: {field:'xmult', label:'\u00d7倍率', default:1, step:0.75, desc:'玻璃牌摧毁时+0.75'},
+  j_flower_pot: {field:'xmult', label:'\u00d7倍率', default:3, step:0, desc:'四花色各1张'},
+  j_steel_joker: {field:'xmult', label:'\u00d7倍率', default:1, step:0.2, desc:'每张钢铁牌+0.2'},
+  j_abstract: {field:'mult', label:'+倍率', default:0, step:3, desc:'每张Joker+3'},
+  j_constellation: {field:'xmult', label:'\u00d7倍率', default:1, step:0.1, desc:'每用行星牌+0.1'},
+  j_madness: {field:'xmult', label:'\u00d7倍率', default:1, step:0.5, desc:'小盲/大盲+0.5'},
+  j_square: {field:'chips', label:'+筹码', default:0, step:4, desc:'打满5张时+4'},
+  j_bull: {field:'chips', label:'+筹码', default:0, step:2, desc:'每$1加+2筹码'},
+  j_fortune_teller: {field:'mult', label:'+倍率', default:0, step:1, desc:'每用塔罗牌+1'},
+};
+
 function renderJokerSlots() {
   const area = document.getElementById('calc-joker-slots');
   if (!area) return;
   if (state.jokers.length === 0) {
-    area.innerHTML = '<p class="calc-empty">搜索并添加 Joker（最多5张）</p>';
+    area.innerHTML = '<p class="calc-empty">点击下方「+ 添加 Joker」选择</p>';
     return;
   }
-  area.innerHTML = state.jokers.map((j, i) =>
-    '<div class="calc-joker-chip" title="'+j.name+'">' +
-      (j.image ? '<img class="calc-jc-img" src="'+j.image+'" loading="lazy">' : '') +
-      '<button class="calc-jc-remove" onclick="calculator.removeJoker('+i+')">\u2715</button>' +
-    '</div>'
-  ).join('');
+  area.innerHTML = state.jokers.map((j, i) => {
+    const sc = SCALING_JOKERS[j.id];
+    let inputHtml = '';
+    if (sc) {
+      const val = (j._customVal !== undefined) ? j._customVal : sc.default;
+      inputHtml = '<div class="calc-jc-scaling">' +
+        '<span class="calc-jc-sc-label">' + sc.label + '</span>' +
+        '<input type="number" class="calc-jc-sc-input" value="' + val + '" step="' + (sc.step || 1) + '" data-idx="' + i + '" onchange="calculator.onJokerValChange(this)" oninput="calculator.onJokerValChange(this)">' +
+        '<span class="calc-jc-sc-desc">' + sc.desc + '</span>' +
+      '</div>';
+    }
+    return '<div class="calc-joker-chip' + (sc ? ' calc-jc-scaling-chip' : '') + '" title="' + j.name + '">' +
+      (j.image ? '<img class="calc-jc-img" src="' + j.image + '" loading="lazy">' : '') +
+      inputHtml +
+      '<button class="calc-jc-remove" onclick="calculator.removeJoker(' + i + ')">\u2715</button>' +
+    '</div>';
+  }).join('');
+}
+
+function onJokerValChange(input) {
+  const idx = parseInt(input.dataset.idx);
+  const val = parseFloat(input.value) || 0;
+  state.jokers[idx]._customVal = val;
+  recalc();
 }
 
 // 牌型等级
@@ -644,6 +702,7 @@ return {
   init, recalc, toggleCard, removeCard, clearAll,
   searchJoker, addJoker, removeJoker, toggleJokerPanel,
   toggleHeldMode, removeHeldCard, onHeldModChange,
+  onJokerValChange,
   changeLevel, onModChange,
   renderSelectedHand, renderJokerSlots,
   get state() { return state; }

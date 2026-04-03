@@ -3884,6 +3884,12 @@ body {
 .calc-jc-name { font-size: 0.82rem; color: var(--text-primary); white-space: nowrap; }
 .calc-jc-remove { background: none; border: none; color: var(--text-muted); cursor: pointer; font-size: 0.8rem; margin-left: 4px; }
 .calc-jc-remove:hover { color: var(--accent-red); }
+.calc-jc-scaling-chip { flex-direction: column; padding: 8px; min-width: 120px; }
+.calc-jc-scaling { display: flex; align-items: center; gap: 4px; margin-top: 4px; }
+.calc-jc-sc-label { font-size: 0.7rem; color: var(--accent-gold); font-weight: bold; white-space: nowrap; }
+.calc-jc-sc-input { width: 56px; background: var(--bg-primary); color: var(--text-primary); border: 1px solid var(--border-color); border-radius: 4px; padding: 2px 4px; font-size: 0.8rem; text-align: center; }
+.calc-jc-sc-input:focus { border-color: var(--accent-gold); outline: none; }
+.calc-jc-sc-desc { font-size: 0.6rem; color: var(--text-muted); white-space: nowrap; }
 .calc-joker-search-wrap { position: relative; }
 .calc-joker-toggle { margin-top: 8px; }
 .calc-joker-panel { margin-top: 10px; }
