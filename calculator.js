@@ -344,6 +344,7 @@ function init(jokerData) {
   renderDeck();
   renderJokerPicker();
   renderHandLevels();
+  loadFromUrl();
   recalc();
 }
 
@@ -795,20 +796,111 @@ function recalc() {
       }).join('');
     }
   }
+  // 显示/隐藏分享按钮
+  const shareEl = document.getElementById('calc-share-actions');
+  if (shareEl) shareEl.style.display = result.total > 0 ? 'flex' : 'none';
+  // 更新 URL
+  saveToUrl();
 }
 
-// 格式化大数
-function formatNum(n) {
-  if (n >= 1e8) return (n/1e8).toFixed(1) + '\u4ebf';
-  if (n >= 1e4) return (n/1e4).toFixed(1) + '\u4e07';
-  return n.toString();
+// 分享文案
+function copyShareText() {
+  const result = calculate();
+  if (result.total === 0) return;
+  const cards = state.selectedCards.map(c => SUIT_SYMBOLS[c.suit] + c.rank).join(' ');
+  const jokers = state.jokers.map(j => j.name).join(', ');
+  let text = '🃏 小丑牌计算器\n';
+  text += '牌型: ' + result.handName + '\n';
+  text += '手牌: ' + cards + '\n';
+  if (jokers) text += 'Joker: ' + jokers + '\n';
+  text += '筹码 ' + result.chips + ' \u00d7 倍率 ' + result.mult + ' = ' + formatNum(result.total) + '\n';
+  text += '\n\U0001f517 https://xiaowanmichelle-wq.github.io/balatro-guide/?tab=calculator';
+  navigator.clipboard.writeText(text).then(() => {
+    const toast = document.getElementById('calc-share-toast');
+    if (toast) { toast.textContent = '\u2705 已复制！'; setTimeout(() => toast.textContent = '', 2000); }
+  }).catch(() => {
+    const ta = document.createElement('textarea'); ta.value = text;
+    document.body.appendChild(ta); ta.select(); document.execCommand('copy');
+    document.body.removeChild(ta);
+    const toast = document.getElementById('calc-share-toast');
+    if (toast) { toast.textContent = '\u2705 已复制！'; setTimeout(() => toast.textContent = '', 2000); }
+  });
+}
+
+// URL 参数保存/读取
+function saveToUrl() {
+  if (state.selectedCards.length === 0 && state.jokers.length === 0) return;
+  try {
+    const data = {
+      c: state.selectedCards.map(c => c.suit[0] + c.rank + (c.enhancement !== 'none' ? ':' + c.enhancement : '') + (c.edition !== 'none' ? '.' + c.edition : '') + (c.seal !== 'none' ? '!' + c.seal : '')),
+      j: state.jokers.map(j => j.id + (j._customVal !== undefined ? ':' + j._customVal : '')),
+      h: state.handCards.map(c => c.suit[0] + c.rank + (c.enhancement !== 'none' ? ':' + c.enhancement : ''))
+    };
+    const param = btoa(JSON.stringify(data));
+    const url = new URL(window.location);
+    url.searchParams.set('calc', param);
+    url.searchParams.set('tab', 'calculator');
+    history.replaceState(null, '', url);
+  } catch(e) {}
+}
+
+function loadFromUrl() {
+  try {
+    const url = new URL(window.location);
+    const param = url.searchParams.get('calc');
+    if (!param) return;
+    const data = JSON.parse(atob(param));
+    if (data.c && Array.isArray(data.c)) {
+      data.c.forEach(s => {
+        const suitMap = {s:'spades',h:'hearts',c:'clubs',d:'diamonds'};
+        const suit = suitMap[s[0]];
+        let rest = s.slice(1);
+        let enhancement = 'none', edition = 'none', seal = 'none';
+        if (rest.includes('!')) { const p = rest.split('!'); rest = p[0]; seal = p[1]; }
+        if (rest.includes('.')) { const p = rest.split('.'); rest = p[0]; edition = p[1]; }
+        if (rest.includes(':')) { const p = rest.split(':'); rest = p[0]; enhancement = p[1]; }
+        if (suit) state.selectedCards.push({suit, rank: rest, enhancement, edition, seal});
+      });
+    }
+    if (data.j && Array.isArray(data.j)) {
+      data.j.forEach(s => {
+        const parts = s.split(':');
+        const j = allJokerData.find(x => x.id === parts[0]);
+        if (j) {
+          const copy = Object.assign({}, j);
+          if (parts[1]) copy._customVal = parseFloat(parts[1]);
+          state.jokers.push(copy);
+        }
+      });
+    }
+    if (data.h && Array.isArray(data.h)) {
+      data.h.forEach(s => {
+        const suitMap = {s:'spades',h:'hearts',c:'clubs',d:'diamonds'};
+        const suit = suitMap[s[0]];
+        let rest = s.slice(1);
+        let enhancement = 'none';
+        if (rest.includes(':')) { const p = rest.split(':'); rest = p[0]; enhancement = p[1]; }
+        if (suit) state.handCards.push({suit, rank: rest, enhancement, edition:'none', seal:'none'});
+      });
+    }
+    // 高亮选中的牌
+    document.querySelectorAll('.calc-card-btn').forEach(btn => {
+      const s = btn.dataset.suit, r = btn.dataset.rank;
+      if (state.selectedCards.find(c => c.suit === s && c.rank === r)) btn.classList.add('selected');
+      if (state.handCards.find(c => c.suit === s && c.rank === r)) btn.classList.add('held');
+    });
+    renderSelectedHand();
+    renderHeldCards();
+    renderJokerSlots();
+    recalc();
+  } catch(e) {}
 }
 
 return {
   init, recalc, toggleCard, removeCard, clearAll,
   searchJoker, addJoker, removeJoker, toggleJokerPanel,
   toggleHeldMode, removeHeldCard, onHeldModChange,
-  onJokerValChange,
+  onJokerValChange, copyShareText,
   changeLevel, onModChange,
   renderSelectedHand, renderJokerSlots,
   get state() { return state; }

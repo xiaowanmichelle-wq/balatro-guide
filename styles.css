@@ -3932,6 +3932,8 @@ body {
 
 /* 计分明细 */
 .calc-breakdown { border-top: 1px solid var(--border-color); padding-top: 12px; }
+.calc-share-actions { display: flex; align-items: center; gap: 12px; margin-top: 12px; padding-top: 10px; border-top: 1px solid var(--border-color); }
+.calc-share-toast { font-size: 0.8rem; color: var(--accent-green); }
 .calc-bd-row { font-size: 0.8rem; padding: 3px 0; color: var(--text-secondary); }
 .calc-bd-base { color: var(--accent-gold); font-weight: bold; }
 .calc-bd-joker { color: var(--accent-orange); }
