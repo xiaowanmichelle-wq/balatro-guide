@@ -424,7 +424,6 @@ function searchJoker(query) {
 }
 
 function addJoker(id) {
-  if (state.jokers.length >= 5) return;
   const j = allJokerData.find(c => c.id === id);
   if (!j) return;
   if (state.jokers.find(x => x.id === id)) {
