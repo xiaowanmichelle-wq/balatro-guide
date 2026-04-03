@@ -452,9 +452,8 @@ function renderJokerSlots() {
     return;
   }
   area.innerHTML = state.jokers.map((j, i) =>
-    '<div class="calc-joker-chip">' +
+    '<div class="calc-joker-chip" title="'+j.name+'">' +
       (j.image ? '<img class="calc-jc-img" src="'+j.image+'" loading="lazy">' : '') +
-      '<span class="calc-jc-name">'+j.name+'</span>' +
       '<button class="calc-jc-remove" onclick="calculator.removeJoker('+i+')">\u2715</button>' +
     '</div>'
   ).join('');
