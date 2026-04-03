@@ -200,6 +200,51 @@ body {
     font-weight: bold;
 }
 
+/* Tab NEW 标记 */
+.tab-new { position: relative; }
+.tab-new-badge {
+    position: absolute;
+    top: -6px; right: -6px;
+    background: #e74c3c;
+    color: #fff;
+    font-size: 0.55rem;
+    font-weight: bold;
+    padding: 1px 5px;
+    border-radius: 8px;
+    line-height: 1.3;
+    animation: tab-badge-pulse 2s infinite;
+}
+@keyframes tab-badge-pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.15); }
+}
+.tab-new-tooltip {
+    display: none;
+    position: absolute;
+    bottom: calc(100% + 8px);
+    left: 50%;
+    transform: translateX(-50%);
+    background: #1a1a2e;
+    color: var(--accent-gold);
+    font-size: 0.78rem;
+    padding: 8px 14px;
+    border-radius: 10px;
+    border: 1px solid var(--accent-gold);
+    white-space: nowrap;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.4);
+    z-index: 100;
+}
+.tab-new-tooltip::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 6px solid transparent;
+    border-top-color: var(--accent-gold);
+}
+.tab-new:hover .tab-new-tooltip { display: block; }
+
 /* Main Layout */
 .main {
     max-width: 1400px;
