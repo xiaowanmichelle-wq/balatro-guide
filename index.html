@@ -666,8 +666,13 @@
                         </label>
                         <label class="calc-toggle-label">
                             <input type="checkbox" id="calc-observatory-toggle" onchange="calculator.toggleObservatory(this.checked)">
-                            <span>🔭 天文台(每张行星牌×1.5)</span>
+                            <span>🔭 天文台</span>
                         </label>
+                    </div>
+                    <!-- 天文台行星牌选择面板 -->
+                    <div class="calc-observatory-panel" id="calc-observatory-panel" style="display:none;">
+                        <p class="calc-obs-hint">选择手中持有的行星牌（每张×1.5倍率）：</p>
+                        <div class="calc-obs-grid" id="calc-obs-grid"></div>
                     </div>
                 </div>
 

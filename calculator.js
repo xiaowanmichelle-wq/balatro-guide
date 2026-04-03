@@ -64,7 +64,8 @@ let state = {
   allJokerData: [],
   breakdown: [],
   plasma: false,
-  observatory: false
+  observatory: false,
+  observatoryPlanets: []  // [{handId, count}] 手中持有的行星牌
 };
 HAND_TYPES.forEach(h => state.handLevels[h.id] = 1);
 
@@ -230,18 +231,19 @@ function calculate() {
     finalMult = avg;
   }
 
-  // 天文台凭证：消耗品中的行星牌×1.5（简化为按已使用行星数）
-  // 这里简化处理：如果开启天文台，给每个行星牌等级>1的牌型额外×1.5
-  if (state.observatory) {
-    let obsCount = 0;
-    Object.entries(state.handLevels).forEach(([hid, lv]) => {
-      if (lv > 1) obsCount += (lv - 1);
-    });
-    if (obsCount > 0) {
-      const obsX = Math.pow(1.5, Math.min(obsCount, 5));
+  // 天文台凭证：手中每张行星牌给予×1.5倍率
+  if (state.observatory && state.observatoryPlanets.length > 0) {
+    let totalPlanetCards = 0;
+    state.observatoryPlanets.forEach(function(p) { totalPlanetCards += (p.count || 0); });
+    if (totalPlanetCards > 0) {
+      var obsX = Math.pow(1.5, totalPlanetCards);
       finalMult *= obsX;
       finalMult = Math.round(finalMult * 100) / 100;
-      breakdown.push({label: '🔭 天文台 \u00d7' + obsX.toFixed(2) + ' (' + obsCount + '级行星牌加成)', xmult: obsX, type:'xmult'});
+      var planetNames = state.observatoryPlanets.filter(function(p) { return p.count > 0; }).map(function(p) {
+        var ht = HAND_TYPES.find(function(h) { return h.id === p.handId; });
+        return (ht ? ht.name : p.handId) + '\u00d7' + p.count;
+      }).join(', ');
+      breakdown.push({label: '🔭 天文台 \u00d7' + obsX.toFixed(2) + ' (' + planetNames + ')', xmult: obsX, type:'xmult'});
     }
   }
 
@@ -930,14 +932,57 @@ function loadFromUrl() {
 }
 
 function togglePlasma(checked) { state.plasma = checked; recalc(); }
-function toggleObservatory(checked) { state.observatory = checked; recalc(); }
+
+function toggleObservatory(checked) {
+  state.observatory = checked;
+  var panel = document.getElementById('calc-observatory-panel');
+  if (panel) panel.style.display = checked ? 'block' : 'none';
+  if (checked) renderObservatoryPanel();
+  recalc();
+}
+
+// 行星牌对照表
+var PLANET_NAMES = {
+  high_card: '冥王星', one_pair: '水星', two_pair: '天王星',
+  three_of_a_kind: '金星', straight: '土星', flush: '木星',
+  full_house: '地球', four_of_a_kind: '火星', straight_flush: '海王星'
+};
+
+function renderObservatoryPanel() {
+  var grid = document.getElementById('calc-obs-grid');
+  if (!grid) return;
+  grid.innerHTML = HAND_TYPES.slice(0, 9).map(function(h) {
+    var existing = state.observatoryPlanets.find(function(p) { return p.handId === h.id; });
+    var count = existing ? existing.count : 0;
+    var planetName = PLANET_NAMES[h.id] || '';
+    return '<div class="calc-obs-item">' +
+      '<span class="calc-obs-name">' + planetName + '<br><small>' + h.name + '</small></span>' +
+      '<button class="calc-hl-btn" onclick="calculator.changeObsPlanet(\'' + h.id + '\',-1)">-</button>' +
+      '<span class="calc-obs-count" id="calc-obs-' + h.id + '">' + count + '</span>' +
+      '<button class="calc-hl-btn" onclick="calculator.changeObsPlanet(\'' + h.id + '\',1)">+</button>' +
+    '</div>';
+  }).join('');
+}
+
+function changeObsPlanet(handId, delta) {
+  var existing = state.observatoryPlanets.find(function(p) { return p.handId === handId; });
+  if (existing) {
+    existing.count = Math.max(0, existing.count + delta);
+  } else if (delta > 0) {
+    state.observatoryPlanets.push({handId: handId, count: 1});
+  }
+  var el = document.getElementById('calc-obs-' + handId);
+  var cur = state.observatoryPlanets.find(function(p) { return p.handId === handId; });
+  if (el && cur) el.textContent = cur.count;
+  recalc();
+}
 
 return {
   init, recalc, toggleCard, removeCard, clearAll,
   searchJoker, addJoker, removeJoker, toggleJokerPanel,
   toggleHeldMode, removeHeldCard, onHeldModChange,
   onJokerValChange, copyShareText,
-  togglePlasma, toggleObservatory,
+  togglePlasma, toggleObservatory, changeObsPlanet,
   changeLevel, onModChange,
   renderSelectedHand, renderJokerSlots,
   get state() { return state; }
