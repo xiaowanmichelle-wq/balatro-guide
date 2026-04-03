@@ -7,34 +7,34 @@ const calculator = (() => {
 const SUITS = ['spades','hearts','clubs','diamonds'];
 const SUIT_SYMBOLS = {spades:'\u2660',hearts:'\u2665',clubs:'\u2663',diamonds:'\u2666'};
 const SUIT_NAMES = {spades:'黑桃',hearts:'红桃',clubs:'梅花',diamonds:'方块'};
-const SUIT_COLORS = {spades:'#1a1a2e',hearts:'#e74c3c',clubs:'#1a1a2e',diamonds:'#e74c3c'};
+const SUIT_COLORS = {spades:'#e8e8f0',hearts:'#e74c3c',clubs:'#e8e8f0',diamonds:'#e74c3c'};
 const RANKS = ['A','2','3','4','5','6','7','8','9','10','J','Q','K'];
 const RANK_VALUES = {A:11,2:2,3:3,4:4,5:5,6:6,7:7,8:8,9:9,10:10,J:10,Q:10,K:10};
 const RANK_ORDER = {A:14,2:2,3:3,4:4,5:5,6:6,7:7,8:8,9:9,10:10,J:11,Q:12,K:13};
 
 const ENHANCEMENTS = [
-  {id:'none',name:'无',chips:0,mult:0,xmult:0},
-  {id:'bonus',name:'奖励',chips:30,mult:0,xmult:0},
-  {id:'mult',name:'倍数',chips:0,mult:4,xmult:0},
-  {id:'wild',name:'万用',chips:0,mult:0,xmult:0,wild:true},
-  {id:'glass',name:'玻璃',chips:0,mult:0,xmult:2},
-  {id:'steel',name:'钢铁',chips:0,mult:0,xmult:1.5},
-  {id:'stone',name:'石头',chips:50,mult:0,xmult:0,noRank:true},
-  {id:'gold',name:'黄金',chips:0,mult:0,xmult:0,gold:true},
-  {id:'lucky',name:'幸运',chips:0,mult:0,xmult:0,lucky:true}
+  {id:'none',name:'无增强',chips:0,mult:0,xmult:0},
+  {id:'bonus',name:'奖励 +30筹码',chips:30,mult:0,xmult:0},
+  {id:'mult',name:'倍数 +4倍率',chips:0,mult:4,xmult:0},
+  {id:'wild',name:'万用 任意花色',chips:0,mult:0,xmult:0,wild:true},
+  {id:'glass',name:'玻璃 \u00d72倍率',chips:0,mult:0,xmult:2},
+  {id:'steel',name:'钢铁 \u00d71.5倍率',chips:0,mult:0,xmult:1.5},
+  {id:'stone',name:'石头 +50筹码',chips:50,mult:0,xmult:0,noRank:true},
+  {id:'gold',name:'黄金 +$3',chips:0,mult:0,xmult:0,gold:true},
+  {id:'lucky',name:'幸运 概率触发',chips:0,mult:0,xmult:0,lucky:true}
 ];
 const EDITIONS = [
-  {id:'none',name:'无',chips:0,mult:0,xmult:0},
-  {id:'foil',name:'箔',chips:50,mult:0,xmult:0},
-  {id:'holo',name:'全息',chips:0,mult:10,xmult:0},
-  {id:'polychrome',name:'多色',chips:0,mult:0,xmult:1.5}
+  {id:'none',name:'无版本',chips:0,mult:0,xmult:0},
+  {id:'foil',name:'箔 +50筹码',chips:50,mult:0,xmult:0},
+  {id:'holo',name:'全息 +10倍率',chips:0,mult:10,xmult:0},
+  {id:'polychrome',name:'多色 \u00d71.5倍率',chips:0,mult:0,xmult:1.5}
 ];
 const SEALS = [
-  {id:'none',name:'无'},
-  {id:'red',name:'红印',retrigger:1},
-  {id:'blue',name:'蓝印'},
-  {id:'gold',name:'金印'},
-  {id:'purple',name:'紫印'}
+  {id:'none',name:'无封印'},
+  {id:'red',name:'红印 重触发1次',retrigger:1},
+  {id:'blue',name:'蓝印 行星牌'},
+  {id:'gold',name:'金印 +$3'},
+  {id:'purple',name:'紫印 塔罗牌'}
 ];
 
 // 牌型定义：基础值 + 每级增长
@@ -384,35 +384,60 @@ function clearAll() {
 }
 
 // Joker 选择器
-function renderJokerPicker() {
+let jokerPanelOpen = false;
+
+function toggleJokerPanel() {
+  jokerPanelOpen = !jokerPanelOpen;
+  const panel = document.getElementById('calc-joker-panel');
+  const btn = document.getElementById('calc-joker-toggle');
+  if (panel) panel.style.display = jokerPanelOpen ? 'block' : 'none';
+  if (btn) btn.textContent = jokerPanelOpen ? '收起 Joker 列表' : '+ 添加 Joker';
+  if (jokerPanelOpen) showJokerGrid('');
+}
+
+function renderJokerPicker() {}
+
+function showJokerGrid(query) {
   const container = document.getElementById('calc-joker-search-results');
   if (!container) return;
-  // 初始不渲染，等搜索
+  let list = allJokerData;
+  if (query && query.length > 0) {
+    const q = query.toLowerCase();
+    list = allJokerData.filter(j => j.name.toLowerCase().includes(q) || j.id.includes(q) || (j.description||'').toLowerCase().includes(q));
+  }
+  const shown = list.slice(0, 40);
+  if (shown.length === 0) {
+    container.innerHTML = '<p class="calc-empty">没有匹配的 Joker</p>';
+    return;
+  }
+  container.innerHTML = shown.map(j => {
+    const inDeck = state.jokers.find(x => x.id === j.id);
+    return '<div class="calc-joker-grid-item' + (inDeck ? ' calc-jgi-selected' : '') + '" onclick="calculator.addJoker(\'' + j.id + '\')" title="' + (j.description||'').replace(/"/g,'&quot;') + '">' +
+      (j.image ? '<img class="calc-jgi-img" src="' + j.image + '" loading="lazy">' : '<div class="calc-jgi-placeholder">🃏</div>') +
+      '<span class="calc-jgi-name">' + j.name + '</span>' +
+    '</div>';
+  }).join('');
 }
 
 function searchJoker(query) {
-  const container = document.getElementById('calc-joker-search-results');
-  if (!container) return;
-  if (!query || query.length < 1) { container.innerHTML = ''; return; }
-  const q = query.toLowerCase();
-  const matches = allJokerData.filter(j => j.name.toLowerCase().includes(q) || j.id.includes(q) || (j.description||'').includes(q)).slice(0, 20);
-  container.innerHTML = matches.map(j =>
-    '<div class="calc-joker-result" onclick="calculator.addJoker(\''+j.id+'\')">' +
-      (j.image ? '<img class="calc-jr-img" src="'+j.image+'" loading="lazy">' : '') +
-      '<div class="calc-jr-info"><span class="calc-jr-name">'+j.name+'</span><span class="calc-jr-desc">'+((j.description||'').slice(0,40))+'</span></div>' +
-    '</div>'
-  ).join('');
+  showJokerGrid(query);
 }
 
 function addJoker(id) {
   if (state.jokers.length >= 5) return;
   const j = allJokerData.find(c => c.id === id);
-  if (!j || state.jokers.find(x => x.id === id)) return;
-  state.jokers.push(j);
+  if (!j) return;
+  if (state.jokers.find(x => x.id === id)) {
+    // 已有则移除
+    state.jokers = state.jokers.filter(x => x.id !== id);
+  } else {
+    state.jokers.push(j);
+  }
   renderJokerSlots();
   recalc();
-  document.getElementById('calc-joker-search').value = '';
-  document.getElementById('calc-joker-search-results').innerHTML = '';
+  // 刷新网格选中状态
+  const searchInput = document.getElementById('calc-joker-search');
+  if (searchInput) showJokerGrid(searchInput.value);
 }
 
 function removeJoker(idx) {
@@ -504,7 +529,7 @@ function formatNum(n) {
 
 return {
   init, recalc, toggleCard, removeCard, clearAll,
-  searchJoker, addJoker, removeJoker,
+  searchJoker, addJoker, removeJoker, toggleJokerPanel,
   changeLevel, onModChange,
   renderSelectedHand, renderJokerSlots,
   get state() { return state; }
