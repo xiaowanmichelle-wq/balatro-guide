@@ -658,7 +658,17 @@
                 <div class="calc-header">
                     <h2>🔢 Balatro 分数计算器</h2>
                     <p class="description">精确模拟游戏计分逻辑，选择手牌和 Joker 实时计算得分</p>
-                    <button class="btn btn-secondary btn-small" onclick="calculator.clearAll()">🗑️ 全部清空</button>
+                    <div class="calc-header-options">
+                        <button class="btn btn-secondary btn-small" onclick="calculator.clearAll()">🗑️ 全部清空</button>
+                        <label class="calc-toggle-label">
+                            <input type="checkbox" id="calc-plasma-toggle" onchange="calculator.togglePlasma(this.checked)">
+                            <span>🟣 等离子牌组</span>
+                        </label>
+                        <label class="calc-toggle-label">
+                            <input type="checkbox" id="calc-observatory-toggle" onchange="calculator.toggleObservatory(this.checked)">
+                            <span>🔭 天文台(每张行星牌×1.5)</span>
+                        </label>
+                    </div>
                 </div>
 
                 <!-- Joker 栏 -->

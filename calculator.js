@@ -57,12 +57,14 @@ HAND_TYPES.forEach(h => HAND_MAP[h.id] = h);
 
 // ============ 状态 ============
 let state = {
-  selectedCards: [],   // [{suit,rank,enhancement,edition,seal}]
-  jokers: [],          // [jokerDataObj]
-  handLevels: {},      // {hand_id: level}
-  handCards: [],       // 留在手牌中的卡牌
+  selectedCards: [],
+  jokers: [],
+  handLevels: {},
+  handCards: [],
   allJokerData: [],
-  breakdown: []
+  breakdown: [],
+  plasma: false,
+  observatory: false
 };
 HAND_TYPES.forEach(h => state.handLevels[h.id] = 1);
 
@@ -219,6 +221,30 @@ function calculate() {
     breakdown.push({label:x.label, xmult:x.val, type:'xmult'});
   });
   finalMult = Math.round(finalMult * 100) / 100;
+
+  // 等离子牌组：筹码和倍率取平均
+  if (state.plasma) {
+    const avg = Math.round((chips + finalMult) / 2);
+    breakdown.push({label: '🟣 等离子牌组：(' + chips + '+' + finalMult + ')/2 = ' + avg, type:'plasma'});
+    chips = avg;
+    finalMult = avg;
+  }
+
+  // 天文台凭证：消耗品中的行星牌×1.5（简化为按已使用行星数）
+  // 这里简化处理：如果开启天文台，给每个行星牌等级>1的牌型额外×1.5
+  if (state.observatory) {
+    let obsCount = 0;
+    Object.entries(state.handLevels).forEach(([hid, lv]) => {
+      if (lv > 1) obsCount += (lv - 1);
+    });
+    if (obsCount > 0) {
+      const obsX = Math.pow(1.5, Math.min(obsCount, 5));
+      finalMult *= obsX;
+      finalMult = Math.round(finalMult * 100) / 100;
+      breakdown.push({label: '🔭 天文台 \u00d7' + obsX.toFixed(2) + ' (' + obsCount + '级行星牌加成)', xmult: obsX, type:'xmult'});
+    }
+  }
+
   const total = Math.round(chips * finalMult);
   state.breakdown = breakdown;
   return {chips, mult: finalMult, total, handName: type.name + ' Lv.' + lv, breakdown};
@@ -896,11 +922,15 @@ function loadFromUrl() {
   } catch(e) {}
 }
 
+function togglePlasma(checked) { state.plasma = checked; recalc(); }
+function toggleObservatory(checked) { state.observatory = checked; recalc(); }
+
 return {
   init, recalc, toggleCard, removeCard, clearAll,
   searchJoker, addJoker, removeJoker, toggleJokerPanel,
   toggleHeldMode, removeHeldCard, onHeldModChange,
   onJokerValChange, copyShareText,
+  togglePlasma, toggleObservatory,
   changeLevel, onModChange,
   renderSelectedHand, renderJokerSlots,
   get state() { return state; }
