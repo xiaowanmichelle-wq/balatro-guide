@@ -3841,3 +3841,94 @@ body {
         padding: 12px 20px;
     }
 }
+
+/* ============ 计算器 ============ */
+.calc-layout { max-width: 960px; margin: 0 auto; }
+.calc-header { text-align: center; margin-bottom: 20px; }
+.calc-header h2 { font-size: 1.6rem; color: var(--accent-gold); margin-bottom: 6px; }
+.calc-header .description { color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 12px; }
+.calc-section { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px; padding: 16px 20px; margin-bottom: 16px; }
+.calc-section-title { font-size: 1rem; color: var(--accent-gold); margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+.calc-section-hint { font-size: 0.75rem; color: var(--text-muted); font-weight: normal; }
+.calc-empty { color: var(--text-muted); font-size: 0.85rem; text-align: center; padding: 12px 0; }
+
+/* 52张牌选择器 */
+.calc-deck-grid { display: grid; grid-template-columns: repeat(13, 1fr); gap: 4px; }
+.calc-card-btn { background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 6px; padding: 6px 2px; cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 1px; transition: all 0.15s; font-size: 0.7rem; }
+.calc-card-btn:hover { border-color: var(--accent-gold); background: var(--bg-card-hover); }
+.calc-card-btn.selected { background: rgba(255,215,0,0.15); border-color: var(--accent-gold); box-shadow: 0 0 8px rgba(255,215,0,0.3); }
+.calc-card-rank { font-weight: bold; font-size: 0.8rem; color: var(--text-primary); }
+.calc-card-suit { font-size: 0.9rem; }
+
+/* 已选手牌 */
+#calc-hand-area { display: flex; gap: 10px; flex-wrap: wrap; }
+.calc-hand-card { background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 10px; padding: 10px; display: flex; flex-direction: column; align-items: center; gap: 6px; position: relative; min-width: 100px; }
+.calc-hc-face { display: flex; align-items: center; gap: 4px; font-size: 1.4rem; font-weight: bold; }
+.calc-hc-rank { font-size: 1.4rem; }
+.calc-hc-suit { font-size: 1.6rem; }
+.calc-hc-mods { display: flex; flex-direction: column; gap: 4px; width: 100%; }
+.calc-mod-sel { background: var(--bg-primary); color: var(--text-primary); border: 1px solid var(--border-color); border-radius: 4px; padding: 2px 4px; font-size: 0.7rem; width: 100%; }
+.calc-hc-remove { position: absolute; top: 2px; right: 4px; background: none; border: none; color: var(--text-muted); cursor: pointer; font-size: 0.8rem; }
+.calc-hc-remove:hover { color: var(--accent-red); }
+
+/* Joker 栏 */
+.calc-joker-bar { display: flex; flex-direction: column; gap: 10px; }
+#calc-joker-slots { display: flex; gap: 8px; flex-wrap: wrap; min-height: 40px; align-items: center; }
+.calc-joker-chip { background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 8px; padding: 6px 10px; display: flex; align-items: center; gap: 8px; }
+.calc-jc-img { width: 36px; height: 36px; border-radius: 4px; object-fit: contain; }
+.calc-jc-name { font-size: 0.82rem; color: var(--text-primary); white-space: nowrap; }
+.calc-jc-remove { background: none; border: none; color: var(--text-muted); cursor: pointer; font-size: 0.8rem; margin-left: 4px; }
+.calc-jc-remove:hover { color: var(--accent-red); }
+.calc-joker-search-wrap { position: relative; }
+.calc-search-input { width: 100%; background: var(--bg-primary); color: var(--text-primary); border: 1px solid var(--border-color); border-radius: 8px; padding: 8px 12px; font-size: 0.85rem; }
+.calc-joker-results { position: absolute; top: 100%; left: 0; right: 0; background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 0 0 8px 8px; max-height: 240px; overflow-y: auto; z-index: 100; }
+.calc-joker-result { display: flex; align-items: center; gap: 10px; padding: 8px 12px; cursor: pointer; border-bottom: 1px solid var(--border-color); }
+.calc-joker-result:hover { background: var(--bg-card-hover); }
+.calc-jr-img { width: 40px; height: 40px; border-radius: 4px; object-fit: contain; }
+.calc-jr-info { display: flex; flex-direction: column; }
+.calc-jr-name { font-size: 0.85rem; color: var(--text-primary); font-weight: bold; }
+.calc-jr-desc { font-size: 0.72rem; color: var(--text-muted); }
+
+/* 计分结果 */
+.calc-result-section { background: linear-gradient(135deg, var(--bg-card) 0%, #1e1e30 100%); border-color: var(--accent-gold); }
+.calc-result-header { text-align: center; margin-bottom: 12px; }
+.calc-result-label { font-size: 1.1rem; color: var(--accent-gold); font-weight: bold; }
+.calc-result-formula { display: flex; align-items: center; justify-content: center; gap: 16px; margin-bottom: 16px; }
+.calc-result-block { display: flex; flex-direction: column; align-items: center; gap: 2px; }
+.calc-result-num { font-size: 2rem; font-weight: bold; line-height: 1; }
+.calc-result-tag { font-size: 0.7rem; color: var(--text-muted); text-transform: uppercase; }
+.chips-block .calc-result-num { color: #3498db; }
+.mult-block .calc-result-num { color: #e74c3c; }
+.total-block .calc-result-num { color: var(--accent-gold); font-size: 2.4rem; }
+.calc-result-op { font-size: 1.4rem; color: var(--text-muted); margin-top: -12px; }
+
+/* 计分明细 */
+.calc-breakdown { border-top: 1px solid var(--border-color); padding-top: 12px; }
+.calc-bd-row { font-size: 0.8rem; padding: 3px 0; color: var(--text-secondary); }
+.calc-bd-base { color: var(--accent-gold); font-weight: bold; }
+.calc-bd-joker { color: var(--accent-orange); }
+.calc-bd-xmult { color: #f39c12; font-weight: bold; }
+.bd-chips { color: #3498db; font-weight: bold; }
+.bd-mult { color: #e74c3c; font-weight: bold; }
+.bd-xmult { color: #f39c12; font-weight: bold; }
+
+/* 牌型等级 */
+.calc-hand-levels { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+.calc-hl-item { display: flex; align-items: center; gap: 6px; background: var(--bg-secondary); border-radius: 8px; padding: 6px 10px; }
+.calc-hl-name { font-size: 0.8rem; color: var(--text-primary); flex: 1; }
+.calc-hl-btn { background: var(--bg-primary); border: 1px solid var(--border-color); color: var(--text-primary); width: 24px; height: 24px; border-radius: 4px; cursor: pointer; font-size: 0.85rem; display: flex; align-items: center; justify-content: center; }
+.calc-hl-btn:hover { border-color: var(--accent-gold); }
+.calc-hl-val { font-size: 0.85rem; color: var(--accent-gold); font-weight: bold; min-width: 20px; text-align: center; }
+
+/* 计算器响应式 */
+@media (max-width: 700px) {
+    .calc-deck-grid { grid-template-columns: repeat(13, 1fr); gap: 2px; }
+    .calc-card-btn { padding: 4px 1px; font-size: 0.6rem; }
+    .calc-card-rank { font-size: 0.65rem; }
+    .calc-card-suit { font-size: 0.75rem; }
+    .calc-hand-levels { grid-template-columns: repeat(2, 1fr); }
+    #calc-hand-area { gap: 6px; }
+    .calc-hand-card { min-width: 85px; padding: 8px; }
+    .calc-result-num { font-size: 1.5rem; }
+    .total-block .calc-result-num { font-size: 1.8rem; }
+}

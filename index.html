@@ -214,6 +214,7 @@
         <button class="tab" data-tab="matcher" role="tab" aria-selected="false" aria-controls="matcher" data-i18n="ui.tabs.matcher">牌组匹配</button>
         <button class="tab" data-tab="guide" role="tab" aria-selected="false" aria-controls="guide" data-i18n="ui.tabs.guide">攻略指南</button>
         <button class="tab" data-tab="seeds" role="tab" aria-selected="false" aria-controls="seeds" data-i18n="ui.tabs.seeds">🌱 种子分享</button>
+        <button class="tab" data-tab="calculator" role="tab" aria-selected="false" aria-controls="calculator">🧮 计算器</button>
     </nav>
 
     <!-- 主内容区 -->
@@ -650,6 +651,78 @@
                 </div>
             </div>
         </section>
+
+        <!-- 计算器页面 -->
+        <section class="tab-content" id="calculator" role="tabpanel" aria-label="计算器">
+            <div class="calc-layout">
+                <div class="calc-header">
+                    <h2>🧮 Balatro 分数计算器</h2>
+                    <p class="description">精确模拟游戏计分逻辑，选择手牌和 Joker 实时计算得分</p>
+                    <button class="btn btn-secondary btn-small" onclick="calculator.clearAll()">🗑️ 全部清空</button>
+                </div>
+
+                <!-- Joker 栏 -->
+                <div class="calc-section">
+                    <h3 class="calc-section-title">🃏 Joker 栏 <span class="calc-section-hint">（最多5张，从左到右触发）</span></h3>
+                    <div class="calc-joker-bar">
+                        <div id="calc-joker-slots"><p class="calc-empty">搜索并添加 Joker（最多5张）</p></div>
+                        <div class="calc-joker-search-wrap">
+                            <input type="text" id="calc-joker-search" class="calc-search-input" placeholder="搜索 Joker 名称..." oninput="calculator.searchJoker(this.value)">
+                            <div id="calc-joker-search-results" class="calc-joker-results"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 已选手牌 -->
+                <div class="calc-section">
+                    <h3 class="calc-section-title">✋ 打出手牌 <span class="calc-section-hint">（最多5张，可设置增强/版本/封印）</span></h3>
+                    <div id="calc-hand-area"><p class="calc-empty">点击下方扑克牌选择手牌（最多5张）</p></div>
+                </div>
+
+                <!-- 计分结果 -->
+                <div class="calc-section calc-result-section">
+                    <div class="calc-result-header">
+                        <span class="calc-result-label" id="calc-result-hand">无</span>
+                    </div>
+                    <div class="calc-result-formula">
+                        <div class="calc-result-block chips-block">
+                            <span class="calc-result-num" id="calc-result-chips">0</span>
+                            <span class="calc-result-tag">筹码</span>
+                        </div>
+                        <span class="calc-result-op">&times;</span>
+                        <div class="calc-result-block mult-block">
+                            <span class="calc-result-num" id="calc-result-mult">0</span>
+                            <span class="calc-result-tag">倍率</span>
+                        </div>
+                        <span class="calc-result-op">=</span>
+                        <div class="calc-result-block total-block">
+                            <span class="calc-result-num" id="calc-result-total">0</span>
+                            <span class="calc-result-tag">总分</span>
+                        </div>
+                    </div>
+                    <!-- 计分明细 -->
+                    <div class="calc-breakdown" id="calc-breakdown">
+                        <p class="calc-empty">选择手牌后显示计分明细</p>
+                    </div>
+                </div>
+
+                <!-- 52张扑克牌选择器 -->
+                <div class="calc-section">
+                    <h3 class="calc-section-title">🎴 选择扑克牌</h3>
+                    <div class="calc-deck-grid" id="calc-deck-grid">
+                        <!-- JS 渲染 -->
+                    </div>
+                </div>
+
+                <!-- 牌型等级 -->
+                <div class="calc-section">
+                    <h3 class="calc-section-title">📊 牌型等级 <span class="calc-section-hint">（行星牌可升级）</span></h3>
+                    <div class="calc-hand-levels" id="calc-hand-levels">
+                        <!-- JS 渲染 -->
+                    </div>
+                </div>
+            </div>
+        </section>
     </main>
 
     <!-- 小程序导流 Banner -->
@@ -694,6 +767,7 @@
     <script src="data.js" defer></script>
     <script src="seeds.js" defer></script>
     <script src="app.js" defer></script>
+    <script src="calculator.js" defer></script>
     <script>
     // ============ 分享功能 ============
     const SHARE_URL = 'https://xiaowanmichelle-wq.github.io/balatro-guide/';
@@ -960,6 +1034,7 @@
             if (typeof app !== 'undefined' && app.allCards && app.allCards.length > 0) {
                 clearInterval(waitForApp);
                 customTierList.init(app.allCards);
+                if (typeof calculator !== 'undefined') calculator.init(app.allCards);
             }
         }, 100);
     });
