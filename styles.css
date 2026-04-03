@@ -1856,6 +1856,13 @@ body {
     color: var(--accent-purple) !important;
     font-weight: bold;
 }
+.rec-add-tag {
+    background: rgba(255, 215, 0, 0.15) !important;
+    color: var(--accent-gold) !important;
+    font-weight: bold;
+}
+.recommendation-card { cursor: pointer; transition: border-color 0.15s, box-shadow 0.15s; }
+.recommendation-card:hover { border-color: var(--accent-gold); box-shadow: 0 0 8px rgba(255,215,0,0.2); }
 
 /* ============ 构筑思路网格优化 ============ */
 #build-strategies {

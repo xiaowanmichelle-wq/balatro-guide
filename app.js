@@ -376,6 +376,22 @@ class BalatroApp {
     
     // ============ 牌组匹配功能 ============
     
+    // 推荐卡牌点击确认加入
+    confirmAddRec(cardId) {
+        const card = this.allCards.find(c => c.id === cardId);
+        if (!card) return;
+        if (this.selectedCards.find(c => c.id === cardId)) {
+            showShareToast('⚠️ ' + card.name + ' 已在卡组中', 1500);
+            return;
+        }
+        if (confirm('确定将「' + card.name + '」加入卡组吗？')) {
+            this.selectedCards.push(card);
+            this.renderSelectedCards();
+            this.updateRecommendations();
+            showShareToast('✅ 已加入 ' + card.name, 1500);
+        }
+    }
+    
     selectCard(cardId) {
         // 在匹配页面添加卡牌
         if (!this.selectedCards.find(c => c.id === cardId)) {
@@ -607,7 +623,7 @@ class BalatroApp {
                 ? `<img class="rec-thumb" src="${rec.card.image}" alt="${recCardName}" loading="lazy" onerror="this.style.display='none'">` 
                 : '';
             return `
-                <div class="recommendation-card ${rec.card.image ? 'has-thumb' : ''}">
+                <div class="recommendation-card ${rec.card.image ? 'has-thumb' : ''}" onclick="app.confirmAddRec('${rec.card.id}')" style="cursor:pointer;" title="点击加入卡组">
                     <div class="rec-header">
                         ${recThumbHTML}
                         <div class="rec-header-text">
@@ -622,6 +638,7 @@ class BalatroApp {
                         <span class="card-tag">${rarityLabel}</span>
                         <span class="card-tag">${typeLabel}</span>
                         ${buildTag}
+                        <span class="card-tag rec-add-tag">➕ 点击加入</span>
                     </div>
                 </div>
             `;
