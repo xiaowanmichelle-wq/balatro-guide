@@ -104,7 +104,7 @@
 ## 🔗 链接
 
 - **在线版**：https://xiaowanmichelle-wq.github.io/balatro-guide/
-- **微信小程序**：开发中，敬请期待
+- **微信小程序**：已上线，微信搜索「小丑牌助手」
 
 ## 🤝 贡献
 

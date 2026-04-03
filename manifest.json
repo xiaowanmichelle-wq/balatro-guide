@@ -1,0 +1,84 @@
+{
+  "name": "Balatro 新手助手 - 卡牌图鉴与攻略",
+  "short_name": "Balatro助手",
+  "description": "Balatro 新手玩家的一站式助手：卡牌图鉴、牌组匹配推荐、攻略指南、种子分享、小丑Tier List",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "theme_color": "#1a1a2e",
+  "background_color": "#0f0f23",
+  "lang": "zh-CN",
+  "dir": "ltr",
+  "categories": ["games", "entertainment", "utilities"],
+  "icons": [
+    {
+      "src": "icons/icon-16x16.png",
+      "sizes": "16x16",
+      "type": "image/png"
+    },
+    {
+      "src": "icons/icon-32x32.png",
+      "sizes": "32x32",
+      "type": "image/png"
+    },
+    {
+      "src": "icons/icon-48x48.png",
+      "sizes": "48x48",
+      "type": "image/png"
+    },
+    {
+      "src": "icons/icon-180x180.png",
+      "sizes": "180x180",
+      "type": "image/png",
+      "purpose": "apple touch icon"
+    },
+    {
+      "src": "icons/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "og-image.png",
+      "sizes": "1200x630",
+      "type": "image/png",
+      "form_factor": "wide",
+      "label": "Balatro 新手助手主页"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "卡牌图鉴",
+      "short_name": "图鉴",
+      "url": "./index.html#gallery",
+      "description": "浏览所有小丑、塔罗、行星和光谱牌"
+    },
+    {
+      "name": "牌组匹配",
+      "short_name": "匹配",
+      "url": "./index.html#matcher",
+      "description": "输入你的卡组获取推荐"
+    },
+    {
+      "name": "攻略指南",
+      "short_name": "攻略",
+      "url": "./index.html#guide",
+      "description": "新手攻略与小丑Tier List"
+    }
+  ]
+}

@@ -1336,6 +1336,58 @@ body {
     opacity: 0.8;
 }
 
+/* 小程序导流 Banner */
+.miniapp-banner {
+    background: linear-gradient(135deg, #1a1a2e 0%, #2d1b4e 50%, #1a1a2e 100%);
+    border-top: 1px solid var(--border-color);
+    border-bottom: 1px solid var(--border-color);
+    padding: 16px 20px;
+}
+
+.miniapp-banner-content {
+    max-width: 960px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 24px;
+}
+
+.miniapp-banner-text {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.miniapp-banner-title {
+    font-size: 1rem;
+    font-weight: bold;
+    color: var(--accent-gold);
+}
+
+.miniapp-banner-desc {
+    font-size: 0.82rem;
+    color: var(--text-secondary);
+}
+
+.miniapp-qrcode {
+    width: 180px;
+    height: auto;
+    border-radius: 8px;
+    flex-shrink: 0;
+}
+
+@media (max-width: 600px) {
+    .miniapp-banner-content {
+        flex-direction: column;
+        text-align: center;
+        gap: 12px;
+    }
+    .miniapp-qrcode {
+        width: 200px;
+    }
+}
+
 /* Share Bar */
 .share-bar {
     background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
@@ -1875,6 +1927,64 @@ body {
 .seeds-header .description {
     color: var(--text-secondary);
     font-size: 0.9rem;
+}
+
+/* 种子功能说明面板 */
+.seed-info-panel {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+.seed-info-section {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 16px 20px;
+}
+
+.seed-info-section h4 {
+    font-size: 0.9rem;
+    color: var(--accent-gold);
+    margin-bottom: 10px;
+}
+
+.seed-info-warning h4 {
+    color: var(--text-secondary);
+}
+
+.seed-info-section ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.seed-info-section li {
+    font-size: 0.82rem;
+    color: var(--text-secondary);
+    padding: 3px 0;
+    padding-left: 16px;
+    position: relative;
+    line-height: 1.5;
+}
+
+.seed-info-section li::before {
+    content: '•';
+    position: absolute;
+    left: 0;
+    color: var(--accent-gold);
+}
+
+.seed-info-warning li::before {
+    color: var(--text-muted);
+}
+
+@media (max-width: 700px) {
+    .seed-info-panel {
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
 }
 
 /* 投稿表单面板 */

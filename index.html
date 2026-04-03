@@ -44,7 +44,16 @@
     <!-- 其他 -->
     <meta name="theme-color" content="#1a1a2e">
     <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-title" content="Balatro助手">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+    <!-- PWA & Favicon -->
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <link rel="icon" type="image/png" sizes="32x32" href="icons/icon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="icons/icon-16x16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="icons/icon-180x180.png">
 
     <link rel="stylesheet" href="styles.css">
 
@@ -460,9 +469,9 @@
                     <!-- 创建我的 Tier List 入口 -->
                     <div class="ctl-entry">
                         <button class="ctl-entry-btn" onclick="customTierList.open()">
-                            🎨 创建我的 Tier List
+                            🎨 排排你心中的小丑牌
                         </button>
-                        <p class="ctl-entry-hint">拖拽或点击卡牌，生成你自己的小丑评级，还能一键分享！</p>
+                        <p class="ctl-entry-hint">从「夯」到「拉完了」，生成你的专属排名图</p>
                     </div>
                 </div>
 
@@ -529,6 +538,27 @@
                 <div class="seeds-header">
                     <h2>🌱 种子分享</h2>
                     <p class="description">分享你发现的好种子，帮助其他玩家获得精彩开局！</p>
+                </div>
+
+                <!-- 种子功能说明 -->
+                <div class="seed-info-panel">
+                    <div class="seed-info-section">
+                        <h4>🎯 种子能做什么</h4>
+                        <ul>
+                            <li>控制商店的顺序以及哪些小丑可以出现</li>
+                            <li>控制盲盒和 Boss 盲盒的顺序</li>
+                            <li>控制哪些强化包和星球卡牌出现以及何时出现</li>
+                            <li>允许不同的玩家重玩或分享相同的游戏风格</li>
+                        </ul>
+                    </div>
+                    <div class="seed-info-section seed-info-warning">
+                        <h4>⚠️ 种子做不到的事</h4>
+                        <ul>
+                            <li>无法为您解锁 Jokers、Planet 卡、Vouchers 或 Blinds</li>
+                            <li>无法强制游戏使用你尚未解锁的卡牌</li>
+                            <li>不会改变基本规则、计分方式或难度设置</li>
+                        </ul>
+                    </div>
                 </div>
 
                 <!-- 投稿表单 -->
@@ -621,6 +651,17 @@
             </div>
         </section>
     </main>
+
+    <!-- 小程序导流 Banner -->
+    <div class="miniapp-banner">
+        <div class="miniapp-banner-content">
+            <div class="miniapp-banner-text">
+                <span class="miniapp-banner-title">📱 微信小程序已上线</span>
+                <span class="miniapp-banner-desc">手机随时查图鉴、匹配牌组、分享种子，微信搜索「小丑牌助手」</span>
+            </div>
+            <img class="miniapp-qrcode" src="qrcode.jpg" alt="小丑牌助手小程序二维码" loading="lazy">
+        </div>
+    </div>
 
     <!-- 分享栏 -->
     <div class="share-bar">
@@ -922,6 +963,30 @@
             }
         }, 100);
     });
+    </script>
+
+    <!-- Service Worker Registration -->
+    <script>
+    if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+            navigator.serviceWorker.register('./sw.js')
+                .then((reg) => {
+                    console.log('[App] Service Worker registered, scope:', reg.scope);
+                    // Check for updates
+                    reg.addEventListener('updatefound', () => {
+                        const newWorker = reg.installing;
+                        newWorker.addEventListener('statechange', () => {
+                            if (newWorker.state === 'activated') {
+                                console.log('[App] New Service Worker activated');
+                            }
+                        });
+                    });
+                })
+                .catch((err) => {
+                    console.warn('[App] Service Worker registration failed:', err);
+                });
+        });
+    }
     </script>
 </body>
 </html>

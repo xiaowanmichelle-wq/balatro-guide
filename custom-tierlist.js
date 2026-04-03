@@ -474,11 +474,11 @@ class CustomTierList {
         ctx.fillStyle = '#ffd700';
         ctx.font = 'bold 28px PingFang SC, Microsoft YaHei, sans-serif';
         ctx.textAlign = 'center';
-        ctx.fillText('我的 Balatro 小丑 Tier List', canvasW / 2, padding + 36);
+        ctx.fillText('排排你心中的小丑牌', canvasW / 2, padding + 36);
 
         ctx.fillStyle = '#8888a0';
         ctx.font = '14px PingFang SC, Microsoft YaHei, sans-serif';
-        ctx.fillText(`共 ${assignedCount} 张卡牌 · 来自 Balatro 新手助手`, canvasW / 2, padding + 62);
+        ctx.fillText(`共 ${assignedCount} 张卡牌 · 来自小丑牌助手`, canvasW / 2, padding + 62);
 
         // 预加载所有图片
         const imageCache = {};
@@ -564,7 +564,7 @@ class CustomTierList {
         ctx.fillStyle = '#555566';
         ctx.font = '12px PingFang SC, sans-serif';
         ctx.textAlign = 'center';
-        ctx.fillText('🃏 Balatro 新手助手  ·  https://xiaowanmichelle-wq.github.io/balatro-guide/', canvasW / 2, canvasH - 16);
+        ctx.fillText('🃏 小丑牌助手  ·  https://xiaowanmichelle-wq.github.io/balatro-guide/', canvasW / 2, canvasH - 16);
 
         // 生成图片数据并展示分享结果页
         try {
@@ -642,15 +642,15 @@ class CustomTierList {
 
             if (navigator.canShare && navigator.canShare({ files: [file] })) {
                 await navigator.share({
-                    title: '我的 Balatro 小丑 Tier List',
-                    text: '来看看我的 Balatro 小丑排名！🃏 快来 https://xiaowanmichelle-wq.github.io/balatro-guide/ 创建你自己的 Tier List 吧～',
+                    title: '排排你心中的小丑牌',
+                    text: '来看看我的小丑牌排名！🃏 快来 https://xiaowanmichelle-wq.github.io/balatro-guide/ 创建你自己的排名吧～',
                     files: [file]
                 });
             } else if (navigator.share) {
                 // 不支持文件分享但支持文本分享
                 await navigator.share({
-                    title: '我的 Balatro 小丑 Tier List',
-                    text: '来看看我的 Balatro 小丑排名！🃏',
+                    title: '排排你心中的小丑牌',
+                    text: '来看看我的小丑牌排名！🃏',
                     url: 'https://xiaowanmichelle-wq.github.io/balatro-guide/'
                 });
             }
