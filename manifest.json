@@ -75,10 +75,22 @@
       "description": "输入你的卡组获取推荐"
     },
     {
+      "name": "计算器",
+      "short_name": "计算",
+      "url": "./index.html#calculator",
+      "description": "详细计算出牌得分"
+    },
+    {
       "name": "攻略指南",
       "short_name": "攻略",
       "url": "./index.html#guide",
       "description": "新手攻略与小丑Tier List"
+    },
+    {
+      "name": "种子分享",
+      "short_name": "种子",
+      "url": "./index.html#seeds",
+      "description": "分享和发现好种子"
     }
   ]
 }

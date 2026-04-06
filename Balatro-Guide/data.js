@@ -268,7 +268,7 @@ const TAGS = {
     // 稀有度
     common: { name: "普通", color: "#95a5a6" },
     rare: { name: "稀有", color: "#3498db" },
-    legendary: { name: "传奇", color: "#f39c12" },
+    legendary: { name: "传奇", color: "#b744f7" },
     secret: { name: "隐藏", color: "#9b59b6" },
     ultra_rare: { name: "极稀有", color: "#e74c3c" },
 

@@ -1512,6 +1512,85 @@ class BalatroApp {
                 }
             }
             
+            // 9.6 零弃牌体系（窃贼核心）
+            if (selectedIds.includes('j_burglar')) {
+                if (card.id === 'j_mystic_summit') { score += 55; synergy = synergy || '窃贼移除弃牌，神秘之峰始终+15倍率'; }
+                if (card.id === 'j_ramen') { score += 50; synergy = synergy || '窃贼移除弃牌，拉面×2倍率永不衰减'; }
+                if (card.id === 'j_obelisk') { score += 50; synergy = synergy || '窃贼强制打非常用牌型，方尖石塔快速叠×倍率'; }
+                if (card.id === 'j_green') { score += 40; synergy = synergy || '窃贼移除弃牌，绿色小丑只涨不跌'; }
+                if (card.id === 'j_delayed') { score += 40; synergy = synergy || '窃贼移除弃牌，延迟满足始终获最高收益'; }
+            }
+            if (card.id === 'j_burglar') {
+                if (selectedIds.includes('j_mystic_summit')) { score += 55; synergy = synergy || '窃贼让神秘之峰始终+15倍率'; }
+                if (selectedIds.includes('j_ramen')) { score += 50; synergy = synergy || '窃贼让拉面×2永不衰减'; }
+                if (selectedIds.includes('j_obelisk')) { score += 50; synergy = synergy || '窃贼+方尖石塔快速叠×倍率'; }
+                if (selectedIds.includes('j_green')) { score += 40; synergy = synergy || '窃贼让绿色小丑只涨不跌'; }
+                if (selectedIds.includes('j_delayed')) { score += 40; synergy = synergy || '窃贼让延迟满足始终生效'; }
+            }
+            
+            // 9.7 六六大顺概率翻倍体系
+            if (selectedIds.includes('j_oops_6')) {
+                if (card.id === 'j_bloodstone') { score += 55; synergy = synergy || '🔥 六六大顺让血石1/2→必定触发×1.5'; }
+                if (card.id === 'j_space') { score += 45; synergy = synergy || '六六大顺让太空1/4→1/2升级牌型'; }
+                if (card.id === 'j_lucky_cat') { score += 45; synergy = synergy || '六六大顺让招财猫翻倍触发'; }
+                if (card.id === 'j_8ball') { score += 40; synergy = synergy || '六六大顺让8号球1/4→1/2生成塔罗'; }
+                if (card.id === 'j_business_card') { score += 40; synergy = synergy || '六六大顺让名片1/2→必定给$2'; }
+            }
+            if (card.id === 'j_oops_6') {
+                if (selectedIds.includes('j_bloodstone')) { score += 55; synergy = synergy || '🔥 六六大顺让血石必定×1.5'; }
+                if (selectedIds.includes('j_space')) { score += 45; synergy = synergy || '六六大顺让太空1/2升级'; }
+                if (selectedIds.includes('j_lucky_cat')) { score += 45; synergy = synergy || '六六大顺翻倍招财猫触发'; }
+                if (selectedIds.includes('j_8ball')) { score += 40; synergy = synergy || '六六大顺让8号球1/2触发'; }
+                if (selectedIds.includes('j_business_card')) { score += 40; synergy = synergy || '六六大顺让名片必定给$2'; }
+            }
+            
+            // 9.8 加牌体系（DNA+全息/徒步者，全息+证书/大理石）
+            if (card.id === 'j_hologram' && selectedIds.includes('j_dna')) { score += 55; synergy = synergy || '🔥 DNA每回合复制加牌→全息每次+×0.25永久倍率'; }
+            if (card.id === 'j_dna' && selectedIds.includes('j_hologram')) { score += 55; synergy = synergy || '🔥 DNA复制→全息+×0.25永久滚雪球'; }
+            if (card.id === 'j_hiker' && selectedIds.includes('j_dna')) { score += 45; synergy = synergy || 'DNA反复出单牌，徒步者永久筹码滚雪球'; }
+            if (card.id === 'j_dna' && selectedIds.includes('j_hiker')) { score += 45; synergy = synergy || 'DNA+徒步者永久+5筹码'; }
+            if (card.id === 'j_hologram' && (selectedIds.includes('j_certificate') || selectedIds.includes('j_marble'))) { score += 45; synergy = synergy || '证书/大理石每回合加牌→全息+×0.25永久'; }
+            if ((card.id === 'j_certificate' || card.id === 'j_marble') && selectedIds.includes('j_hologram')) { score += 45; synergy = synergy || '每回合加牌触发全息+×0.25'; }
+            
+            // 9.81 手牌K/Q钢铁体系
+            if (card.id === 'j_steel' && selectedIds.includes('j_baron')) { score += 50; synergy = synergy || '🔥 钢铁牌K双重×1.5叠乘=×2.25'; }
+            if (card.id === 'j_baron' && selectedIds.includes('j_steel')) { score += 50; synergy = synergy || '🔥 男爵+钢铁K=×2.25/张'; }
+            if (card.id === 'j_steel' && selectedIds.includes('j_shoot_moon')) { score += 45; synergy = synergy || '钢铁Q: 射月+13+钢铁×1.5'; }
+            if (card.id === 'j_shoot_moon' && selectedIds.includes('j_steel')) { score += 45; synergy = synergy || '钢铁Q双重收益'; }
+            if (card.id === 'j_baron' && selectedIds.includes('j_shoot_moon')) { score += 40; synergy = synergy || 'K/Q手牌体系双核'; }
+            if (card.id === 'j_shoot_moon' && selectedIds.includes('j_baron')) { score += 40; synergy = synergy || 'K/Q手牌体系双核'; }
+            
+            // 9.82 幻视扩展（卡尼奥/迈达斯/名片）
+            if (card.id === 'j_canio' && selectedIds.includes('j_pareidolia')) { score += 55; synergy = synergy || '🔥 幻视+卡尼奥：摧毁任何牌都叠×1倍率'; }
+            if (card.id === 'j_pareidolia' && selectedIds.includes('j_canio')) { score += 55; synergy = synergy || '🔥 幻视让所有牌变人头牌→卡尼奥无限叠'; }
+            if (card.id === 'j_midas' && selectedIds.includes('j_pareidolia')) { score += 40; synergy = synergy || '幻视让所有牌变人头牌→迈达斯全变金卡'; }
+            if (card.id === 'j_pareidolia' && selectedIds.includes('j_midas')) { score += 40; synergy = synergy || '幻视+迈达斯全变金卡'; }
+            if (card.id === 'j_business_card' && selectedIds.includes('j_pareidolia')) { score += 35; synergy = synergy || '幻视让所有牌都触发名片给$2'; }
+            
+            // 9.83 模具小丑+疯狂
+            if (card.id === 'j_stencil' && selectedIds.includes('j_madness')) { score += 45; synergy = synergy || '疯狂摧毁→模具空位×1叠加'; }
+            if (card.id === 'j_madness' && selectedIds.includes('j_stencil')) { score += 45; synergy = synergy || '疯狂+模具：摧毁=涨×倍率'; }
+            
+            // 9.84 仪式匕首+乌合之众
+            if (card.id === 'j_ceremonial' && selectedIds.includes('j_riff_raff')) { score += 45; synergy = synergy || '乌合之众补位→匕首循环摧毁获永久倍率'; }
+            if (card.id === 'j_riff_raff' && selectedIds.includes('j_ceremonial')) { score += 45; synergy = synergy || '乌合之众持续补位让匕首循环'; }
+            
+            // 9.85 迈达斯+吸血鬼
+            if (card.id === 'j_vampire' && selectedIds.includes('j_midas')) { score += 45; synergy = synergy || '🔥 迈达斯持续产金卡→吸血鬼无限叠×倍率'; }
+            if (card.id === 'j_midas' && selectedIds.includes('j_vampire')) { score += 45; synergy = synergy || '🔥 迈达斯+吸血鬼无限供应增强牌'; }
+            
+            // 9.86 天文学家+星座/卫星（Joker之间，非行星牌）
+            if (card.id === 'j_constellation' && selectedIds.includes('j_astronomer')) { score += 55; synergy = synergy || '🔥 天文学家免费行星→星座无限叠+×0.1倍率'; }
+            if (card.id === 'j_astronomer' && selectedIds.includes('j_constellation')) { score += 55; synergy = synergy || '🔥 天文学家+星座免费无限叠倍率'; }
+            if (card.id === 'j_satellite' && selectedIds.includes('j_astronomer')) { score += 40; synergy = synergy || '天文学家免费行星→卫星+$1加速收入'; }
+            if (card.id === 'j_astronomer' && selectedIds.includes('j_satellite')) { score += 40; synergy = synergy || '天文学家+卫星免费叠收入'; }
+            
+            // 9.87 弃牌流（约里克/上路吧杰克+弃牌加速器）
+            if (card.id === 'j_yorick' && (selectedIds.includes('j_drunkard') || selectedIds.includes('j_merry_andy'))) { score += 40; synergy = synergy || '额外弃牌加速约里克达到23张叠×倍率'; }
+            if (card.id === 'j_hit_road' && (selectedIds.includes('j_drunkard') || selectedIds.includes('j_merry_andy'))) { score += 40; synergy = synergy || '额外弃牌→弃更多J→上路吧杰克×倍率更高'; }
+            if ((card.id === 'j_drunkard' || card.id === 'j_merry_andy') && selectedIds.includes('j_yorick')) { score += 40; synergy = synergy || '弃牌加速器帮约里克快速叠×倍率'; }
+            if ((card.id === 'j_drunkard' || card.id === 'j_merry_andy') && selectedIds.includes('j_hit_road')) { score += 40; synergy = synergy || '弃牌加速器帮上路吧杰克多弃J'; }
+            
             // 10. 行星牌协同
             if (tags.includes('planet') || card.cardType === 'planet') {
                 const planetSynergies = [
