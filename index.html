@@ -271,6 +271,11 @@
                                 普通
                             </label>
                             <label class="checkbox-label">
+                                <input type="checkbox" value="uncommon" checked>
+                                <span class="checkmark rarity-uncommon"></span>
+                                罕见
+                            </label>
+                            <label class="checkbox-label">
                                 <input type="checkbox" value="rare" checked>
                                 <span class="checkmark rarity-rare"></span>
                                 稀有
@@ -1002,6 +1007,9 @@
                             <button class="ctl-filter-rarity-btn active" data-rarity="all" onclick="customTierList.setFilterRarity('all')">全部</button>
                             <button class="ctl-filter-rarity-btn" data-rarity="common" onclick="customTierList.setFilterRarity('common')">
                                 <span class="ctl-rarity-dot" style="background:#6cb5ff"></span>普通
+                            </button>
+                            <button class="ctl-filter-rarity-btn" data-rarity="uncommon" onclick="customTierList.setFilterRarity('uncommon')">
+                                <span class="ctl-rarity-dot" style="background:#2ed573"></span>罕见
                             </button>
                             <button class="ctl-filter-rarity-btn" data-rarity="rare" onclick="customTierList.setFilterRarity('rare')">
                                 <span class="ctl-rarity-dot" style="background:#ff6b6b"></span>稀有

@@ -52,6 +52,7 @@ i18n.register('en', {
         },
         rarity: {
             common: 'Common',
+            uncommon: 'Uncommon',
             rare: 'Rare',
             legendary: 'Legendary',
         },

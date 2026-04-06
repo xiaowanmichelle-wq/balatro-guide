@@ -52,6 +52,7 @@ i18n.register('ja', {
         },
         rarity: {
             common: 'コモン',
+            uncommon: 'アンコモン',
             rare: 'レア',
             legendary: 'レジェンダリー',
         },

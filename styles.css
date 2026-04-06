@@ -22,6 +22,7 @@
     --accent-orange: #f39c12;
     
     --rarity-common: #95a5a6;
+    --rarity-uncommon: #2ed573;
     --rarity-rare: #3498db;
     --rarity-legendary: #f39c12;
     --rarity-secret: #9b59b6;
@@ -356,6 +357,7 @@ body {
 }
 
 .rarity-common { background: var(--rarity-common); }
+.rarity-uncommon { background: var(--rarity-uncommon); }
 .rarity-rare { background: var(--rarity-rare); }
 .rarity-legendary { background: var(--rarity-legendary); }
 .rarity-secret { background: var(--rarity-secret); }
@@ -521,6 +523,7 @@ body {
 }
 
 .card.rarity-common::before { background: var(--rarity-common); }
+.card.rarity-uncommon::before { background: var(--rarity-uncommon); }
 .card.rarity-rare::before { background: var(--rarity-rare); }
 .card.rarity-legendary::before { background: var(--rarity-legendary); }
 .card.rarity-secret::before { background: var(--rarity-secret); }

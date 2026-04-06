@@ -66,6 +66,7 @@ i18n.register('zh-CN', {
         // 稀有度
         rarity: {
             common: '普通',
+            uncommon: '罕见',
             rare: '稀有',
             legendary: '传奇',
         },

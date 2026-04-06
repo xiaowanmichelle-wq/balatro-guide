@@ -418,6 +418,7 @@ class BalatroApp {
         
         const rarityLabels = {
             common: i18n.t('gallery.rarity.common'),
+            uncommon: i18n.t('gallery.rarity.uncommon') || '罕见',
             rare: i18n.t('gallery.rarity.rare'),
             legendary: i18n.t('gallery.rarity.legendary'),
             secret: i18n.t('gallery.rarity.secret')
