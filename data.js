@@ -803,7 +803,7 @@ const SYNERGY_RULES = {
     skip_combo: {
         cards: ["j_throwback", "j_red"],
         name: "跳过体系",
-        description: "回溯跳过+X0.25倍率，红牌跳过+3倍率，跳过盲注双重收益"
+        description: "回溯跳盲注+X0.25倍率，红牌跳补充包+3倍率，两者触发条件不同但同属跳过体系"
     },
 
     // 超新星+太空协同
