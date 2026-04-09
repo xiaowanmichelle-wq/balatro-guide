@@ -1975,7 +1975,7 @@ class BalatroApp {
                 coreCards: ['j_jolly', 'j_sly', 'j_duo'],
                 supportCards: ['j_spare_trousers', 'j_hanging_chad', 'j_splash', 'p_mercury'],
                 tips: '优先升级对子的行星牌（水星），后期寻找二重奏(X2)作为终极倍率',
-                counters: '眼(The Eye)每手牌型不能重复 | 公牛(The Ox)打最常用牌型时钱归零',
+                counters: '眼：每手牌型不能重复 | 公牛：打最常用牌型时钱归零',
                 compatibleWith: [
                     { id: 'double_pair_build', note: '对子流自然升级为双对流，所有对子加成在两对中触发两次' },
                     { id: 'economy_build', note: '经济流可以作为前期过渡，攒钱后转对子体系' }
@@ -1990,7 +1990,7 @@ class BalatroApp {
                 coreCards: ['j_mad', 'j_clever', 'j_spare_trousers', 'j_jolly', 'j_sly'],
                 supportCards: ['j_duo', 'j_square', 'p_uranus'],
                 tips: '两对是双倍快乐——对子系加成（开心/奸诈）会触发两次！备用裤子每打出两对+2倍率永久叠加，稳定成长。方形小丑和两对完美配合：两对恰好4张牌，每次+4筹码永久叠加',
-                counters: '眼(The Eye)每手牌型不能重复 | 灵媒(The Psychic)必须打5张，两对只需4张浪费1张位置',
+                counters: '眼：每手牌型不能重复 | 灵媒：必须打5张，两对只需4张浪费1张位置',
                 compatibleWith: [
                     { id: 'pair_build', note: '双对流是对子流的升级版，核心卡牌完全兼容' },
                     { id: 'economy_build', note: '经济流提供前期过渡资金，后期切换到双对输出' }
@@ -2005,7 +2005,7 @@ class BalatroApp {
                 coreCards: ['j_crazy', 'j_devious', 'j_order', 'j_shortcut', 'j_four_fingers'],
                 supportCards: ['j_runner', 'j_superposition', 'p_saturn'],
                 tips: '捷径是顺子流的核心辅助，让2-4-5-6-7也算顺子。四指进一步降低到4张即可',
-                counters: '针(The Needle)只能出1手，顺子凑不齐没机会 | 手臂(The Arm)牌型等级-1 | 眼(The Eye)牌型不能重复',
+                counters: '针：只能出1手，顺子凑不齐没机会 | 手臂：牌型等级-1 | 眼：牌型不能重复',
                 compatibleWith: [
                     { id: 'flush_build', note: '顺子+同花=同花顺！四指让两者只需4张，是终极组合' },
                     { id: 'fibonacci_build', note: 'A-2-3-5中3和5间隔2用捷径相邻，4张斐波那契牌可融入顺子' }
@@ -2020,7 +2020,7 @@ class BalatroApp {
                 coreCards: ['j_droll', 'j_crafty', 'j_tribe', 'j_smeared'],
                 supportCards: ['j_four_fingers', 'j_blackboard', 'p_jupiter'],
                 tips: '模糊小丑是同花流最重要的辅助——红桃方块合并、黑桃梅花合并，等于只有2种花色',
-                counters: '花色Boss削弱对应花色(The Club♣/Goad♠/Window♦/Head♥)，你的同花花色被削弱则全部计分为0 | 眼(The Eye)牌型不能重复',
+                counters: '花色Boss削弱对应花色(♣梅花/♠黑桃/♦方块/♥红桃)，你的同花花色被削弱则全部计分为0 | 眼：每手牌型不能重复',
                 compatibleWith: [
                     { id: 'straight_build', note: '同花+顺子=同花顺！用四指降低门槛，是最强牌型组合' },
                     { id: 'chance_build', note: '血石(红桃X1.5)与同花配合，打红桃同花每张牌都可能触发' },
@@ -2036,7 +2036,7 @@ class BalatroApp {
                 coreCards: ['j_photograph', 'j_scary_face', 'j_smiley', 'j_pareidolia'],
                 supportCards: ['j_sock', 'j_baron', 'j_triboulet', 'j_business_card', 'j_midas'],
                 tips: '幻视(所有牌变人头牌)是核心中的核心，拿到后所有人头牌加成都能触发',
-                counters: '植物(The Plant)人头牌被削弱计分为0，直接废掉 | 标记(The Mark)人头牌暗置看不到牌面',
+                counters: '植物：人头牌被削弱计分为0，直接废掉 | 标记：人头牌暗置看不到牌面',
                 compatibleWith: [
                     { id: 'kq_build', note: '人头牌流自然兼容K/Q皇室流，K/Q本身就是人头牌' },
                     { id: 'steel_build', note: '钢铁牌+男爵/射月，手牌中的K/Q既触发钢铁×1.5又触发皇室加成' },
@@ -2053,7 +2053,7 @@ class BalatroApp {
                 coreCards: ['j_triboulet', 'j_baron', 'j_shoot_moon'],
                 supportCards: ['j_pareidolia', 'j_sock', 'j_photograph', 'j_hanging_chad'],
                 tips: '传说Joker特里布莱是核心，每张K和Q都X2，手牌全是K/Q时倍率爆炸',
-                counters: '植物(The Plant)人头牌被削弱 | 标记(The Mark)人头牌暗置 | 钩子(The Hook)每手弃2张随机手牌，可能弃掉留手的K/Q',
+                counters: '植物：人头牌被削弱 | 标记：人头牌暗置 | 钩子：每手弃2张随机手牌，可能弃掉留手的K/Q',
                 compatibleWith: [
                     { id: 'face_build', note: 'K/Q都是人头牌，所有人头牌加成(恐怖面孔/微笑表情/照片)全部叠加' },
                     { id: 'steel_build', note: '手牌中的K/Q变钢铁牌后，钢铁×1.5+男爵×1.5+射月+13多重触发' },
@@ -2069,7 +2069,7 @@ class BalatroApp {
                 coreCards: ['j_fibonacci', 'j_even_steven', 'j_odd_todd'],
                 supportCards: ['j_hack', 'j_scholar', 'j_walkie', 'j_8ball'],
                 tips: '2是三重触发王者(斐波那契+偶数+脱口秀演员)，3和5可双重触发(斐波那契+脱口秀演员+奇数)。烂脱口秀演员让2/3/5的+8倍率再触发一次，性价比极高',
-                counters: '燧石(The Flint)牌型基础筹码和倍数减半 | 柱子(The Pillar)之前打过的牌被削弱，反复打相同点数会失效',
+                counters: '燧石：牌型基础筹码和倍数减半 | 柱子：之前打过的牌被削弱，反复打相同点数会失效',
                 compatibleWith: [
                     { id: 'straight_build', note: 'A-2-3-5中3和5用捷径相邻，可融入顺子体系（但8距5差3不适配）' },
                     { id: 'tarot_build', note: '8号球打出8时1/4概率给塔罗牌，与塔罗流占卜师配合' }
@@ -2084,7 +2084,7 @@ class BalatroApp {
                 coreCards: ['j_golden', 'j_to_moon', 'j_bull', 'j_bootstraps'],
                 supportCards: ['j_rocket', 'j_egg', 'j_cloud9', 'j_credit_card'],
                 tips: '保持$25以上获得最大利息($5)，公牛和乌合之众让你的钱包就是你的武器',
-                counters: '牙齿(The Tooth)每打出1张牌-$1亏钱 | 公牛(The Ox)打最常用牌型时钱变$0 | 高墙(The Wall)4倍分数前期伤害低',
+                counters: '牙齿：每打出1张牌-$1亏钱 | 公牛：打最常用牌型时钱变$0 | 高墙：4倍分数前期伤害低',
                 compatibleWith: [
                     { id: 'pair_build', note: '经济流是最佳前期过渡，攒够钱后可以转任何后期流派' },
                     { id: 'double_pair_build', note: '经济流提供前期资金，后期靠双对输出' },
@@ -2103,7 +2103,7 @@ class BalatroApp {
                 coreCards: ['j_yorick', 'j_burnt', 'j_drunkard', 'j_merry_andy', 'j_banner'],
                 supportCards: ['j_hit_road', 'j_trading', 'j_mail_in', 'j_castle', 'j_faceless'],
                 tips: '快乐安迪+3弃牌但手牌上限-1，是核心引擎。配合旗帜每剩余弃牌+30筹码非常可观',
-                counters: '水(The Water)弃牌次数归0，弃牌流直接瘫痪 | 针(The Needle)只能出1手没有弃牌机会',
+                counters: '水：弃牌次数归0，弃牌流直接瘫痪 | 针：只能出1手没有弃牌机会',
                 compatibleWith: [
                     { id: 'economy_build', note: '弃牌经济卡(交易卡/邮寄回扣)赚的钱可以喂给公牛/提靴带' },
                     { id: 'face_build', note: '无脸小丑弃3张人头牌+$5，配合幻视(所有牌变人头牌)收益爆炸' }
@@ -2118,7 +2118,7 @@ class BalatroApp {
                 coreCards: ['j_burglar', 'j_ramen', 'j_mystic_summit'],
                 supportCards: ['j_delayed', 'j_green', 'j_acrobat', 'j_obelisk'],
                 tips: '窃贼是整个流派的基石——没有弃牌=拉面不衰减+神秘峰顶满触发+延迟满足满收益（整回合未弃牌时每个剩余弃牌+$2，窃贼直接满足条件）',
-                counters: '猩红之心(Crimson Heart)每手随机禁用1个Joker，拉面/神秘峰顶被禁就废了 | 高墙(The Wall)4倍分数',
+                counters: '猩红之心：每手随机禁用1个Joker，拉面/神秘峰顶被禁就废了 | 高墙：4倍分数',
                 compatibleWith: [
                     { id: 'economy_build', note: '延迟满足每剩余弃牌+$2，窃贼让收益最大化，赚的钱转给公牛/提靴带' },
                     { id: 'swashbuckler_build', note: '窃贼+3出牌次数更快累积侠盗倍率，延迟满足赚钱买更多小丑抬售价' }
@@ -2133,7 +2133,7 @@ class BalatroApp {
                 coreCards: ['j_swashbuckler', 'j_gift_card', 'j_egg'],
                 supportCards: ['j_ceremonial', 'j_campfire', 'j_riff_raff'],
                 tips: '礼品卡+鸡蛋是侠盗流的双引擎——礼品卡每回合给全队涨售价，鸡蛋单卡每回合+$3售价。5张小丑+礼品卡=每回合侠盗+5倍率，加上鸡蛋更猛。后期侠盗倍率轻松30+',
-                counters: '绿叶(Verdant Leaf)所有牌被削弱直到卖1个Joker，卖掉侠盗/礼品卡很伤 | 猩红之心(Crimson Heart)每手随机禁用1个Joker',
+                counters: '绿叶：所有牌被削弱直到卖1个Joker，卖掉侠盗/礼品卡很伤 | 猩红之心：每手随机禁用1个Joker',
                 compatibleWith: [
                     { id: 'sell_build', note: '篝火每出售+×0.25，乌合之众每盲注补2张小丑可出售，与侠盗售价体系双重收益' },
                     { id: 'burglar_build', note: '窃贼+3出牌次数加速出牌，延迟满足赚钱买更多小丑抬高侠盗售价倍率' },
@@ -2149,7 +2149,7 @@ class BalatroApp {
                 coreCards: ['j_cartomancer', 'j_fortune_teller', 'j_vagabond'],
                 supportCards: ['j_hallucination', 'j_8ball', 'j_superposition', 'j_perkeo'],
                 tips: '算命先生的倍率随游戏进行不断累积，是塔罗流的核心产出卡',
-                counters: '猩红之心(Crimson Heart)每手随机禁用1个Joker，占卜师被禁则倍率白攒 | 高墙(The Wall)4倍分数前期积累慢',
+                counters: '猩红之心：每手随机禁用1个Joker，占卜师被禁则倍率白攒 | 高墙：4倍分数前期积累慢',
                 compatibleWith: [
                     { id: 'planet_build', note: '塔罗牌和行星牌都是消耗品体系，帕奇欧可以同时为两者产出' },
                     { id: 'augment_build', note: '塔罗牌(皇后/皇帝)给牌加增强，供吸血鬼吸收，双重收益' },
@@ -2166,7 +2166,7 @@ class BalatroApp {
                 coreCards: ['j_astronomer', 'j_constellation', 'j_satellite'],
                 supportCards: ['j_space', 'j_supernova', 'j_showman'],
                 tips: '天文学家是行星流的引擎——免费行星意味着每次商店都能升级牌型+增加星座倍率',
-                counters: '手臂(The Arm)打出牌型等级-1，行星牌辛苦升的级会被扣回 | 高墙(The Wall)4倍分数',
+                counters: '手臂：打出牌型等级-1，行星牌辛苦升的级会被扣回 | 高墙：4倍分数',
                 compatibleWith: [
                     { id: 'tarot_build', note: '塔罗和行星都是消耗品体系，帕奇欧可以同时复制两者' },
                     { id: 'economy_build', note: '卫星赚的钱可以喂给公牛/提靴带，天文学家省下的钱用于其他购买' },
@@ -2182,7 +2182,7 @@ class BalatroApp {
                 coreCards: ['j_glass', 'j_ceremonial', 'j_madness', 'j_canio'],
                 supportCards: ['j_abstract', 'j_pareidolia', 't_justice', 't_fool'],
                 tips: '玻璃卡+正义塔罗牌是核心循环——正义创造玻璃卡，玻璃卡摧毁时玻璃小丑增加倍率，愚者可复制上次使用的正义',
-                counters: '针(The Needle)只能出1手，摧毁触发机会少 | 绿叶(Verdant Leaf)要卖1个Joker才能解除削弱',
+                counters: '针：只能出1手，摧毁触发机会少 | 绿叶：要卖1个Joker才能解除削弱',
                 compatibleWith: [
                     { id: 'face_build', note: '卡尼奥摧毁人头牌+X1，配合幻视(所有牌变人头牌)持续叠倍率' },
                     { id: 'tarot_build', note: '正义/愚者都是塔罗牌，占卜师可以从中获得额外倍率' },
@@ -2198,7 +2198,7 @@ class BalatroApp {
                 coreCards: ['j_blueprint', 'j_brainstorm'],
                 supportCards: ['j_showman', 'j_invisible', 'j_dna'],
                 tips: '蓝图复制右侧、头脑风暴复制最左——合理安排Joker顺序让最强效果被复制',
-                counters: '琥珀橡果(Amber Acorn)Joker翻转并随机排列，蓝图/头脑风暴位置错乱 | 猩红之心(Crimson Heart)每手随机禁用1个Joker',
+                counters: '琥珀橡果：Joker翻转并随机排列，蓝图/头脑风暴位置错乱 | 猩红之心：每手随机禁用1个Joker',
                 compatibleWith: [
                     { id: 'kq_build', note: '复制特里布莱的K/Q×2，让倍率直接翻倍甚至三倍' },
                     { id: 'steel_build', note: '复制钢铁小丑的X倍率效果，钢铁牌越多收益越恐怖' },
@@ -2214,7 +2214,7 @@ class BalatroApp {
                 coreCards: ['j_campfire', 'j_gift_card', 'j_diet_cola'],
                 supportCards: ['j_swashbuckler', 'j_riff_raff', 'j_ceremonial'],
                 tips: '篝火在Boss重置前要尽量多出售卡牌累积倍率，乌合之众每盲注创造2个普通Joker可以出售。进阶：拿到金柱"租赁"后，商店小丑$1买$1卖，相当于每张免费+×0.25倍率，疯狂循环',
-                counters: '篝火Boss后×倍率重置是内置克制，必须Boss前最大化 | 绿叶(Verdant Leaf)要卖1个Joker解除，但卖Joker也喂篝火',
+                counters: '篝火Boss后×倍率重置是内置克制，必须Boss前最大化 | 绿叶：要卖1个Joker解除，但卖Joker也喂篝火',
                 compatibleWith: [
                     { id: 'economy_build', note: '出售赚的钱可以喂给公牛/提靴带，买卖循环=倍率+经济双收' },
                     { id: 'destroy_build', note: '仪式匕首摧毁Joker获得倍率，与出售流的"牺牲换收益"理念一致' }
@@ -2229,7 +2229,7 @@ class BalatroApp {
                 coreCards: ['j_oops_6', 'j_bloodstone', 'j_lucky_cat'],
                 supportCards: ['j_space', 'j_gros_michel', 'j_ancient', 't_magician'],
                 tips: '六六大顺是概率流的基石——血石从50%变100%触发，太空从25%变50%，简直是作弊。注意大麦克香蕉灭绝后会变成卡文迪什(X3)更强',
-                counters: '猩红之心(Crimson Heart)随机禁用Joker可能禁到六六大顺，概率翻倍没了 | 燧石(The Flint)基础值减半收益打折',
+                counters: '猩红之心：随机禁用Joker可能禁到六六大顺，概率翻倍没了 | 燧石：基础值减半收益打折',
                 compatibleWith: [
                     { id: 'flush_build', note: '血石对红桃牌触发X1.5，打同花多红桃牌每张都可能触发' },
                     { id: 'planet_build', note: '太空小丑概率翻倍后1/2升级牌型，与星座的X倍率叠加更快' },
@@ -2245,7 +2245,7 @@ class BalatroApp {
                 coreCards: ['j_vampire', 'j_midas'],
                 supportCards: ['t_empress', 't_emperor', 'j_hallucination', 'j_cartomancer', 'j_driver_license'],
                 tips: '迈达斯面具是增强吸收流的最佳搭档——每次打出人头牌都会变金卡，吸血鬼自动吸收叠X倍率。注意驾驶执照需要16张增强牌才X3，与吸血鬼路线冲突，选一条路走到底。塔罗牌产出越多，增强供应越稳定',
-                counters: '植物(The Plant)人头牌被削弱，迈达斯面具依赖人头牌产金卡失效 | 柱子(The Pillar)打过的牌被削弱，反复打增强牌被限制',
+                counters: '植物：人头牌被削弱，迈达斯面具依赖人头牌产金卡失效 | 柱子：打过的牌被削弱，反复打增强牌被限制',
                 compatibleWith: [
                     { id: 'face_build', note: '迈达斯面具将人头牌变金卡(增强牌)，源源不断供吸血鬼吸收' },
                     { id: 'tarot_build', note: '塔罗牌(皇后/皇帝)给牌加增强，占卜师同时获得倍率，一举两得' }
@@ -2260,7 +2260,7 @@ class BalatroApp {
                 coreCards: ['j_throwback', 'j_red'],
                 supportCards: ['j_mr_bones', 'j_acrobat', 'j_stencil'],
                 tips: '跳过小盲和大盲，只打Boss。骷髅先生防止意外死亡，杂技演员最后一手X3保底',
-                counters: '高墙(The Wall)4倍分数 | 紫瓶(Violet Vessel)6倍分数，跳过流只打Boss但Boss分数极高',
+                counters: '高墙：4倍分数 | 紫瓶：6倍分数，跳过流只打Boss但Boss分数极高',
                 compatibleWith: [
                     { id: 'economy_build', note: '跳过盲注少打回合但省时间，经济流帮你在少量回合中攒够钱' }
                 ]
@@ -2274,7 +2274,7 @@ class BalatroApp {
                 coreCards: ['j_steel', 'j_mime', 't_chariot'],
                 supportCards: ['j_baron', 'j_shoot_moon', 'j_certificate', 'j_hanging_chad', 'j_pareidolia'],
                 tips: '钢铁牌的核心优势是"不打出就能加倍率"——用战车把手牌中不需要打出的牌变钢铁牌，配合哑剧演员让每张钢铁牌的×1.5额外触发1次。手牌全钢铁时倍率指数级增长',
-                counters: '钩子(The Hook)每手弃2张随机手牌，可能弃掉钢铁牌 | 枷锁(The Manacle)手牌-1减少钢铁牌留手数',
+                counters: '钩子：每手弃2张随机手牌，可能弃掉钢铁牌 | 枷锁：手牌-1减少钢铁牌留手数',
                 compatibleWith: [
                     { id: 'kq_build', note: '手牌中的K/Q变钢铁牌后，钢铁×1.5+男爵×1.5+射月+13多重叠加' },
                     { id: 'face_build', note: '钢铁牌留手牌触发倍率，人头牌加成在打出时触发，两者互补' },
@@ -2292,7 +2292,7 @@ class BalatroApp {
                 coreCards: ['j_hologram', 'j_dna', 'j_certificate', 'j_marble'],
                 supportCards: ['j_fortune_teller', 'j_constellation', 'j_stone', 'j_half'],
                 tips: '全息影像是核心引擎，DNA是最佳搭档——每回合出单牌就+×0.25。证书和大理石提供被动稳定加牌。注意牌组膨胀后抽牌稳定性会下降',
-                counters: '高墙(The Wall)4倍分数，加牌流需要时间积累 | 柱子(The Pillar)加入的新牌打过后也会被削弱',
+                counters: '高墙：4倍分数，加牌流需要时间积累 | 柱子：加入的新牌打过后也会被削弱',
                 compatibleWith: [
                     { id: 'tarot_build', note: '塔罗牌使用后触发占卜师+倍率，部分塔罗牌还能间接加牌' },
                     { id: 'planet_build', note: '行星牌使用后触发星座+X倍率，与全息的X倍率双重叠乘' },
@@ -2308,7 +2308,7 @@ class BalatroApp {
                 coreCards: ['j_erosion', 'j_canio', 'j_sixth_sense'],
                 supportCards: ['j_glass', 'j_trading', 'j_pareidolia'],
                 tips: '侵蚀+火祭是爆发组合——一次火祭=+20倍率+$20。倒吊人则是稳定的每回合减牌手段。牌组压缩到极限后抽牌极其稳定，配合卡尼奥倍率叠乘恐怖',
-                counters: '灵媒(The Psychic)必须打5张，减牌后牌组太少可能凑不够 | 柱子(The Pillar)打过的牌被削弱，减牌后可用牌更少',
+                counters: '灵媒：必须打5张，减牌后牌组太少可能凑不够 | 柱子：打过的牌被削弱，减牌后可用牌更少',
                 compatibleWith: [
                     { id: 'destroy_build', note: '摧毁流的玻璃小丑/仪式匕首在摧毁牌的同时也减少牌组，与侵蚀双重收益' },
                     { id: 'economy_build', note: '火祭摧毁5张牌获$20，减牌的同时赚大钱，喂给公牛/提靴带' },
