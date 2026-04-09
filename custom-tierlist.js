@@ -17,12 +17,12 @@ class CustomTierList {
         // i18n 翻译映射（内部 key 始终用中文，显示时翻译）
         this._tierI18n = {
             en: {
-                names: { '夯': 'Broken', '顶级': 'Top', '人上人': 'Great', 'NPC': 'Okay', '拉': 'Weak', '拉完了': 'Trash' },
-                descs: { '夯': 'Meta-defining', '顶级': 'Very Strong', '人上人': 'Strong', 'NPC': 'Usable', '拉': 'Below Avg', '拉完了': 'Not Recommended' }
+                names: { '夯': 'Carry', '顶级': 'Elite', '人上人': 'Superior', 'NPC': 'NPC', '拉': 'Bad', '拉完了': 'Garbage' },
+                descs: { '夯': 'Dominates', '顶级': 'Top-tier', '人上人': 'Top player', 'NPC': 'Generic', '拉': 'Weak', '拉完了': 'Completely bad' }
             },
             ja: {
-                names: { '夯': '壊れ', '顶级': 'トップ', '人上人': '強い', 'NPC': '普通', '拉': '弱い', '拉完了': 'ゴミ' },
-                descs: { '夯': '環境最強', '顶级': '極強', '人上人': '強力', 'NPC': '使える', '拉': 'やや弱', '拉完了': '非推奨' }
+                names: { '夯': '圧勝', '顶级': '最強', '人上人': 'エリート', 'NPC': 'NPC', '拉': 'ダメ', '拉完了': '最悪' },
+                descs: { '夯': '支配する', '顶级': 'トップクラス', '人上人': '頂点の存在', 'NPC': 'つまらない', '拉': '下手', '拉完了': 'クソ' }
             }
         };
         // 旧版 S/A/B/C/D/E → 新版映射（存档兼容）
