@@ -17,7 +17,7 @@ class BalatroApp {
         // 当前筛选条件
         this.filters = {
             types: ['joker', 'tarot', 'planet', 'spectral'],
-            rarities: ['common', 'rare', 'legendary'],
+            rarities: ['common', 'uncommon', 'rare', 'legendary'],
             effects: [],
             hands: [],
             search: '',
@@ -363,7 +363,7 @@ class BalatroApp {
         
         this.filters = {
             types: ['joker', 'tarot', 'planet', 'spectral'],
-            rarities: ['common', 'rare', 'legendary'],
+            rarities: ['common', 'uncommon', 'rare', 'legendary'],
             effects: [],
             hands: [],
             search: '',
