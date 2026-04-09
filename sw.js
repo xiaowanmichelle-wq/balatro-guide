@@ -1,6 +1,6 @@
 // Balatro Guide Service Worker
 // Version-based cache for easy updates
-const CACHE_VERSION = 'v2.0.0';
+const CACHE_VERSION = 'v2.1.0';
 const CACHE_NAME = `balatro-guide-${CACHE_VERSION}`;
 
 // Core app shell files - always cache these

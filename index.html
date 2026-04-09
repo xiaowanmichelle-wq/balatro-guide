@@ -936,6 +936,7 @@
         applyI18n();
         renderLangMenu();
         document.getElementById('lang-menu').classList.remove('open');
+        document.documentElement.lang = lang;
         
         // 重新渲染动态内容
         if (app) {
@@ -948,6 +949,10 @@
         }
         if (typeof seedManager !== 'undefined' && seedManager) {
             seedManager.renderSeeds();
+        }
+        // 自定义 Tier List 重新渲染（翻译档位名）
+        if (typeof customTierList !== 'undefined' && customTierList.isOpen) {
+            customTierList.render();
         }
     }
     

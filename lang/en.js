@@ -338,8 +338,8 @@ i18n.register('en', {
             name: '🦝 Swashbuckler Build',
             difficulty: '⭐⭐ Medium',
             desc: 'Swashbuckler converts total Joker sell value into Mult — Gift Card and Egg keep raising it',
-            detail: 'Swashbuckler turns other Jokers\\'s total sell value into its own +Mult. Gift Card adds +$1 sell value to all Jokers each round. Egg gains +$3 sell value per round. Both continuously raise Swashbuckler\\'s Mult. Ceremonial Dagger destroys high sell-value Jokers for huge permanent Mult.',
-            tips: 'Gift Card + Egg are the twin engines — Gift Card raises the whole team\\'s sell value, Egg solo gains +$3/round. 5 Jokers + Gift Card = +5 Mult per round. Late game Swashbuckler easily hits 30+ Mult',
+            detail: 'Swashbuckler turns other Jokers total sell value into its own +Mult. Gift Card adds +$1 sell value to all Jokers each round. Egg gains +$3 sell value per round. Both continuously raise Swashbuckler Mult. Ceremonial Dagger destroys high sell-value Jokers for huge permanent Mult.',
+            tips: 'Gift Card + Egg are the twin engines — Gift Card raises the whole team sell value, Egg solo gains +$3/round. 5 Jokers + Gift Card = +5 Mult per round. Late game Swashbuckler easily hits 30+ Mult',
         },
         tarot_build: {
             name: '🔮 Tarot Build',
