@@ -27,7 +27,7 @@ const EDITIONS = [
   {id:'none',name:'无版本',chips:0,mult:0,xmult:0},
   {id:'foil',name:'箔 +50筹码',chips:50,mult:0,xmult:0},
   {id:'holo',name:'全息 +10倍率',chips:0,mult:10,xmult:0},
-  {id:'polychrome',name:'多色 \u00d71.5倍率',chips:0,mult:0,xmult:1.5}
+  {id:'polychrome',name:'多彩 \u00d71.5倍率',chips:0,mult:0,xmult:1.5}
 ];
 const SEALS = [
   {id:'none',name:'无封印'},
@@ -213,6 +213,13 @@ function calculate() {
     if (result.chips) { chips += result.chips; breakdown.push({label:label+' +'+result.chips+'筹码', chips:result.chips, type:'joker'}); }
     if (result.mult) { mult += result.mult; breakdown.push({label:label+' +'+result.mult+'倍率', mult:result.mult, type:'joker'}); }
     if (result.xmult) xmultList.push({val:result.xmult, label:label+' \u00d7'+result.xmult});
+    // Joker 版本效果（箔/全息/多彩）
+    const jokerEdi = EDITIONS.find(e => e.id === joker.edition);
+    if (jokerEdi && jokerEdi.id !== 'none') {
+      if (jokerEdi.chips) { chips += jokerEdi.chips; breakdown.push({label:label+' '+jokerEdi.name, chips:jokerEdi.chips, type:'joker_edi'}); }
+      if (jokerEdi.mult) { mult += jokerEdi.mult; breakdown.push({label:label+' '+jokerEdi.name, mult:jokerEdi.mult, type:'joker_edi'}); }
+      if (jokerEdi.xmult && jokerEdi.xmult > 0) xmultList.push({val:jokerEdi.xmult, label:label+' '+jokerEdi.name});
+    }
   });
 
   // 应用所有 xmult
@@ -431,6 +438,11 @@ function renderSelectedHand() {
     const edi = EDITIONS.find(e => e.id === c.edition) || EDITIONS[0];
     const seal = SEALS.find(s => s.id === c.seal) || SEALS[0];
     return '<div class="calc-hand-card">' +
+      '<div class="calc-hc-top">' +
+        '<button class="calc-hc-move" onclick="calculator.moveCardLeft('+i+')">\u25c0</button>' +
+        '<button class="calc-hc-remove" onclick="calculator.removeCard('+i+')">\u2715</button>' +
+        '<button class="calc-hc-move" onclick="calculator.moveCardRight('+i+')">\u25b6</button>' +
+      '</div>' +
       '<div class="calc-hc-face" style="color:'+color+'"><span class="calc-hc-rank">'+displayRank+'</span><span class="calc-hc-suit">'+sym+'</span></div>' +
       '<div class="calc-hc-mods">' +
         '<select class="calc-mod-sel" data-idx="'+i+'" data-field="enhancement" onchange="calculator.onModChange(this)">' +
@@ -443,7 +455,6 @@ function renderSelectedHand() {
           SEALS.map(s => '<option value="'+s.id+'"'+(c.seal===s.id?' selected':'')+'>'+s.name+'</option>').join('') +
         '</select>' +
       '</div>' +
-      '<button class="calc-hc-remove" onclick="calculator.removeCard('+i+')">\u2715</button>' +
     '</div>';
   }).join('');
 }
@@ -463,6 +474,24 @@ function removeCard(idx) {
   btns.forEach(btn => {
     if (btn.dataset.suit === c.suit && btn.dataset.rank === c.rank) btn.classList.remove('selected');
   });
+  renderSelectedHand();
+  recalc();
+}
+
+function moveCardLeft(idx) {
+  if (idx <= 0) return;
+  const tmp = state.selectedCards[idx];
+  state.selectedCards[idx] = state.selectedCards[idx - 1];
+  state.selectedCards[idx - 1] = tmp;
+  renderSelectedHand();
+  recalc();
+}
+
+function moveCardRight(idx) {
+  if (idx >= state.selectedCards.length - 1) return;
+  const tmp = state.selectedCards[idx];
+  state.selectedCards[idx] = state.selectedCards[idx + 1];
+  state.selectedCards[idx + 1] = tmp;
   renderSelectedHand();
   recalc();
 }
@@ -593,7 +622,9 @@ function addJoker(id) {
   const j = allJokerData.find(c => c.id === id);
   if (!j) return;
   // 每次添加一个副本（允许重复，如负片/全息等场景）
-  state.jokers.push(Object.assign({}, j));
+  const copy = Object.assign({}, j);
+  copy.edition = 'none';
+  state.jokers.push(copy);
   renderJokerSlots();
   recalc();
   const searchInput = document.getElementById('calc-joker-search');
@@ -612,6 +643,7 @@ const SCALING_JOKERS = {
   j_spare_trousers: {field:'mult', label:'+倍率', default:0, step:2, desc:'每弃两对+2'},
   j_green: {field:'mult', label:'+倍率', default:0, step:1, desc:'每出牌+1/弃牌-1'},
   j_red_card: {field:'mult', label:'+倍率', default:0, step:3, desc:'每跳过补充包+3'},
+  j_red: {field:'mult', label:'+倍率', default:0, step:3, desc:'每跳过补充包+3'},
   j_swashbuckler: {field:'mult', label:'+倍率', default:0, step:1, desc:'=其他Joker售价总和'},
   j_flash: {field:'mult', label:'+倍率', default:0, step:2, desc:'每次重掷+2'},
   j_fortune_teller: {field:'mult', label:'+倍率', default:0, step:1, desc:'每用塔罗牌+1'},
@@ -630,6 +662,7 @@ const SCALING_JOKERS = {
   j_bull: {field:'chips', label:'+筹码', default:0, step:2, desc:'每$1加+2筹码'},
   j_square: {field:'chips', label:'+筹码', default:0, step:4, desc:'打满4张时+4'},
   j_stone_joker: {field:'chips', label:'+筹码', default:0, step:25, desc:'每张石头牌+25'},
+  j_stone: {field:'chips', label:'+筹码', default:0, step:25, desc:'每张石头牌+25'},
   j_erosion: {field:'mult', label:'+倍率', default:0, step:4, desc:'牌组每少1张+4'},
   j_hiker: {field:'chips', label:'+筹码', default:0, step:5, desc:'每打出1张牌永久+5'},
   // \u00d7倍率型
@@ -641,6 +674,7 @@ const SCALING_JOKERS = {
   j_throwback: {field:'xmult', label:'\u00d7倍率', default:1, step:0.25, desc:'每跳过盲注+0.25'},
   j_glass: {field:'xmult', label:'\u00d7倍率', default:1, step:0.75, desc:'玻璃牌摧毁时+0.75'},
   j_steel_joker: {field:'xmult', label:'\u00d7倍率', default:1, step:0.2, desc:'每张钢铁牌+0.2'},
+  j_steel: {field:'xmult', label:'\u00d7倍率', default:1, step:0.2, desc:'每张钢铁牌+0.2'},
   j_constellation: {field:'xmult', label:'\u00d7倍率', default:1, step:0.1, desc:'每用行星牌+0.1'},
   j_madness: {field:'xmult', label:'\u00d7倍率', default:1, step:0.5, desc:'小盲/大盲+0.5'},
   j_campfire: {field:'xmult', label:'\u00d7倍率', default:1, step:0.25, desc:'每出售+0.25 Boss重置'},
@@ -659,6 +693,7 @@ const SCALING_JOKERS = {
   j_bootstraps: {field:'mult', label:'+倍率', default:0, step:2, desc:'每$5加+2倍率'},
   j_rocket: {field:'money', label:'$', default:1, step:2, desc:'击败Boss+$2'},
   j_turtle_bean: {field:'hand_size', label:'手牌上限', default:5, step:1, desc:'每轮-1'},
+  j_blue: {field:'chips', label:'+筹码', default:0, step:2, desc:'牌组每有1张牌+2筹码'},
 };
 
 function renderJokerSlots() {
@@ -685,9 +720,13 @@ function renderJokerSlots() {
         '<span class="calc-jc-sc-desc">' + sc.desc + '</span>' +
       '</div>';
     }
+    const editionHtml = '<select class="calc-jc-edition-sel" data-idx="' + i + '" onchange="calculator.onJokerEditionChange(this)">' +
+      EDITIONS.map(e => '<option value="'+e.id+'"'+((j.edition||'none')===e.id?' selected':'')+'>'+e.name+'</option>').join('') +
+    '</select>';
     return '<div class="calc-joker-chip" title="' + j.name + '" draggable="true" data-jidx="' + i + '">' +
       '<div class="calc-jc-drag-handle">\u2630</div>' +
       (j.image ? '<img class="calc-jc-img" src="' + j.image + '" loading="lazy">' : '') +
+      editionHtml +
       inputHtml +
       '<button class="calc-jc-remove" onclick="calculator.removeJoker(' + i + ')">\u2715</button>' +
     '</div>';
@@ -771,6 +810,12 @@ function onJokerValChange(input) {
   const idx = parseInt(input.dataset.idx);
   const val = parseFloat(input.value) || 0;
   state.jokers[idx]._customVal = val;
+  recalc();
+}
+
+function onJokerEditionChange(sel) {
+  const idx = parseInt(sel.dataset.idx);
+  state.jokers[idx].edition = sel.value;
   recalc();
 }
 
@@ -977,10 +1022,10 @@ function changeObsPlanet(handId, delta) {
 }
 
 return {
-  init, recalc, toggleCard, removeCard, clearAll,
+  init, recalc, toggleCard, removeCard, moveCardLeft, moveCardRight, clearAll,
   searchJoker, addJoker, removeJoker, toggleJokerPanel,
   toggleHeldMode, removeHeldCard, onHeldModChange,
-  onJokerValChange, copyShareText,
+  onJokerValChange, onJokerEditionChange, copyShareText,
   togglePlasma, toggleObservatory, changeObsPlanet,
   changeLevel, onModChange,
   renderSelectedHand, renderJokerSlots,

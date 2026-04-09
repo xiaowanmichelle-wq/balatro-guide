@@ -1979,10 +1979,10 @@ class BalatroApp {
                 name: '👯 双对流',
                 difficulty: '⭐⭐ 中等',
                 desc: '两对牌型组合卡牌，双倍触发对子加成，伤害爆炸',
-                detail: '两对包含两个对子，因此开心小丑(+8倍率)、奸诈小丑(+50筹码)会双倍触发。再叠加疯狂小丑(+10倍率)、聪敏小丑(+80筹码)、备用裤子(+2倍率永久叠加)，五卡齐聚时对子效果全部触发两次，伤害倍增。',
+                detail: '两对包含两个对子，因此开心小丑(+8倍率)、奸诈小丑(+50筹码)会双倍触发。再叠加疯狂小丑(+10倍率)、聪敏小丑(+80筹码)、备用裤子(+2倍率永久叠加)，五卡齐聚时对子效果全部触发两次，伤害倍增。方形小丑打出恰好4张牌+4筹码永久叠加，两对恰好是4张牌完美适配。',
                 coreCards: ['j_mad', 'j_clever', 'j_spare_trousers', 'j_jolly', 'j_sly'],
-                supportCards: ['j_duo', 'p_uranus'],
-                tips: '两对是双倍快乐——对子系加成会触发两次！备用裤子的倍率叠加尤其强大，两对一次叠加+4倍率',
+                supportCards: ['j_duo', 'j_square', 'p_uranus'],
+                tips: '两对是双倍快乐——对子系加成（开心/奸诈）会触发两次！备用裤子每打出两对+2倍率永久叠加，稳定成长。方形小丑和两对完美配合：两对恰好4张牌，每次+4筹码永久叠加',
                 compatibleWith: [
                     { id: 'pair_build', note: '双对流是对子流的升级版，核心卡牌完全兼容' },
                     { id: 'economy_build', note: '经济流提供前期过渡资金，后期切换到双对输出' }
@@ -2085,10 +2085,10 @@ class BalatroApp {
                 name: '🗑️ 弃牌流',
                 difficulty: '⭐⭐ 中等',
                 desc: '利用弃牌触发各种效果，弃牌也能赚钱和加倍率',
-                detail: '醉汉和快乐安迪增加弃牌次数，旗帜将剩余弃牌转化为筹码，约里克弃23张后获得X倍率，上路吧杰克弃J获得倍率。弃牌经济卡则把弃牌变成收入。',
+                detail: '醉汉和快乐安迪增加弃牌次数（快乐安迪+3弃牌但手牌上限-1），旗帜将剩余弃牌转化为筹码，约里克弃23张后获得X倍率，上路吧杰克弃J获得倍率。弃牌经济卡则把弃牌变成收入。',
                 coreCards: ['j_yorick', 'j_burnt', 'j_drunkard', 'j_merry_andy', 'j_banner'],
                 supportCards: ['j_hit_road', 'j_trading', 'j_mail_in', 'j_castle', 'j_faceless'],
-                tips: '快乐安迪+3弃牌是核心引擎，配合旗帜每剩余弃牌+30筹码非常可观',
+                tips: '快乐安迪+3弃牌但手牌上限-1，是核心引擎。配合旗帜每剩余弃牌+30筹码非常可观',
                 compatibleWith: [
                     { id: 'economy_build', note: '弃牌经济卡(交易卡/邮寄回扣)赚的钱可以喂给公牛/提靴带' },
                     { id: 'face_build', note: '无脸小丑弃3张人头牌+$5，配合幻视(所有牌变人头牌)收益爆炸' }
@@ -2099,10 +2099,10 @@ class BalatroApp {
                 name: '🦝 侠盗流',
                 difficulty: '⭐⭐⭐ 高级',
                 desc: '窃贼移除所有弃牌，让多个Joker保持最佳状态',
-                detail: '窃贼移除所有弃牌次数但+3手牌。这让拉面始终保持X2倍率、神秘峰顶始终+15倍率、延迟满足获得最高$收益、绿色小丑不会扣倍率。',
+                detail: '窃贼移除所有弃牌次数但+3出牌次数。这让拉面始终保持X2倍率、神秘峰顶始终+15倍率、延迟满足获得最高$收益（整回合未弃牌时每个剩余弃牌+$2）、绿色小丑不会扣倍率。',
                 coreCards: ['j_burglar', 'j_ramen', 'j_mystic_summit'],
                 supportCards: ['j_delayed', 'j_green', 'j_acrobat'],
-                tips: '窃贼是整个流派的基石——没有弃牌=拉面不衰减+神秘峰顶满触发+延迟满足满收益',
+                tips: '窃贼是整个流派的基石——没有弃牌=拉面不衰减+神秘峰顶满触发+延迟满足满收益（整回合未弃牌时每个剩余弃牌+$2，窃贼直接满足条件）',
                 compatibleWith: [
                     { id: 'economy_build', note: '延迟满足每剩余弃牌+$2，窃贼让收益最大化，赚的钱转给公牛/提靴带' }
                 ]
@@ -2201,11 +2201,11 @@ class BalatroApp {
                 id: 'augment_build',
                 name: '🧛 增强吸收流',
                 difficulty: '⭐⭐ 中等',
-                desc: '吸血鬼吸收增强牌效果叠加X倍率，注意与驾驶执照的取舍',
-                detail: '吸血鬼打出增强牌时移除增强效果+X0.1倍率，通过塔罗牌（皇后/皇帝等）不断给牌附增强供吸收。驾驶执照需要16张增强牌才能X3，与吸血鬼存在天然矛盾——吸血鬼吃掉增强会导致驾驶执照失效，需要合理取舍。',
-                coreCards: ['j_vampire', 'j_driver_license'],
-                supportCards: ['t_empress', 't_emperor', 'j_hallucination', 'j_cartomancer'],
-                tips: '如果走吸血鬼路线就别指望驾驶执照了，专注给牌加增强然后让吸血鬼吃掉叠倍率。塔罗牌产出越多，增强供应越稳定',
+                desc: '吸血鬼吸收增强牌效果叠加X倍率，迈达斯面具源源不断供给增强牌',
+                detail: '吸血鬼打出增强牌时移除增强效果+X0.1倍率。迈达斯面具将打出的人头牌变为金卡（增强牌），源源不断供吸血鬼吸收叠X倍率。通过塔罗牌（皇后/皇帝等）不断给牌附增强效果进一步提高效率。',
+                coreCards: ['j_vampire', 'j_midas'],
+                supportCards: ['t_empress', 't_emperor', 'j_hallucination', 'j_cartomancer', 'j_driver_license'],
+                tips: '迈达斯面具是增强吸收流的最佳搭档——每次打出人头牌都会变金卡，吸血鬼自动吸收叠X倍率。注意驾驶执照需要16张增强牌才X3，与吸血鬼路线冲突，选一条路走到底。塔罗牌产出越多，增强供应越稳定',
                 compatibleWith: [
                     { id: 'face_build', note: '迈达斯面具将人头牌变金卡(增强牌)，源源不断供吸血鬼吸收' },
                     { id: 'tarot_build', note: '塔罗牌(皇后/皇帝)给牌加增强，占卜师同时获得倍率，一举两得' }
@@ -2215,8 +2215,8 @@ class BalatroApp {
                 id: 'skip_build',
                 name: '⏭️ 跳过流',
                 difficulty: '⭐⭐ 中等',
-                desc: '跳过盲注获得倍率积累，回溯+红牌双重收益',
-                detail: '回溯每跳过盲注+X0.25倍率，红牌每跳过增强包+3倍率。跳过小盲注和大盲注（只打Boss）可以快速积累倍率。',
+                desc: '跳过盲注获得倍率积累，回溯跳盲注+X倍率，红牌跳补充包+倍率',
+                detail: '回溯每跳过盲注+X0.25倍率，红牌每在补充包中跳过+3倍率。跳过小盲注和大盲注（只打Boss）可以快速积累回溯倍率，同时跳过补充包为红牌叠倍率。',
                 coreCards: ['j_throwback', 'j_red'],
                 supportCards: ['j_mr_bones', 'j_acrobat', 'j_stencil'],
                 tips: '跳过小盲和大盲，只打Boss。骷髅先生防止意外死亡，杂技演员最后一手X3保底',
