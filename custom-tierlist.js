@@ -18,7 +18,7 @@ class CustomTierList {
         this._tierI18n = {
             en: {
                 names: { '夯': 'Carry', '顶级': 'Elite', '人上人': 'Superior', 'NPC': 'NPC', '拉': 'Bad', '拉完了': 'Garbage' },
-                descs: { '夯': 'Dominates', '顶级': 'Top-tier', '人上人': 'Top player', 'NPC': 'Generic', '拉': 'Weak', '拉完了': 'Completely bad' }
+                descs: { '夯': 'Dominate', '顶级': 'Top-tier', '人上人': 'Top player', 'NPC': 'Generic', '拉': 'Weak', '拉完了': 'Hopeless' }
             },
             ja: {
                 names: { '夯': '圧勝', '顶级': '最強', '人上人': 'エリート', 'NPC': 'NPC', '拉': 'ダメ', '拉完了': '最悪' },
