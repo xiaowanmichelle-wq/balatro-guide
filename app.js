@@ -2195,10 +2195,10 @@ class BalatroApp {
                 name: '🔥 出售流',
                 difficulty: '⭐⭐ 中等',
                 desc: '通过出售卡牌获得增益，篝火每出售+X0.25',
-                detail: '篝火每出售一张卡+X0.25倍率(Boss重置)，礼品卡增加出售值，零糖可乐出售创造免费双倍标签。每回合买卖循环快速累积倍率。',
+                detail: '篝火每出售一张卡+X0.25倍率(Boss重置)，礼品卡增加出售值，零糖可乐出售创造免费双倍标签。每回合买卖循环快速累积倍率。金柱凭证"租赁"让小丑$1买入$1卖出，相当于免费喂篝火+×0.25！',
                 coreCards: ['j_campfire', 'j_gift_card', 'j_diet_cola'],
                 supportCards: ['j_swashbuckler', 'j_riff_raff', 'j_ceremonial'],
-                tips: '篝火在Boss重置前要尽量多出售卡牌累积倍率，乌合之众每盲注创造2个普通Joker可以出售',
+                tips: '篝火在Boss重置前要尽量多出售卡牌累积倍率，乌合之众每盲注创造2个普通Joker可以出售。进阶：拿到金柱"租赁"后，商店小丑$1买$1卖，相当于每张免费+×0.25倍率，疯狂循环',
                 compatibleWith: [
                     { id: 'economy_build', note: '出售赚的钱可以喂给公牛/提靴带，买卖循环=倍率+经济双收' },
                     { id: 'destroy_build', note: '仪式匕首摧毁Joker获得倍率，与出售流的"牺牲换收益"理念一致' }
