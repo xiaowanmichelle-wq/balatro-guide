@@ -2326,8 +2326,8 @@ class BalatroApp {
         // 渲染 Tier List
         this.renderTierList();
         // 重新初始化滚动入场动画（动态内容）
-        if (typeof scrollObserver !== 'undefined') {
-            document.querySelectorAll('.scroll-reveal:not(.revealed)').forEach(el => scrollObserver.observe(el));
+        if (window.scrollObserver) {
+            document.querySelectorAll('.scroll-reveal:not(.revealed)').forEach(el => window.scrollObserver.observe(el));
         }
     }
     

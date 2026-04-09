@@ -954,6 +954,12 @@
         if (typeof customTierList !== 'undefined' && customTierList.isOpen) {
             customTierList.render();
         }
+        // 重新渲染后，新的 scroll-reveal 元素需要重新 observe
+        if (window.scrollObserver) {
+            document.querySelectorAll('.scroll-reveal:not(.revealed)').forEach(el => {
+                window.scrollObserver.observe(el);
+            });
+        }
     }
     
     function applyI18n() {
