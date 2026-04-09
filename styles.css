@@ -495,6 +495,40 @@ body {
     gap: 15px;
 }
 
+/* 成长小丑引导提示 */
+.scaling-tip {
+    grid-column: 1 / -1;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 18px;
+    background: linear-gradient(135deg, rgba(0, 184, 148, 0.08), rgba(0, 184, 148, 0.02));
+    border: 1px solid rgba(0, 184, 148, 0.25);
+    border-radius: 12px;
+    margin-bottom: 4px;
+    animation: scalingTipGlow 3s ease-in-out infinite alternate;
+}
+
+@keyframes scalingTipGlow {
+    from { border-color: rgba(0, 184, 148, 0.2); }
+    to { border-color: rgba(0, 184, 148, 0.45); }
+}
+
+.scaling-tip-icon {
+    font-size: 1.6rem;
+    flex-shrink: 0;
+}
+
+.scaling-tip-text {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    line-height: 1.5;
+}
+
+.scaling-tip-text strong {
+    color: #00b894;
+}
+
 /* Card Component */
 .card {
     background: var(--bg-card);

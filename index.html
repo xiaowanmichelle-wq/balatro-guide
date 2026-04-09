@@ -341,6 +341,10 @@
                                 <input type="checkbox" value="suit">
                                 <span class="tag-chip" style="--tag-color: #e91e63">花色</span>
                             </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" value="scaling">
+                                <span class="tag-chip" style="--tag-color: #00b894">成长</span>
+                            </label>
                         </div>
                     </div>
 
@@ -403,6 +407,13 @@
                         <button class="search-btn" id="search-btn" data-i18n="ui.search">搜索</button>
                     </div>
                     <div class="cards-grid" id="cards-grid">
+                        <!-- 成长小丑引导提示 -->
+                        <div class="scaling-tip" id="scaling-tip" style="display:none;">
+                            <span class="scaling-tip-icon">📈</span>
+                            <div class="scaling-tip-text">
+                                <strong>成长型小丑</strong>是赢得后几轮的关键！它们的效果会随游戏进行不断叠加，越到后期越强。优先选择永久×倍率成长型（如星座、全息影像、吸血鬼）。
+                            </div>
+                        </div>
                         <!-- 卡牌将通过 JS 渲染 -->
                     </div>
                 </div>

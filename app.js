@@ -117,6 +117,9 @@ class BalatroApp {
             input.addEventListener('change', () => {
                 this.filters.effects = Array.from(document.querySelectorAll('.filter-section:nth-child(4) .checkbox-label input:checked')).map(i => i.value);
                 this.renderCards();
+                // 成长小丑引导提示
+                const tip = document.getElementById('scaling-tip');
+                if (tip) tip.style.display = this.filters.effects.includes('scaling') ? 'flex' : 'none';
             });
         });
         
