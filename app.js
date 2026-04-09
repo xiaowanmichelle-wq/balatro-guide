@@ -2005,7 +2005,7 @@ class BalatroApp {
                 tips: '捷径是顺子流的核心辅助，让2-4-5-6-7也算顺子。四指进一步降低到4张即可',
                 compatibleWith: [
                     { id: 'flush_build', note: '顺子+同花=同花顺！四指让两者只需4张，是终极组合' },
-                    { id: 'fibonacci_build', note: 'A-2-3-5-8本身就是捷径顺子，斐波那契点数天然适配' }
+                    { id: 'fibonacci_build', note: 'A-2-3-5中3和5间隔2用捷径相邻，4张斐波那契牌可融入顺子' }
                 ]
             },
             {
@@ -2064,7 +2064,7 @@ class BalatroApp {
                 supportCards: ['j_scholar', 'j_hack', 'j_walkie', 'j_8ball'],
                 tips: '2和8是双重触发王者(斐波那契+偶数)，尽量多拿这两个点数',
                 compatibleWith: [
-                    { id: 'straight_build', note: 'A-2-3-5-8用捷径可组成顺子，斐波那契点数天然兼容顺子流' },
+                    { id: 'straight_build', note: 'A-2-3-5中3和5用捷径相邻，可融入顺子体系（但8距5差3不适配）' },
                     { id: 'tarot_build', note: '8号球打出8时1/4概率给塔罗牌，与塔罗流占卜师配合' }
                 ]
             },
