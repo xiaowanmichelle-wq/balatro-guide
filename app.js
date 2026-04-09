@@ -2020,7 +2020,7 @@ class BalatroApp {
                 coreCards: ['j_droll', 'j_crafty', 'j_tribe', 'j_smeared'],
                 supportCards: ['j_four_fingers', 'j_blackboard', 'p_jupiter'],
                 tips: '模糊小丑是同花流最重要的辅助——红桃方块合并、黑桃梅花合并，等于只有2种花色',
-                counters: '花色Boss(梅花/黑桃/方块/红桃)对应花色牌被削弱 | 眼(The Eye)每手不能重复牌型',
+                counters: '花色Boss削弱对应花色牌(The Club♣/The Goad♠/The Window♦/The Head♥)，你的同花花色被削弱时全部计分为0 | 眼(The Eye)每手不能重复牌型',
                 compatibleWith: [
                     { id: 'straight_build', note: '同花+顺子=同花顺！用四指降低门槛，是最强牌型组合' },
                     { id: 'chance_build', note: '血石(红桃X1.5)与同花配合，打红桃同花每张牌都可能触发' },
