@@ -473,11 +473,11 @@
         <!-- 攻略指南页面 -->
         <section class="tab-content" id="guide" role="tabpanel" aria-label="攻略指南">
             <div class="guide-content">
-                <h2>📖 新手攻略</h2>
+                <h2 data-i18n="guide.title">📖 新手攻略</h2>
 
                 <div class="guide-section scroll-reveal">
-                    <h3>🏆 小丑 Tier List</h3>
-                    <p class="guide-subtitle">前八轮 vs 无限轮分别评价，点击卡牌可查看详情</p>
+                    <h3 data-i18n="guide.tierListTitle">🏆 小丑 Tier List</h3>
+                    <p class="guide-subtitle" data-i18n="guide.tierListSubtitle">前八轮 vs 无限轮分别评价，点击卡牌可查看详情</p>
                     <div class="tierlist-filters" id="tierlist-filters">
                         <!-- 筛选按钮通过 JS 渲染 -->
                     </div>
@@ -487,61 +487,61 @@
 
                     <!-- 创建我的 Tier List 入口 -->
                     <div class="ctl-entry">
-                        <button class="ctl-entry-btn" onclick="customTierList.open()">
+                        <button class="ctl-entry-btn" onclick="customTierList.open()" data-i18n="guide.ctlBtn">
                             🎨 排排你心中的小丑牌
                         </button>
-                        <p class="ctl-entry-hint">从「夯」到「拉完了」，生成你的专属排名图</p>
+                        <p class="ctl-entry-hint" data-i18n="guide.ctlHint">从「夯」到「拉完了」，生成你的专属排名图</p>
                     </div>
                 </div>
 
                 <div class="guide-section scroll-reveal">
-                    <h3>🎯 基础概念</h3>
+                    <h3 data-i18n="guide.basicConcepts">🎯 基础概念</h3>
                     <div class="guide-card">
-                        <h4>筹码 × 倍数 = 得分</h4>
-                        <p>Balatro 的核心公式：<strong>Chips × Mult = Score</strong></p>
+                        <h4 data-i18n="guide.scoringTitle">筹码 × 倍数 = 得分</h4>
+                        <p data-i18n-html="guide.scoringIntro">Balatro 的核心公式：<strong>Chips × Mult = Score</strong></p>
                         <ul>
-                            <li><strong>筹码(Chips)</strong>: 分数的基础值，由牌型基础筹码 + 打出牌的点数 + 各种 +Chips 效果累加</li>
-                            <li><strong>倍数(Mult)</strong>: 加法型乘数，由牌型基础倍数 + 各种 <span style="color:#e74c3c">+Mult</span> 效果累加（如 +4、+8）</li>
-                            <li><strong>倍率(XMult)</strong>: 乘法型乘数，在倍数累加完成后，依次 <span style="color:#f39c12">×XMult</span> 相乘（如 X2、X3）</li>
+                            <li data-i18n-html="guide.scoringChips"><strong>筹码(Chips)</strong>: 分数的基础值，由牌型基础筹码 + 打出牌的点数 + 各种 +Chips 效果累加</li>
+                            <li data-i18n-html="guide.scoringMult"><strong>倍数(Mult)</strong>: 加法型乘数，由牌型基础倍数 + 各种 <span style="color:#e74c3c">+Mult</span> 效果累加（如 +4、+8）</li>
+                            <li data-i18n-html="guide.scoringXmult"><strong>倍率(XMult)</strong>: 乘法型乘数，在倍数累加完成后，依次 <span style="color:#f39c12">×XMult</span> 相乘（如 X2、X3）</li>
                         </ul>
                         <div class="scoring-example" style="background: rgba(255,255,255,0.05); border-radius: 8px; padding: 12px; margin-top: 10px;">
-                            <p style="margin: 0 0 6px; font-size: 0.85em; opacity: 0.8;">📐 计算顺序示例：</p>
-                            <p style="margin: 0 0 4px; font-size: 0.9em;">① 筹码 = 牌型基础 + 打出牌点数 + 各种 +Chips → 得到总筹码</p>
-                            <p style="margin: 0 0 4px; font-size: 0.9em;">② 倍数 = 牌型基础 + 各种 <span style="color:#e74c3c">+Mult</span> → 得到基础倍数</p>
-                            <p style="margin: 0 0 4px; font-size: 0.9em;">③ 倍率加成 = 基础倍数 <span style="color:#f39c12">× X2 × X3 ...</span> → 得到最终倍数</p>
-                            <p style="margin: 0; font-size: 0.9em;">④ <strong>最终得分 = 总筹码 × 最终倍数</strong></p>
+                            <p style="margin: 0 0 6px; font-size: 0.85em; opacity: 0.8;" data-i18n="guide.scoringExample">📐 计算顺序示例：</p>
+                            <p style="margin: 0 0 4px; font-size: 0.9em;" data-i18n-html="guide.scoringStep1">① 筹码 = 牌型基础 + 打出牌点数 + 各种 +Chips → 得到总筹码</p>
+                            <p style="margin: 0 0 4px; font-size: 0.9em;" data-i18n-html="guide.scoringStep2">② 倍数 = 牌型基础 + 各种 <span style="color:#e74c3c">+Mult</span> → 得到基础倍数</p>
+                            <p style="margin: 0 0 4px; font-size: 0.9em;" data-i18n-html="guide.scoringStep3">③ 倍率加成 = 基础倍数 <span style="color:#f39c12">× X2 × X3 ...</span> → 得到最终倍数</p>
+                            <p style="margin: 0; font-size: 0.9em;" data-i18n-html="guide.scoringStep4">④ <strong>最终得分 = 总筹码 × 最终倍数</strong></p>
                         </div>
-                        <p style="margin-top: 8px; font-size: 0.85em; opacity: 0.7;">⚠️ 注意：倍数(+Mult)是加法叠加，倍率(XMult)是乘法叠加。1个 X2 倍率 ≈ 把你的倍数翻一倍，远比 +2 倍数强！</p>
+                        <p style="margin-top: 8px; font-size: 0.85em; opacity: 0.7;" data-i18n="guide.scoringNote">⚠️ 注意：倍数(+Mult)是加法叠加，倍率(XMult)是乘法叠加。1个 X2 倍率 ≈ 把你的倍数翻一倍，远比 +2 倍数强！</p>
                     </div>
 
                     <div class="guide-card">
-                        <h4>🔀 卡牌顺序很重要！</h4>
-                        <p>Balatro 中<strong>小丑卡牌</strong>和<strong>手中的扑克牌</strong>都可以手动拖拽调整顺序，这会直接影响计分结果。</p>
+                        <h4 data-i18n="guide.orderTitle">🔀 卡牌顺序很重要！</h4>
+                        <p data-i18n-html="guide.orderIntro">Balatro 中<strong>小丑卡牌</strong>和<strong>手中的扑克牌</strong>都可以手动拖拽调整顺序，这会直接影响计分结果。</p>
                         <ul>
-                            <li><strong>小丑(Joker)顺序</strong>：Joker 的效果按<span style="color:#ffd700">从左到右</span>的顺序依次触发。拖拽 Joker 可以改变触发顺序</li>
-                            <li><strong>扑克牌顺序</strong>：手牌中的扑克牌也可以拖拽排列，打出的牌按<span style="color:#ffd700">从左到右</span>依次计分</li>
+                            <li data-i18n-html="guide.orderJoker"><strong>小丑(Joker)顺序</strong>：Joker 的效果按<span style="color:#ffd700">从左到右</span>的顺序依次触发。拖拽 Joker 可以改变触发顺序</li>
+                            <li data-i18n-html="guide.orderPoker"><strong>扑克牌顺序</strong>：手牌中的扑克牌也可以拖拽排列，打出的牌按<span style="color:#ffd700">从左到右</span>依次计分</li>
                         </ul>
                         <div style="background: rgba(255,255,255,0.05); border-radius: 8px; padding: 12px; margin-top: 10px;">
-                            <p style="margin: 0 0 6px; font-size: 0.85em; opacity: 0.8;">🎯 顺序影响举例：</p>
-                            <p style="margin: 0 0 4px; font-size: 0.9em;">• <strong>蓝图</strong>复制<span style="color:#3498db">右侧</span>的 Joker → 把最强 Joker 放在蓝图右边</p>
-                            <p style="margin: 0 0 4px; font-size: 0.9em;">• <strong>头脑风暴</strong>复制<span style="color:#3498db">最左侧</span>的 Joker → 把最强 Joker 放在最左边</p>
-                            <p style="margin: 0 0 4px; font-size: 0.9em;">• <strong>照片</strong>对打出的<span style="color:#3498db">第一张</span>人头牌 X2 → 人头牌尽量放最左边先打出</p>
-                            <p style="margin: 0; font-size: 0.9em;">• <strong>+Mult</strong> 的 Joker 应放在 <strong>XMult</strong> 的 Joker <span style="color:#f39c12">左边</span> → 先加后乘，收益最大化</p>
+                            <p style="margin: 0 0 6px; font-size: 0.85em; opacity: 0.8;" data-i18n="guide.orderExampleTitle">🎯 顺序影响举例：</p>
+                            <p style="margin: 0 0 4px; font-size: 0.9em;" data-i18n-html="guide.orderExample1">• <strong>蓝图</strong>复制<span style="color:#3498db">右侧</span>的 Joker → 把最强 Joker 放在蓝图右边</p>
+                            <p style="margin: 0 0 4px; font-size: 0.9em;" data-i18n-html="guide.orderExample2">• <strong>头脑风暴</strong>复制<span style="color:#3498db">最左侧</span>的 Joker → 把最强 Joker 放在最左边</p>
+                            <p style="margin: 0 0 4px; font-size: 0.9em;" data-i18n-html="guide.orderExample3">• <strong>照片</strong>对打出的<span style="color:#3498db">第一张</span>人头牌 X2 → 人头牌尽量放最左边先打出</p>
+                            <p style="margin: 0; font-size: 0.9em;" data-i18n-html="guide.orderExample4">• <strong>+Mult</strong> 的 Joker 应放在 <strong>XMult</strong> 的 Joker <span style="color:#f39c12">左边</span> → 先加后乘，收益最大化</p>
                         </div>
-                        <p style="margin-top: 8px; font-size: 0.85em; opacity: 0.7;">💡 小技巧：长按/拖拽即可调整顺序。养成随时调整 Joker 排列的习惯，尤其是获得蓝图、头脑风暴等位置敏感的卡牌时！</p>
+                        <p style="margin-top: 8px; font-size: 0.85em; opacity: 0.7;" data-i18n="guide.orderTip">💡 小技巧：长按/拖拽即可调整顺序。养成随时调整 Joker 排列的习惯，尤其是获得蓝图、头脑风暴等位置敏感的卡牌时！</p>
                     </div>
                 </div>
 
                 <div class="guide-section scroll-reveal">
-                    <h3>💡 构筑思路</h3>
+                    <h3 data-i18n="guide.buildTitle">💡 构筑思路</h3>
                     <div class="guide-grid" id="build-strategies">
                         <!-- 构筑思路通过 JS 渲染 -->
                     </div>
                 </div>
 
                 <div class="guide-section scroll-reveal">
-                    <h3>⭐ 推荐卡牌</h3>
-                    <p class="guide-subtitle">按构筑流派分类，点击卡牌可添加到牌组匹配</p>
+                    <h3 data-i18n="guide.recTitle">⭐ 推荐卡牌</h3>
+                    <p class="guide-subtitle" data-i18n="guide.recSubtitle">按构筑流派分类，点击卡牌可添加到牌组匹配</p>
                     <div class="recommended-tabs" id="recommended-tabs">
                         <!-- 推荐卡牌分类 Tab 通过 JS 渲染 -->
                     </div>
@@ -555,54 +555,54 @@
         <section class="tab-content" id="seeds" role="tabpanel" aria-label="种子分享">
             <div class="seeds-layout">
                 <div class="seeds-header">
-                    <h2>🌱 种子分享</h2>
-                    <p class="description">分享你发现的好种子，帮助其他玩家获得精彩开局！</p>
+                    <h2 data-i18n="seeds.title">🌱 种子分享</h2>
+                    <p class="description" data-i18n="seeds.description">分享你发现的好种子，帮助其他玩家获得精彩开局！</p>
                 </div>
 
                 <!-- 种子功能说明 -->
                 <div class="seed-info-panel scroll-reveal">
                     <div class="seed-info-section">
-                        <h4>🎯 种子能做什么</h4>
+                        <h4 data-i18n="seeds.canDoTitle">🎯 种子能做什么</h4>
                         <ul>
-                            <li>控制商店的顺序以及哪些小丑可以出现</li>
-                            <li>控制盲盒和 Boss 盲盒的顺序</li>
-                            <li>控制哪些强化包和星球卡牌出现以及何时出现</li>
-                            <li>允许不同的玩家重玩或分享相同的游戏风格</li>
+                            <li data-i18n="seeds.canDo1">控制商店的顺序以及哪些小丑可以出现</li>
+                            <li data-i18n="seeds.canDo2">控制盲盒和 Boss 盲盒的顺序</li>
+                            <li data-i18n="seeds.canDo3">控制哪些强化包和星球卡牌出现以及何时出现</li>
+                            <li data-i18n="seeds.canDo4">允许不同的玩家重玩或分享相同的游戏风格</li>
                         </ul>
                     </div>
                     <div class="seed-info-section seed-info-warning">
-                        <h4>⚠️ 种子做不到的事</h4>
+                        <h4 data-i18n="seeds.cantDoTitle">⚠️ 种子做不到的事</h4>
                         <ul>
-                            <li>无法为您解锁 Jokers、Planet 卡、Vouchers 或 Blinds</li>
-                            <li>无法强制游戏使用你尚未解锁的卡牌</li>
-                            <li>不会改变基本规则、计分方式或难度设置</li>
+                            <li data-i18n="seeds.cantDo1">无法为您解锁 Jokers、Planet 卡、Vouchers 或 Blinds</li>
+                            <li data-i18n="seeds.cantDo2">无法强制游戏使用你尚未解锁的卡牌</li>
+                            <li data-i18n="seeds.cantDo3">不会改变基本规则、计分方式或难度设置</li>
                         </ul>
                     </div>
                 </div>
 
                 <!-- 投稿表单 -->
                 <div class="seed-submit-panel scroll-reveal">
-                    <h3>📝 投稿种子</h3>
+                    <h3 data-i18n="seeds.submitTitle">📝 投稿种子</h3>
                     <form id="seed-form" class="seed-form">
                         <div class="form-row">
                             <div class="form-group">
-                                <label for="seed-code">种子代码 <span class="required">*</span></label>
-                                <input type="text" id="seed-code" placeholder="如：ABCD1234" required maxlength="50">
+                                <label for="seed-code"><span data-i18n="seeds.seedCode">种子代码</span> <span class="required">*</span></label>
+                                <input type="text" id="seed-code" data-i18n-placeholder="seeds.seedCodePlaceholder" placeholder="如：ABCD1234" required maxlength="50">
                             </div>
                             <div class="form-group">
-                                <label for="seed-author">你的昵称</label>
-                                <input type="text" id="seed-author" placeholder="匿名玩家" maxlength="30">
+                                <label for="seed-author" data-i18n="seeds.nickname">你的昵称</label>
+                                <input type="text" id="seed-author" data-i18n-placeholder="seeds.nicknamePlaceholder" placeholder="匿名玩家" maxlength="30">
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="seed-title">标题/亮点 <span class="required">*</span></label>
-                            <input type="text" id="seed-title" placeholder="如：第一关直接给传说Joker" required maxlength="80">
+                            <label for="seed-title"><span data-i18n="seeds.seedTitle">标题/亮点</span> <span class="required">*</span></label>
+                            <input type="text" id="seed-title" data-i18n-placeholder="seeds.seedTitlePlaceholder" placeholder="如：第一关直接给传说Joker" required maxlength="80">
                         </div>
                         <div class="form-row">
                             <div class="form-group">
-                                <label for="seed-build">推荐流派</label>
+                                <label for="seed-build" data-i18n="seeds.buildLabel">推荐流派</label>
                                 <select id="seed-build">
-                                    <option value="">不限</option>
+                                    <option value="" data-i18n="seeds.buildNone">不限</option>
                                     <option value="对子流">🃏 对子流</option>
                                     <option value="双对流">👯 双对流</option>
                                     <option value="顺子流">📏 顺子流</option>
@@ -628,21 +628,21 @@
                                 </select>
                             </div>
                             <div class="form-group">
-                                <label for="seed-difficulty">难度评价</label>
+                                <label for="seed-difficulty" data-i18n="seeds.difficultyLabel">难度评价</label>
                                 <select id="seed-difficulty">
-                                    <option value="简单">⭐ 简单</option>
-                                    <option value="中等" selected>⭐⭐ 中等</option>
-                                    <option value="困难">⭐⭐⭐ 困难</option>
+                                    <option value="简单" data-i18n="seeds.difficultyEasy">⭐ 简单</option>
+                                    <option value="中等" selected data-i18n="seeds.difficultyMedium">⭐⭐ 中等</option>
+                                    <option value="困难" data-i18n="seeds.difficultyHard">⭐⭐⭐ 困难</option>
                                 </select>
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="seed-desc">详细说明</label>
-                            <textarea id="seed-desc" placeholder="描述这个种子的特色、关键Joker、推荐打法等..." rows="3" maxlength="500"></textarea>
+                            <label for="seed-desc" data-i18n="seeds.detailLabel">详细说明</label>
+                            <textarea id="seed-desc" data-i18n-placeholder="seeds.detailPlaceholder" placeholder="描述这个种子的特色、关键Joker、推荐打法等..." rows="3" maxlength="500"></textarea>
                         </div>
                         <div class="form-actions">
-                            <button type="submit" class="btn btn-primary" id="seed-submit-btn">🚀 提交种子</button>
-                            <span class="submit-hint">投稿需审核通过后才会展示</span>
+                            <button type="submit" class="btn btn-primary" id="seed-submit-btn" data-i18n="seeds.submitBtn">🚀 提交种子</button>
+                            <span class="submit-hint" data-i18n="seeds.submitHint">投稿需审核通过后才会展示</span>
                         </div>
                     </form>
                     <div id="seed-submit-msg" class="seed-submit-msg"></div>
@@ -653,16 +653,16 @@
                     <div class="seeds-toolbar">
                         <div class="seeds-search">
                             <span class="search-icon">🔍</span>
-                            <input type="text" id="seed-search" placeholder="搜索种子代码或描述...">
+                            <input type="text" id="seed-search" data-i18n-placeholder="seeds.searchPlaceholder" placeholder="搜索种子代码或描述...">
                         </div>
                         <div class="seeds-sort">
-                            <button class="sort-btn active" data-sort="hot">🔥 最热</button>
-                            <button class="sort-btn" data-sort="new">🕐 最新</button>
+                            <button class="sort-btn active" data-sort="hot" data-i18n="seeds.sortHot">🔥 最热</button>
+                            <button class="sort-btn" data-sort="new" data-i18n="seeds.sortNew">🕐 最新</button>
                         </div>
                     </div>
                     <div class="seeds-grid" id="seeds-grid">
                         <!-- 种子卡片通过 JS 渲染 -->
-                        <div class="seeds-loading">加载中...</div>
+                        <div class="seeds-loading" data-i18n="seeds.loadingSeeds">加载中...</div>
                     </div>
                     <div class="seeds-pagination" id="seeds-pagination">
                         <!-- 分页按钮 -->
@@ -952,12 +952,21 @@
     }
     
     function applyI18n() {
-        // 更新所有带 data-i18n 属性的元素
+        // 更新所有带 data-i18n 属性的元素（纯文本）
         document.querySelectorAll('[data-i18n]').forEach(el => {
             const key = el.getAttribute('data-i18n');
             const translated = i18n.t(key);
             if (translated && translated !== key) {
                 el.textContent = translated;
+            }
+        });
+
+        // 更新带 data-i18n-html 属性的元素（含 HTML 标签）
+        document.querySelectorAll('[data-i18n-html]').forEach(el => {
+            const key = el.getAttribute('data-i18n-html');
+            const translated = i18n.t(key);
+            if (translated && translated !== key) {
+                el.innerHTML = translated;
             }
         });
         

@@ -138,6 +138,10 @@ i18n.register('zh-CN', {
     // ============ 攻略指南页面 ============
     guide: {
         title: '📖 新手攻略',
+        tierListTitle: '🏆 小丑 Tier List',
+        tierListSubtitle: '前八轮 vs 无限轮分别评价，点击卡牌可查看详情',
+        ctlBtn: '🎨 排排你心中的小丑牌',
+        ctlHint: '从「夯」到「拉完了」，生成你的专属排名图',
         basicConcepts: '🎯 基础概念',
         
         // 得分公式卡
@@ -190,6 +194,15 @@ i18n.register('zh-CN', {
     seeds: {
         title: '🌱 种子分享',
         description: '分享你发现的好种子，帮助其他玩家获得精彩开局！',
+        canDoTitle: '🎯 种子能做什么',
+        canDo1: '控制商店的顺序以及哪些小丑可以出现',
+        canDo2: '控制盲盒和 Boss 盲盒的顺序',
+        canDo3: '控制哪些强化包和星球卡牌出现以及何时出现',
+        canDo4: '允许不同的玩家重玩或分享相同的游戏风格',
+        cantDoTitle: '⚠️ 种子做不到的事',
+        cantDo1: '无法为您解锁 Jokers、Planet 卡、Vouchers 或 Blinds',
+        cantDo2: '无法强制游戏使用你尚未解锁的卡牌',
+        cantDo3: '不会改变基本规则、计分方式或难度设置',
         
         // 投稿表单
         submitTitle: '📝 投稿种子',

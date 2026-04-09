@@ -113,6 +113,10 @@ i18n.register('ja', {
     // ============ 攻略ガイドページ ============
     guide: {
         title: '📖 初心者ガイド',
+        tierListTitle: '🏆 ジョーカー Tier List',
+        tierListSubtitle: '序盤 vs エンドレスを個別評価、カードをクリックで詳細表示',
+        ctlBtn: '🎨 あなたのジョーカーをランク付け',
+        ctlHint: '「壊れ」から「ゴミ」まで — あなただけのランキングを作ろう！',
         basicConcepts: '🎯 基本コンセプト',
         scoringTitle: 'チップ × マルチ = スコア',
         scoringIntro: 'Balatoのコア公式: <strong>チップ × マルチ = スコア</strong>',
@@ -155,6 +159,15 @@ i18n.register('ja', {
     seeds: {
         title: '🌱 シード共有',
         description: '素晴らしいシードを共有して、他のプレイヤーの素敵なスタートを助けましょう！',
+        canDoTitle: '🎯 シードでできること',
+        canDo1: 'ショップの順番とどのジョーカーが出現するかを制御',
+        canDo2: 'ブラインドとボスブラインドの順番を制御',
+        canDo3: 'どのブースターパックと惑星カードがいつ出現するかを制御',
+        canDo4: '異なるプレイヤーが同じゲームスタイルをリプレイ・共有可能',
+        cantDoTitle: '⚠️ シードでできないこと',
+        cantDo1: 'ジョーカー、惑星カード、バウチャー、ブラインドのアンロックはできません',
+        cantDo2: 'まだアンロックしていないカードの使用を強制できません',
+        cantDo3: '基本ルール、スコアリング方式、難易度設定は変更されません',
         submitTitle: '📝 シードを投稿',
         seedCode: 'シードコード',
         seedCodePlaceholder: '例：ABCD1234',

@@ -113,6 +113,10 @@ i18n.register('en', {
     // ============ Strategy Guide Page ============
     guide: {
         title: '📖 Beginner\'s Guide',
+        tierListTitle: '🏆 Joker Tier List',
+        tierListSubtitle: 'Early rounds vs Endless rated separately. Click a card for details',
+        ctlBtn: '🎨 Rank your Jokers',
+        ctlHint: 'From "Broken" to "Trash" — create your own ranking!',
         basicConcepts: '🎯 Core Concepts',
         scoringTitle: 'Chips × Mult = Score',
         scoringIntro: 'The core formula in Balatro: <strong>Chips × Mult = Score</strong>',
@@ -155,6 +159,15 @@ i18n.register('en', {
     seeds: {
         title: '🌱 Seed Sharing',
         description: 'Share great seeds to help other players find amazing starts!',
+        canDoTitle: '🎯 What Seeds Can Do',
+        canDo1: 'Control the order of the shop and which Jokers can appear',
+        canDo2: 'Control the order of Blind and Boss Blind',
+        canDo3: 'Control which booster packs and planet cards appear and when',
+        canDo4: 'Allow different players to replay or share the same game style',
+        cantDoTitle: '⚠️ What Seeds Cannot Do',
+        cantDo1: 'Cannot unlock Jokers, Planet cards, Vouchers, or Blinds for you',
+        cantDo2: 'Cannot force the game to use cards you haven\'t unlocked',
+        cantDo3: 'Does not change base rules, scoring, or difficulty settings',
         submitTitle: '📝 Submit Seed',
         seedCode: 'Seed Code',
         seedCodePlaceholder: 'e.g. ABCD1234',
