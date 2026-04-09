@@ -2102,15 +2102,31 @@ class BalatroApp {
             },
             {
                 id: 'burglar_build',
-                name: '🦝 侠盗流',
+                name: '🔇 窃贼流',
                 difficulty: '⭐⭐⭐ 高级',
                 desc: '窃贼移除所有弃牌，让多个Joker保持最佳状态',
                 detail: '窃贼移除所有弃牌次数但+3出牌次数。这让拉面始终保持X2倍率、神秘峰顶始终+15倍率、延迟满足获得最高$收益（整回合未弃牌时每个剩余弃牌+$2）、绿色小丑不会扣倍率。',
                 coreCards: ['j_burglar', 'j_ramen', 'j_mystic_summit'],
-                supportCards: ['j_delayed', 'j_green', 'j_acrobat'],
+                supportCards: ['j_delayed', 'j_green', 'j_acrobat', 'j_obelisk'],
                 tips: '窃贼是整个流派的基石——没有弃牌=拉面不衰减+神秘峰顶满触发+延迟满足满收益（整回合未弃牌时每个剩余弃牌+$2，窃贼直接满足条件）',
                 compatibleWith: [
-                    { id: 'economy_build', note: '延迟满足每剩余弃牌+$2，窃贼让收益最大化，赚的钱转给公牛/提靴带' }
+                    { id: 'economy_build', note: '延迟满足每剩余弃牌+$2，窃贼让收益最大化，赚的钱转给公牛/提靴带' },
+                    { id: 'swashbuckler_build', note: '窃贼+3出牌次数更快累积侠盗倍率，延迟满足赚钱买更多小丑抬售价' }
+                ]
+            },
+            {
+                id: 'swashbuckler_build',
+                name: '🦝 侠盗流',
+                difficulty: '⭐⭐ 中等',
+                desc: '侠盗将所有小丑总售价转化为倍率，礼品卡和鸡蛋持续抬售价',
+                detail: '侠盗把其他小丑的总售价变成自己的+倍率。礼品卡每回合给所有小丑和消耗品售价+$1，鸡蛋每回合自身售价+$3，两者都能持续抬高侠盗的倍率。仪式匕首摧毁高售价小丑时获售价×2的永久倍率，与侠盗互补。',
+                coreCards: ['j_swashbuckler', 'j_gift_card', 'j_egg'],
+                supportCards: ['j_ceremonial', 'j_campfire', 'j_riff_raff'],
+                tips: '礼品卡+鸡蛋是侠盗流的双引擎——礼品卡每回合给全队涨售价，鸡蛋单卡每回合+$3售价。5张小丑+礼品卡=每回合侠盗+5倍率，加上鸡蛋更猛。后期侠盗倍率轻松30+',
+                compatibleWith: [
+                    { id: 'sell_build', note: '篝火每出售+×0.25，乌合之众每盲注补2张小丑可出售，与侠盗售价体系双重收益' },
+                    { id: 'burglar_build', note: '窃贼+3出牌次数加速出牌，延迟满足赚钱买更多小丑抬高侠盗售价倍率' },
+                    { id: 'destroy_build', note: '仪式匕首摧毁右侧高售价小丑=巨额永久倍率，礼品卡抬高售价让匕首收益更大' }
                 ]
             },
             {
