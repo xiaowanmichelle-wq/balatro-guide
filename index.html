@@ -1049,11 +1049,11 @@
     <div class="ctl-overlay" id="custom-tierlist-overlay">
         <div class="ctl-modal">
             <div class="ctl-header">
-                <h2>🎨 我的 Tier List</h2>
+                <h2 data-i18n="ctl.title">🎨 我的 Tier List</h2>
                 <div class="ctl-header-actions">
                     <span class="ctl-stats" id="ctl-stats"></span>
-                    <button class="ctl-btn ctl-btn-share" onclick="customTierList.generateShareImage()">📸 生成分享图</button>
-                    <button class="ctl-btn ctl-btn-clear" onclick="if(confirm('确定清空所有分配？'))customTierList.clearAll()">🗑️ 清空</button>
+                    <button class="ctl-btn ctl-btn-share" onclick="customTierList.generateShareImage()" data-i18n="ctl.share">📸 生成分享图</button>
+                    <button class="ctl-btn ctl-btn-clear" onclick="if(confirm(i18n.t('ctl.confirmClear')||'确定清空所有分配？'))customTierList.clearAll()" data-i18n="ctl.clear">🗑️ 清空</button>
                     <button class="ctl-btn ctl-btn-close" onclick="customTierList.close()">✕</button>
                 </div>
             </div>
@@ -1145,25 +1145,25 @@
         <div class="ctl-share-panel">
             <button class="ctl-share-close" onclick="customTierList.closeShareResult()">✕</button>
             <div class="ctl-share-header">
-                <h3>🎉 做完啦！快来分享吧~</h3>
-                <p class="ctl-share-subtitle">和大家一起讨论你的小丑排序</p>
+                <h3 data-i18n="ctl.shareTitle">🎉 做完啦！快来分享吧~</h3>
+                <p class="ctl-share-subtitle" data-i18n="ctl.shareSubtitle">和大家一起讨论你的小丑排序</p>
             </div>
             <div class="ctl-share-preview">
-                <img class="ctl-share-img" src="" alt="我的 Tier List">
+                <img class="ctl-share-img" src="" alt="My Tier List">
             </div>
-            <p class="ctl-share-info">共 <span class="ctl-share-count">0</span> 张卡牌 · 长按图片可直接保存</p>
+            <p class="ctl-share-info" data-i18n="ctl.shareInfo">共 <span class="ctl-share-count">0</span> 张卡牌 · 长按图片可直接保存</p>
             <div class="ctl-share-actions">
                 <button class="ctl-share-action-btn ctl-share-dl-btn" onclick="customTierList.downloadShareImage()">
                     <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
-                    保存图片
+                    <span data-i18n="ctl.saveImg">保存图片</span>
                 </button>
                 <button class="ctl-share-action-btn ctl-share-sys-btn" onclick="customTierList.systemShare()">
                     <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92 1.61 0 2.92-1.31 2.92-2.92s-1.31-2.92-2.92-2.92z"/></svg>
-                    系统分享
+                    <span data-i18n="ctl.sysShare">系统分享</span>
                 </button>
                 <button class="ctl-share-action-btn ctl-share-copy-btn" onclick="customTierList.copyShareText()">
                     <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>
-                    复制文案
+                    <span data-i18n="ctl.copyText">复制文案</span>
                 </button>
             </div>
             <div class="ctl-share-toast" id="ctl-share-toast"></div>

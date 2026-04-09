@@ -14,6 +14,17 @@ class CustomTierList {
             '夯': '版本之子', '顶级': '极强', '人上人': '强力',
             'NPC': '可用', '拉': '偏弱', '拉完了': '不推荐'
         };
+        // i18n 翻译映射（内部 key 始终用中文，显示时翻译）
+        this._tierI18n = {
+            en: {
+                names: { '夯': 'Broken', '顶级': 'Top', '人上人': 'Great', 'NPC': 'Okay', '拉': 'Weak', '拉完了': 'Trash' },
+                descs: { '夯': 'Meta-defining', '顶级': 'Very Strong', '人上人': 'Strong', 'NPC': 'Usable', '拉': 'Below Avg', '拉完了': 'Not Recommended' }
+            },
+            ja: {
+                names: { '夯': '壊れ', '顶级': 'トップ', '人上人': '強い', 'NPC': '普通', '拉': '弱い', '拉完了': 'ゴミ' },
+                descs: { '夯': '環境最強', '顶级': '極強', '人上人': '強力', 'NPC': '使える', '拉': 'やや弱', '拉完了': '非推奨' }
+            }
+        };
         // 旧版 S/A/B/C/D/E → 新版映射（存档兼容）
         this._legacyMap = { S: '夯', A: '顶级', B: '人上人', C: 'NPC', D: '拉', E: '拉完了' };
         // cardAssignments: { cardId: '夯' | '顶级' | ... | null }
@@ -151,6 +162,26 @@ class CustomTierList {
         return this.allJokers.filter(c => !this.cardAssignments[c.id]);
     }
 
+    // i18n：获取当前语言下的 tier 显示名
+    tierName(tier) {
+        if (typeof i18n !== 'undefined') {
+            const lang = i18n.getCurrentLanguage().code;
+            const map = this._tierI18n[lang];
+            if (map && map.names[tier]) return map.names[tier];
+        }
+        return tier; // 中文直接返回
+    }
+
+    // i18n：获取当前语言下的 tier 描述
+    tierDesc(tier) {
+        if (typeof i18n !== 'undefined') {
+            const lang = i18n.getCurrentLanguage().code;
+            const map = this._tierI18n[lang];
+            if (map && map.descs[tier]) return map.descs[tier];
+        }
+        return this.tierDescs[tier];
+    }
+
     getCardsForTier(tier) {
         return this.allJokers.filter(c => this.cardAssignments[c.id] === tier);
     }
@@ -171,6 +202,8 @@ class CustomTierList {
         const currentTier = this.cardAssignments[cardId] || null;
         picker.querySelectorAll('.ctl-picker-tier-btn').forEach(btn => {
             btn.classList.toggle('current', btn.dataset.tier === currentTier);
+            // i18n：更新按钮显示文字
+            btn.textContent = this.tierName(btn.dataset.tier);
         });
         // 显示移除按钮（如果已分配）
         const removeBtn = picker.querySelector('.ctl-picker-remove');
@@ -343,10 +376,10 @@ class CustomTierList {
             `).join('');
 
             return `
-                <div class="ctl-tier-row">
+                    <div class="ctl-tier-row">
                     <div class="ctl-tier-label" style="background:${this.tierColors[tier]}">
-                        <span class="ctl-tier-letter">${tier}</span>
-                        <span class="ctl-tier-desc">${this.tierDescs[tier]}</span>
+                        <span class="ctl-tier-letter">${this.tierName(tier)}</span>
+                        <span class="ctl-tier-desc">${this.tierDesc(tier)}</span>
                     </div>
                     <div class="ctl-tier-drop" 
                          data-tier="${tier}"
@@ -519,9 +552,9 @@ class CustomTierList {
             const tierFontSize = tier.length <= 2 ? 30 : tier.length === 3 ? 24 : 20;
             ctx.font = `bold ${tierFontSize}px PingFang SC, Microsoft YaHei, sans-serif`;
             ctx.textAlign = 'center';
-            ctx.fillText(tier, padding + tierLabelW / 2, y + rowH / 2 + 4);
+            ctx.fillText(this.tierName(tier), padding + tierLabelW / 2, y + rowH / 2 + 4);
             ctx.font = '11px PingFang SC, sans-serif';
-            ctx.fillText(this.tierDescs[tier], padding + tierLabelW / 2, y + rowH / 2 + 24);
+            ctx.fillText(this.tierDesc(tier), padding + tierLabelW / 2, y + rowH / 2 + 24);
             ctx.textAlign = 'left';
 
             // 卡牌区域背景

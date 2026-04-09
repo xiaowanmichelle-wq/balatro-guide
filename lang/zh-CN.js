@@ -289,6 +289,25 @@ i18n.register('zh-CN', {
         abstract_tarot: '抽象塔罗流',
     },
 
+    // ============ 自定义 Tier List ============
+    ctl: {
+        title: '🎨 我的 Tier List',
+        share: '📸 生成分享图',
+        clear: '🗑️ 清空',
+        confirmClear: '确定清空所有分配？',
+        cardPool: '📦 卡牌池',
+        searchPlaceholder: '搜索卡牌...',
+        filterRarity: '稀有度',
+        filterType: '类型',
+        filterAll: '全部',
+        shareTitle: '🎉 做完啦！快来分享吧~',
+        shareSubtitle: '和大家一起讨论你的小丑排序',
+        shareInfo: '长按图片可直接保存',
+        saveImg: '保存图片',
+        sysShare: '系统分享',
+        copyText: '复制文案',
+    },
+
     // ============ 策略翻译 ============
     // 策略的 name/difficulty/desc/detail/tips/compatibleWith[].note
     // 直接从 getBuildStrategies() 的中文内容提取

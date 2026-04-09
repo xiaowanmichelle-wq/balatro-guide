@@ -243,6 +243,25 @@ i18n.register('en', {
         abstract_tarot: 'Abstract Tarot',
     },
 
+    // ============ Custom Tier List ============
+    ctl: {
+        title: '🎨 My Tier List',
+        share: '📸 Share Image',
+        clear: '🗑️ Clear',
+        confirmClear: 'Clear all assignments?',
+        cardPool: '📦 Card Pool',
+        searchPlaceholder: 'Search cards...',
+        filterRarity: 'Rarity',
+        filterType: 'Type',
+        filterAll: 'All',
+        shareTitle: '🎉 Done! Share it with friends~',
+        shareSubtitle: 'Discuss your Joker rankings with everyone',
+        shareInfo: 'Long press image to save',
+        saveImg: 'Save Image',
+        sysShare: 'Share',
+        copyText: 'Copy Text',
+    },
+
     // ============ Strategy Translations ============
     strategies: {
         pair_build: {

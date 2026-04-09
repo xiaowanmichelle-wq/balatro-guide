@@ -243,6 +243,25 @@ i18n.register('ja', {
         abstract_tarot: 'アブストラクトタロット',
     },
 
+    // ============ カスタム Tier List ============
+    ctl: {
+        title: '🎨 マイ Tier List',
+        share: '📸 共有画像を生成',
+        clear: '🗑️ クリア',
+        confirmClear: 'すべての割り当てをクリアしますか？',
+        cardPool: '📦 カードプール',
+        searchPlaceholder: 'カードを検索...',
+        filterRarity: 'レアリティ',
+        filterType: 'タイプ',
+        filterAll: '全部',
+        shareTitle: '🎉 完成！友達とシェアしよう~',
+        shareSubtitle: 'みんなでジョーカーランキングを議論しよう',
+        shareInfo: '画像を長押しで保存可能',
+        saveImg: '画像を保存',
+        sysShare: 'シェア',
+        copyText: 'テキストをコピー',
+    },
+
     // ============ 戦略翻訳 ============
     strategies: {
         pair_build: {
