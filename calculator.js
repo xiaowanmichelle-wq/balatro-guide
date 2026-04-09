@@ -694,6 +694,7 @@ const SCALING_JOKERS = {
   j_rocket: {field:'money', label:'$', default:1, step:2, desc:'击败Boss+$2'},
   j_turtle_bean: {field:'hand_size', label:'手牌上限', default:5, step:1, desc:'每轮-1'},
   j_blue: {field:'chips', label:'+筹码', default:0, step:2, desc:'牌组每有1张牌+2筹码'},
+  j_ceremonial: {field:'mult', label:'+倍率', default:0, step:1, desc:'摧毁右侧Joker售价×2永久加倍率'},
 };
 
 function renderJokerSlots() {

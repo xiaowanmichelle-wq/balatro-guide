@@ -4019,6 +4019,83 @@ body {
 .calc-hl-btn:hover { border-color: var(--accent-gold); }
 .calc-hl-val { font-size: 0.85rem; color: var(--accent-gold); font-weight: bold; min-width: 20px; text-align: center; }
 
+/* ============ 滚动入场动画系统 ============ */
+
+/* 基础隐藏状态 — 等待进入视口 */
+.scroll-reveal {
+    opacity: 0;
+    transform: translateY(40px);
+    transition: opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+                transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* 从左侧滑入 */
+.scroll-reveal.from-left {
+    transform: translateX(-50px);
+}
+
+/* 从右侧滑入 */
+.scroll-reveal.from-right {
+    transform: translateX(50px);
+}
+
+/* 缩放弹入 */
+.scroll-reveal.scale-in {
+    transform: scale(0.9);
+}
+
+/* 激活状态 — 进入视口后 */
+.scroll-reveal.revealed {
+    opacity: 1;
+    transform: translateY(0) translateX(0) scale(1);
+}
+
+/* 延迟级别（用于子元素依次入场） */
+.scroll-reveal.delay-1 { transition-delay: 0.1s; }
+.scroll-reveal.delay-2 { transition-delay: 0.2s; }
+.scroll-reveal.delay-3 { transition-delay: 0.3s; }
+.scroll-reveal.delay-4 { transition-delay: 0.4s; }
+.scroll-reveal.delay-5 { transition-delay: 0.5s; }
+
+/* 卡牌网格子元素入场：每张卡依次出现 */
+.cards-grid .card.scroll-reveal,
+.seeds-grid .seed-card.scroll-reveal,
+.recommended-cards .card.scroll-reveal {
+    transition-duration: 0.5s;
+}
+
+/* 计分结果区域特殊动画 */
+.calc-result-section.scroll-reveal.revealed {
+    animation: resultGlow 1.5s ease-out;
+}
+
+@keyframes resultGlow {
+    0% { box-shadow: 0 0 0 rgba(255, 215, 0, 0); }
+    50% { box-shadow: 0 0 30px rgba(255, 215, 0, 0.15); }
+    100% { box-shadow: none; }
+}
+
+/* 构筑卡片 stagger 动画 */
+#build-strategies .guide-card.scroll-reveal {
+    transition-duration: 0.5s;
+}
+
+/* 底部模块入场 */
+.miniapp-banner.scroll-reveal,
+.share-bar.scroll-reveal,
+.footer.scroll-reveal {
+    transform: translateY(30px);
+}
+
+/* 禁用动画 — 尊重用户偏好 */
+@media (prefers-reduced-motion: reduce) {
+    .scroll-reveal {
+        opacity: 1 !important;
+        transform: none !important;
+        transition: none !important;
+    }
+}
+
 /* 计算器响应式 */
 @media (max-width: 700px) {
     .calc-deck-grid { grid-template-columns: repeat(13, 1fr); gap: 2px; }

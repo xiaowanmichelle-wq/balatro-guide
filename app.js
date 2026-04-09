@@ -2281,6 +2281,10 @@ class BalatroApp {
         this.renderRecommendedTabs();
         // 渲染 Tier List
         this.renderTierList();
+        // 重新初始化滚动入场动画（动态内容）
+        if (typeof scrollObserver !== 'undefined') {
+            document.querySelectorAll('.scroll-reveal:not(.revealed)').forEach(el => scrollObserver.observe(el));
+        }
     }
     
     renderBuildStrategies() {
@@ -2316,7 +2320,7 @@ class BalatroApp {
             }
             
             return `
-                <div class="guide-card strategy-card" data-strategy="${s.id}">
+                <div class="guide-card strategy-card scroll-reveal" data-strategy="${s.id}">
                     <div class="strategy-header">
                         <h4>${sName}</h4>
                         <span class="strategy-difficulty">${sDifficulty}</span>
