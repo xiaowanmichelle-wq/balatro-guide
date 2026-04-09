@@ -190,6 +190,9 @@ class BalatroApp {
         activeTab.setAttribute('aria-selected', 'true');
         document.getElementById(tabId).classList.add('active');
         
+        // 切换 Tab 后回到顶部
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        
         // 种子分享 Tab 延迟初始化
         if (tabId === 'seeds' && !seedManager) {
             seedManager = new SeedManager();
