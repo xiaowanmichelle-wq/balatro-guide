@@ -6,17 +6,17 @@
 i18n.register('zh-CN', {
     // ============ 页面元信息 ============
     meta: {
-        title: 'Balatro 新手助手 - 卡牌图鉴、构筑推荐与种子分享 | Balatro Guide',
-        description: 'Balatro 新手助手：最全的 Balatro 卡牌图鉴（150+张 Joker、塔罗牌、行星牌、灵魂牌），智能牌组匹配与构筑推荐，21种流派攻略指南，以及玩家种子分享社区。',
-        ogTitle: 'Balatro 新手助手 - 卡牌图鉴、构筑推荐与种子分享',
+        title: '小丑牌助手 - 卡牌图鉴、构筑推荐与种子分享 | Balatro Guide',
+        description: '小丑牌助手：最全的 Balatro 卡牌图鉴（150+张 Joker、塔罗牌、行星牌、灵魂牌），智能牌组匹配与构筑推荐，21种流派攻略指南，以及玩家种子分享社区。',
+        ogTitle: '小丑牌助手 - 卡牌图鉴、构筑推荐与种子分享',
         ogDescription: '最全的 Balatro 卡牌图鉴（150+张），智能牌组匹配与构筑推荐，21种流派攻略指南，以及玩家种子分享社区。',
-        siteName: 'Balatro 新手助手',
+        siteName: '小丑牌助手',
     },
 
     // ============ 通用 UI ============
     ui: {
         // Header
-        logo: '🃏 Balatro 新手助手',
+        logo: '🃏 小丑牌助手',
         subtitle: '卡牌图鉴 · 牌组匹配 · 构筑推荐',
         
         // Tab 导航
@@ -28,7 +28,7 @@ i18n.register('zh-CN', {
         },
         
         // Footer
-        footer: 'Balatro 新手助手 - 帮助你更好地理解游戏',
+        footer: '小丑牌助手 - 帮助你更好地理解游戏',
         dataSource: '卡牌数据基于游戏版本整理',
         siteStats: '🎴 本站总访问量 {{pv}} 次 · 访客数 {{uv}} 人',
         

@@ -1,5 +1,5 @@
 {
-  "name": "Balatro 新手助手 - 卡牌图鉴与攻略",
+  "name": "小丑牌助手 - 卡牌图鉴与攻略",
   "short_name": "Balatro助手",
   "description": "Balatro 新手玩家的一站式助手：卡牌图鉴、牌组匹配推荐、攻略指南、种子分享、小丑Tier List",
   "start_url": "./index.html",
@@ -58,7 +58,7 @@
       "sizes": "1200x630",
       "type": "image/png",
       "form_factor": "wide",
-      "label": "Balatro 新手助手主页"
+      "label": "小丑牌助手主页"
     }
   ],
   "shortcuts": [

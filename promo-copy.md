@@ -1,4 +1,4 @@
-# Balatro 新手助手 — 推广文案合集
+# 小丑牌助手 — 推广文案合集
 
 ---
 
@@ -84,7 +84,7 @@ Tab 一键切换，再也不用纠结前期后期该拿什么了 ✨
 
 ## 🎮 Steam 社区指南文案
 
-**标题**：[工具] Balatro 新手助手 - 260+ 卡牌图鉴 & 150 张小丑 Tier List & 智能构筑推荐
+**标题**：[工具] 小丑牌助手 - 260+ 卡牌图鉴 & 150 张小丑 Tier List & 智能构筑推荐
 
 **正文**：
 
@@ -166,7 +166,7 @@ If you find it useful, feel free to bookmark it or share with your friends. Feed
 
 ## 🐦 Twitter/X 短文案
 
-Balatro 新手助手上线！🃏
+小丑牌助手上线！🃏
 
 ✅ 260+ 张卡牌图鉴
 ✅ 150 张小丑完整 Tier List

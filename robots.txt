@@ -1,4 +1,4 @@
-# Balatro 新手助手 - robots.txt
+# 小丑牌助手 - robots.txt
 User-agent: *
 Allow: /
 

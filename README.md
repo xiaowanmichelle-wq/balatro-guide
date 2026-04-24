@@ -1,4 +1,4 @@
-# 🃏 Balatro 新手助手 | Balatro Guide
+# 🃏 小丑牌助手 | Balatro Guide
 
 <p align="center">
   <strong>最全的 Balatro 卡牌图鉴 · 智能构筑推荐 · 种子分享社区</strong>
